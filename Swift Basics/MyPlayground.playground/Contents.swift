@@ -86,3 +86,11 @@ let cityOfPerson: String? = personWithAddress.address?.city // cityOfPerson의 �
 if let city = cityOfPerson {
   print("도시: \(city)")
 }
+
+if let address = personWithAddress.address,
+   let city = address.city {
+  print("주소: \(address.street), 도시: \(city)")
+} else {
+  print("주소 또는 도시 정보가 없습니다.")
+}
+
