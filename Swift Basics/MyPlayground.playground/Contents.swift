@@ -31,9 +31,28 @@ final class Friend: Person {
   }
 }
 
+final class Family: Person {
+  let relationship: String
+
+  init(givenName: String, middleName: String, familyName: String = "Barker", relationship: String) {
+    self.relationship = relationship
+    super.init(givenName: givenName, middleName: middleName, familyName: familyName)
+  }
+
+  override var displayName: String {
+    return "\(super.displayName) - \(relationship)"
+  }
+}
+
 let steve = Person(givenName: "Steve", middleName: "Paul", familyName: "Jobs")
 let sam = Friend(givenName: "Sam", middleName: "John", familyName: "Smith")
 sam.whereWeMet = "Tech Conference"
+let sarah = Family(givenName: "Sarah", middleName: "Jane", familyName: "Doe", relationship: "Sister")
+let john = Family(givenName: "John", middleName: "Michael", familyName: "Doe", relationship: "Brother")
+
 
 print(steve.displayName)
 print(sam.displayName)
+
+print(sarah.displayName)
+print(john.displayName)
