@@ -19,7 +19,21 @@ class Person {
   }
 }
 
+final class Friend: Person {
+  var whereWeMet: String?
+
+  override var displayName: String {
+    var baseDisplayName = super.displayName
+    if let meetingPlace = whereWeMet {
+      baseDisplayName += " - Met at: \(meetingPlace)"
+    }
+    return baseDisplayName
+  }
+}
 
 let steve = Person(givenName: "Steve", middleName: "Paul", familyName: "Jobs")
+let sam = Friend(givenName: "Sam", middleName: "John", familyName: "Smith")
+sam.whereWeMet = "Tech Conference"
 
 print(steve.displayName)
+print(sam.displayName)
