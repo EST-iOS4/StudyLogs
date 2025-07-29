@@ -41,3 +41,48 @@ func printUserInfo() {
 }
 
 printUserInfo()
+
+// MARK: - 4. 옵셔널 체이닝 (Optional Chaining)
+
+// 옵셔널 속성을 연속적으로 안전하게 호출할 때 사용합니다. 중간에 하나라도 nil이면 전체 결과가 nil이 됩니다.
+print("\n--- 옵셔널 체이닝 ---")
+class Person {
+  var address: Address?
+
+  init(address: Address?) {
+    self.address = address
+  }
+}
+
+class Address {
+  var street: String = ""
+  var city: String?
+
+  init(street: String, city: String?) {
+    self.street = street
+    self.city = city
+  }
+}
+
+let personWithAddress = Person(address: Address(street: "강남대로", city: "서울"))
+let personWithoutAddress = Person(address: nil)
+
+// 옵셔널 체이닝을 사용하여 안전하게 street 값에 접근
+if let street = personWithAddress.address?.street {
+  print("주소: \(street)")
+} else {
+  print("주소 정보 없음")
+}
+
+// address가 nil이므로 street에 접근하지 않고 nil을 반환
+if let street = personWithoutAddress.address?.street {
+  print("주소: \(street)")
+} else {
+  print("주소 정보 없음")
+}
+
+// city는 옵셔널이므로 한번 더 옵셔널 바인딩이 필요할 수 있습니다.
+let cityOfPerson: String? = personWithAddress.address?.city // cityOfPerson의 타입은 String?
+if let city = cityOfPerson {
+  print("도시: \(city)")
+}
