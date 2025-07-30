@@ -70,3 +70,52 @@ func printMediaInfo(for media: Media) {
 printMediaInfo(for: myBook)
 printMediaInfo(for: myMovie)
 printMediaInfo(for: myMusic)
+
+
+enum Planet {
+  case mercury, venus, earth, mars, jupiter, saturn, uranus, neptune
+
+  func surfaceGravity() -> Double {
+    switch self {
+    case .mercury:
+      return 3.7
+    case .venus:
+      return 8.87
+    case .earth:
+      return 9.81
+    case .mars:
+      return 3.71
+    case .jupiter:
+      return 24.79
+    case .saturn:
+      return 10.44
+    case .uranus:
+      return 8.69
+    case .neptune:
+      return 11.15
+    }
+  }
+}
+
+let earth = Planet.earth
+print("지구의 중력: \(earth.surfaceGravity()) m/s²")
+
+enum Color: Int {
+  case red = 1
+  case green = 2
+  case blue = 3
+
+  var description: String {
+    switch self {
+    case .red:
+      return "빨강"
+    case .green:
+      return "초록"
+    case .blue:
+      return "파랑"
+    }
+  }
+}
+
+let color: Color = .green
+print ("선택한 색상: \(color.rawValue) - \(color.description)")
