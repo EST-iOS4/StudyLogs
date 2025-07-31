@@ -59,3 +59,19 @@ let totalSum2DArray = sum2DArray.reduce(0) { $0 + $1 }
 
 print(sum2DArray)
 print(totalSum2DArray) // 45
+
+
+print("\n=== 클로저의 캡처 ===")
+
+func makeCounter() -> () -> Int {
+  var count = 0
+  return {
+    count += 1
+    return count
+  }
+}
+
+let counter = makeCounter()
+print("첫 번째 호출: \(counter())")  // 1
+print("두 번째 호출: \(counter())")  // 2
+print("세 번째 호출: \(counter())")  // 3
