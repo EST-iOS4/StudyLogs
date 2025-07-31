@@ -19,7 +19,6 @@ let oddNumbers: Set<Int> = [1, 3, 5, 7, 9]
 let squareNumbers: Set<Int> = [1, 4, 9]
 let triangularNumbers: Set<Int> = [1, 3, 6, 10]
 
-
 let evenOrTriangularNumbers = evenNumbers.union(triangularNumbers)
 print(evenOrTriangularNumbers.count) // 7
 
