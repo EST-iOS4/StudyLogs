@@ -1,5 +1,6 @@
 import CoreLocation
 
+// MARK: - 프토콜과 제네릭을 사용한 교통 수단 모델링
 protocol TransportLocation {
   var location: CLLocation { get }
 }
@@ -11,6 +12,21 @@ protocol TransportMethod {
   var averageSpeedInKPH: Double { get }
 }
 
+// MARK: - Journey 클래스: 모델링 된 교통 수단을 사용하여 여행을 시작하는 클래스
+class Journey<T: TransportMethod> {
+  var transportMethod: T
+
+  init(transportMethod: T) {
+    self.transportMethod = transportMethod
+  }
+
+  func startJourney() {
+    print("여행을 시작합니다! 출발지: \(transportMethod.defaultCollectionPoint), 평균 속도: \(transportMethod.averageSpeedInKPH) KPH")
+  }
+}
+
+
+// Train 교통 수단으로
 struct Train: TransportMethod {
   var defaultCollectionPoint: TrainStation
   var averageSpeedInKPH: Double = 120.0
@@ -30,22 +46,11 @@ enum TrainStation: TransportLocation {
   }
 }
 
-class Journey<T: TransportMethod> {
-  var transportMethod: T
-
-  init(transportMethod: T) {
-    self.transportMethod = transportMethod
-  }
-
-  func startJourney() {
-    print("여행을 시작합니다! 출발지: \(transportMethod.defaultCollectionPoint), 평균 속도: \(transportMethod.averageSpeedInKPH) KPH")
-  }
-}
-
+// Train 교통 수단을 이용한 여행 시작
 let trainJourney = Journey(transportMethod: Train(defaultCollectionPoint: .stationA))
 trainJourney.startJourney()
 
-
+// Car 교통 수단을 추가개발
 struct Car: TransportMethod {
   var defaultCollectionPoint: Road
   var averageSpeedInKPH: Double = 80.0
@@ -77,6 +82,7 @@ enum Road: TransportLocation {
     }
   }
 }
-  
+
+// Car 교통 수단을 이용한 여행 시작
 let carJourney = Journey(transportMethod: Car(defaultCollectionPoint: .car))
 carJourney.startJourney()
