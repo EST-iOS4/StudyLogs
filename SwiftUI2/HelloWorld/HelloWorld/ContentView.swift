@@ -8,15 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("안녕하세요!")
-        }
-        .padding()
+  var body: some View {
+    VStack {
+      Text("위")
+      HStack {
+        Text("왼쪽")
+        Text("오른쪽")
+      }
+      ZStack {
+        Text("배경")
+        Text("전경")
+      }
     }
+    .font(.largeTitle)
+    .padding()
+  }
 }
 
 #Preview {
