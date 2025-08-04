@@ -26,8 +26,12 @@ struct ContentView: View {
       Text("Modifiers")
         .font(.title)
     } icon: {
-      Image(systemName: "flag.fill")
-        .opacity(0.25)
+      Image("flag")
+        .resizable()
+        .aspectRatio(contentMode: .fill)
+        .frame(width: 120, height: 80)
+        .clipped()
+        .border(Color.blue, width: 2)
     }
   }
 }
