@@ -21,6 +21,14 @@ struct ContentView: View {
     Label("Text", systemImage: "car.fill")
       .labelStyle(TrailingIconLabelStyle())
       .font(.custom("Courier", size: 24))
+
+    Label {
+      Text("Modifiers")
+        .font(.title)
+    } icon: {
+      Image(systemName: "flag.fill")
+        .opacity(0.25)
+    }
   }
 }
 
