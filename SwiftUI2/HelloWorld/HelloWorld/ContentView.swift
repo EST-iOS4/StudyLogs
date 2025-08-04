@@ -14,6 +14,9 @@ struct ContentView: View {
     Text("This is my age \(myString). Since I am retired, I am now eligible for a pension and Social Security so I can spend the rest of my life relaxing and enjoying life without having to work for an income anymore.")
       .lineLimit(2)
       .truncationMode(.tail)
+      .font(.title)
+      .fontWeight(.semibold)
+      .foregroundStyle(.red)
       .padding()
   }
 }
