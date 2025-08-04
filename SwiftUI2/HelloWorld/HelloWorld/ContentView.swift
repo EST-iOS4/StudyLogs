@@ -11,12 +11,9 @@ struct ContentView: View {
   @State private var value = 0
 
   var body: some View {
-    Stepper(value: $value, in: 0...10) {
-      Text("값: \(value)")
-        .background(.yellow)
-        .font(.largeTitle)
-    }
-    .padding()
+    Text("위치 수정자 예제")
+      .offset(x: 50, y: 100)
+      .position(x: 200, y: 300)
   }
 }
 
