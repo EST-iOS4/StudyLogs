@@ -11,7 +11,8 @@ struct ContentView: View {
   @State private var isOn = true
 
   var body: some View {
-    Toggle("Toggle Example", isOn: $isOn)
+    Text("Here's a secret message!")
+      .background(Color.yellow)
       .padding()
   }
 }
