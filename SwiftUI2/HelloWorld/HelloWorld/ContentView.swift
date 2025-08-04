@@ -11,9 +11,12 @@ struct ContentView: View {
   @State private var value = 0
 
   var body: some View {
-    Text("위치 수정자 예제")
-      .offset(x: 50, y: 100)
-      .position(x: 200, y: 300)
+    // alignment: leading, center, trailing
+    VStack(alignment: .center, spacing: 10) {
+      Text("첫 번째 텍스트")
+      Text("텍스트 #2")
+      Text("#3")
+    }
   }
 }
 
