@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-  @State private var isOn = true
+  @State private var value = 0
 
   var body: some View {
-    Text("Here's a secret message!")
-      .background(Color.yellow)
+    Stepper("값: \(value)", value: $value, in: 0...10)
       .padding()
   }
 }
