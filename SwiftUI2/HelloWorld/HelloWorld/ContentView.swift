@@ -19,7 +19,18 @@ struct ContentView: View {
       .foregroundStyle(.red)
       .padding()
     Label("Text", systemImage: "car.fill")
+      .labelStyle(TrailingIconLabelStyle())
       .font(.custom("Courier", size: 24))
+  }
+}
+
+// 커스텀 LabelStyle: 아이콘을 텍스트 뒤에 배치
+struct TrailingIconLabelStyle: LabelStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    HStack {
+      configuration.title
+      configuration.icon
+    }
   }
 }
 
