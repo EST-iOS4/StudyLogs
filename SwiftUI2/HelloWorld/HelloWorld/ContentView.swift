@@ -8,20 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
+  @State private var isOn = true
+
   var body: some View {
-    VStack {
-      Text("위")
-      HStack {
-        Text("왼쪽")
-        Text("오른쪽")
-      }
-      ZStack {
-        Text("배경")
-        Text("전경")
-      }
-    }
-    .font(.largeTitle)
-    .padding()
+    Toggle("Toggle Example", isOn: $isOn)
+      .padding()
   }
 }
 
