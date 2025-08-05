@@ -8,30 +8,33 @@
 import SwiftUI
 
 struct ContentView: View {
-  @State private var myColor = Color.red
+  @State private var username: String = ""
+  @State private var password: String = ""
 
   var body: some View {
     VStack {
-      Picker("Select an option", selection: $myColor) {
-        Text("Red").tag(Color.red)
-        Text("Green").tag(Color.green)
-        Text("Blue").tag(Color.blue)
+      Text("로그인")
+        .font(.largeTitle)
+        .padding()
+      TextField("사용자 이름을 입력하세요", text: $username)
+        .padding()
+        .border(.black, width: 1)
+      SecureField("비밀번호를 입력하세요", text: $password)
+        .padding()
+        .border(.black, width: 1)
+      Button(action: {
+        print("사용자 이름: \(username), 비밀번호: \(password)")
+        // API 호출
+      }) {
+        Text("로그인")
+          .frame(minWidth: 0, maxWidth: .infinity)
+          .padding()
+          .background(Color.blue)
+          .foregroundColor(.white)
+          .cornerRadius(8)
       }
-      .pickerStyle(.segmented)
-
-      Circle()
-        .fill(myColor)
-        .frame(width: 150, height: 150)
-        .overlay(
-          Text("Selected Color")
-            .foregroundColor(.white)
-            .font(.title)
-        )
     }
     .padding()
-    .onChange(of: myColor, initial: true) {
-      print("Selected color changed to: \(myColor.description)")
-    }
   }
 }
 
