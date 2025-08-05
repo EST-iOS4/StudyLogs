@@ -212,24 +212,48 @@ struct ContentView: View {
 
     var result = Double(numbers[0]) ?? 0.0
 
-    for (index, operatorSymbol) in operators.enumerated() {
+    var tempNumbers = numbers
+    var tempOperators = Array(operators)
+    var i = 0
+
+    while i < tempOperators.count {
+      // 연산자 중 곱셈과 나눗셈의 경우 그 연산자 먼저 계산
+      if tempOperators[i] == "×" || tempOperators[i] == "÷" {
+
+        let leftNumber = Double(tempNumbers[i]) ?? 0.0
+        let rightNumber = Double(tempNumbers[i + 1]) ?? 0.0
+
+        if tempOperators[i] == "×" {
+          result = leftNumber * rightNumber
+        } else if tempOperators[i] == "÷" {
+          if rightNumber != 0 {
+            result = leftNumber / rightNumber
+          } else {
+            resultString = "Error"
+            return
+          }
+        }
+
+        // Replace the processed numbers and operators
+        tempNumbers.remove(at: i + 1)
+        tempNumbers[i] = String(result)
+        tempOperators.remove(at: i)
+      } else {
+        i += 1
+      }
+    }
+
+    result = Double(tempNumbers[0]) ?? 0.0
+
+    for (index, operatorSymbol) in tempOperators.enumerated() {
       guard index < numbers.count - 1 else { break } // Ensure we don't go out of bounds
-      let nextNumber = Double(numbers[index + 1]) ?? 0.0
+      let nextNumber = Double(tempNumbers[index + 1]) ?? 0.0
 
       switch operatorSymbol {
       case "+":
         result += nextNumber
       case "−":
         result -= nextNumber
-      case "×":
-        result *= nextNumber
-      case "÷":
-        if nextNumber != 0 {
-          result /= nextNumber
-        } else {
-          resultString = "Error"
-          return
-        }
       default:
         break
       }
