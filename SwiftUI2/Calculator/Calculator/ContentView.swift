@@ -111,7 +111,9 @@ struct ContentView: View {
           Text(".")
         }
         .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          calculateResult()
+        } label: {
           Text("=")
         }
         .buttonStyle(.bordered)
@@ -128,6 +130,16 @@ struct ContentView: View {
       formulaString.removeLast()
     }
     formulaString += value
+  }
+
+  private func calculateResult() {
+    // Implement the logic to calculate the result based on the formulaString
+    // For now, just set resultString to a placeholder value
+    let numbers = formulaString.components(separatedBy: CharacterSet(charactersIn: "+−×÷"))
+    print("Numbers: \(numbers)")
+    let operators = formulaString.filter { "+−×÷".contains($0) }
+    print("Operators: \(operators)")
+    resultString = "Result"
   }
 }
 
