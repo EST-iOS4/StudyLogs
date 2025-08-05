@@ -8,18 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
-  let myString = 43
-
+  @State private var myColor = Color.red
   var body: some View {
-    Button {
-      print("click!") // 실행 코드
-    } label: {
-      Text("Click here")
-        .font(.largeTitle)
-        .foregroundStyle(.green)
-        .padding()
-        .border(.red, width: 6)
+    VStack {
+      Picker("Select an option", selection: $myColor) {
+        Text("Red").tag(Color.red)
+        Text("Green").tag(Color.green)
+        Text("Blue").tag(Color.blue)
+      }
+      .pickerStyle(.segmented)
     }
+    .padding()
   }
 }
 
