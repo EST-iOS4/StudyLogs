@@ -196,7 +196,56 @@ struct ContentView: View {
     print("Numbers: \(numbers)")
     let operators = formulaString.filter { "+−×÷".contains($0) }
     print("Operators: \(operators)")
-    resultString = "Calculating..."
+
+    // 입력이 없을때, set resultString to "0"
+    if numbers.isEmpty {
+      resultString = "0"
+      return
+    }
+
+    // 연산자 입력이 없을때, set resultString to the first number
+    if numbers.count == 1 && operators.isEmpty {
+      // If there's only one number and no operators, just return that number
+      resultString = numbers[0]
+      return
+    }
+
+    var result = Double(numbers[0]) ?? 0.0
+
+    for (index, operatorSymbol) in operators.enumerated() {
+      guard index < numbers.count - 1 else { break } // Ensure we don't go out of bounds
+      let nextNumber = Double(numbers[index + 1]) ?? 0.0
+
+      switch operatorSymbol {
+      case "+":
+        result += nextNumber
+      case "−":
+        result -= nextNumber
+      case "×":
+        result *= nextNumber
+      case "÷":
+        if nextNumber != 0 {
+          result /= nextNumber
+        } else {
+          resultString = "Error"
+          return
+        }
+      default:
+        break
+      }
+    }
+
+    // 소수점 없는 경우 출력
+    if result.truncatingRemainder(dividingBy: 1) == 0 {
+      resultString = String(format: "%g", result) // %g will format the number without decimal places if it's an integer
+    } else {
+      // 소수점 있는 경우 출력
+      // 문자열 출력에서 %f 는 소수점 출력
+      // %d 는 정수 출력
+      // %g 는 소수점이 없는 정수 출력
+      // %s 는 문자열 출력
+      resultString = String(format: "%.2f", result) // %f will format the number with decimal places
+    }
   }
 }
 
