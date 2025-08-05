@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
   @State private var formulaString = ""
-  @State private var resultString = "계산기 실습"
+  @State private var resultString = "0"
 
   var body: some View {
     VStack {
@@ -17,11 +17,15 @@ struct ContentView: View {
         Text(formulaString)
           .foregroundStyle(.gray)
         Text(resultString)
-          .font(.custom("Helvetica Neue", size: 72))
+          .font(.system(size: 60))
+          .lineLimit(1)
       }
       .frame(maxWidth: .infinity, minHeight: 200, alignment: .trailing)
       HStack {
-        Button {} label: {
+        Button {
+          formulaString = ""
+          resultString = "0"
+        } label: {
           Text("AC")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -31,13 +35,17 @@ struct ContentView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
           .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          appendToFormula("%")
+        } label: {
           Text("%")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
         }
         .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          appendToFormula("÷")
+        } label: {
           Text("÷")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
@@ -55,18 +63,22 @@ struct ContentView: View {
         }
         .buttonStyle(.bordered)
         Button {
-
+          appendToFormula("8")
         } label: {
           Text("8")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          appendToFormula("9")
+        } label: {
           Text("9")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          appendToFormula("×")
+        } label: {
           Text("×")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
@@ -74,17 +86,23 @@ struct ContentView: View {
         .buttonStyle(.bordered)
       }
       HStack {
-        Button {} label: {
+        Button {
+          appendToFormula("4")
+        } label: {
           Text("4")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          appendToFormula("5")
+        } label: {
           Text("5")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          appendToFormula("6")
+        } label: {
           Text("6")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -98,17 +116,23 @@ struct ContentView: View {
         .buttonStyle(.bordered)
       }
       HStack {
-        Button {} label: {
+        Button {
+          appendToFormula("1")
+        } label: {
           Text("1")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          appendToFormula("2")
+        } label: {
           Text("2")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          appendToFormula("3")
+        } label: {
           Text("3")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -127,7 +151,9 @@ struct ContentView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .buttonStyle(.bordered)
-        Button {} label: {
+        Button {
+          appendToFormula("0")
+        } label: {
           Text("0")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -156,6 +182,10 @@ struct ContentView: View {
       // If the last character is an operator, replace it with the new value
       formulaString.removeLast()
     }
+    if formulaString.isEmpty && value == "0" {
+      // Prevent leading zero
+      return
+    }
     formulaString += value
   }
 
@@ -166,7 +196,7 @@ struct ContentView: View {
     print("Numbers: \(numbers)")
     let operators = formulaString.filter { "+−×÷".contains($0) }
     print("Operators: \(operators)")
-    resultString = "Result"
+    resultString = "Calculating..."
   }
 }
 
