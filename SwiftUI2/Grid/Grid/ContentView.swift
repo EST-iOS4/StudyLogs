@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-  let columns = [
+  let rows = [
     GridItem(.fixed(100)),
     GridItem(.fixed(100)),
     GridItem(.fixed(100))
@@ -26,7 +26,7 @@ struct ContentView: View {
 
   var body: some View {
     ScrollView(.horizontal) {
-      LazyHGrid(rows: columns, spacing: 20) {
+      LazyHGrid(rows: rows, spacing: 20) {
         ForEach(0..<30) { index in
           Rectangle()
             .fill(Color.blue)
