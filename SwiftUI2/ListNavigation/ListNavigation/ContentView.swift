@@ -7,21 +7,40 @@
 
 import SwiftUI
 
+
+struct Person: Identifiable {
+  var id = UUID()
+  var name: String
+}
+
 struct ContentView: View {
-  let familyMembers = ["아빠", "엄마", "형", "누나", "동생"]
-  let friends = ["친구1", "친구2", "친구3", "친구4"]
+  let family = [
+    Person(name: "아빠"),
+    Person(name: "엄마"),
+    Person(name: "형"),
+    Person(name: "누나"),
+    Person(name: "동생")
+  ]
+
+  let friends = [
+    Person(name: "친구1"),
+    Person(name: "친구2"),
+    Person(name: "친구3"),
+    Person(name: "친구4"),
+    Person(name: "친구5")
+  ]
 
   var body: some View {
     List {
       Section("가족") {
-        ForEach(familyMembers, id: \.self) { member in
-          Text(member)
+        ForEach(family) { member in
+          Text(member.name)
         }
       }
 
       Section("친구") {
-        ForEach(friends, id: \.self) { friend in
-          Text(friend)
+        ForEach(friends) { friend in
+          Text(friend.name)
         }
       }
 
