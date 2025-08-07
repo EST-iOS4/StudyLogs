@@ -22,7 +22,7 @@ struct ProgrammaticNavigation: View {
         }
       }
       .navigationDestination(for: Int.self) { number in
-        DetailView(number: number)
+        DetailView(path: $path, number: number)
       }
       .navigationDestination(for: String.self) { text in
         TextDetailView(text: text)
@@ -33,12 +33,27 @@ struct ProgrammaticNavigation: View {
 }
 
 struct DetailView: View {
+  @Binding var path: NavigationPath
   var number: Int
 
   var body: some View {
-    Text("상세화면 \(number)")
-      .font(.largeTitle)
-      .padding()
+    VStack {
+      Text("숫자 상세화면 \(number)")
+        .font(.largeTitle)
+        .padding()
+
+      Button("숫자 상세 화면으로 이동") {
+        path.append(Int.random(in: 1...100)) // 랜덤 숫자 화면으로 이동
+      }
+
+      Button("뒤로 가기") {
+        path.removeLast() // 뒤로 가기
+      }
+
+      Button("홈으로 이동") {
+        path.removeLast(path.count) // 홈으로 이동
+      }
+    }
   }
 }
 
