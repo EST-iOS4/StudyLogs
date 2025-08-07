@@ -10,6 +10,9 @@ import SwiftUI
 struct ProgrammaticNavigation: View {
   @State private var path = NavigationPath()
 
+  // Clamped 프로퍼티 래퍼를 사용하여 값 제한 사용예시
+  @Clamped(min: 0, max: 100) var clampedValue: Int = 100
+
   var body: some View {
     NavigationStack(path: $path) {
       VStack(spacing: 20) {
