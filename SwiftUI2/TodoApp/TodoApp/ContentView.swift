@@ -10,47 +10,38 @@ import SwiftData
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
-  @Query private var items: [TodoItem]
+  @Query(sort: \TodoItem.createdAt, order: .reverse) private var todos: [TodoItem]
+
+  @State private var showingAddTodo = false
+  @State private var searchText = ""
+  @State private var selectedPriority: TodoItem.Priority?
+
+  var filteredTodos: [TodoItem] {
+    todos.filter { todo in
+      (searchText.isEmpty || todo.title.localizedCaseInsensitiveContains(searchText)) &&
+      (selectedPriority == nil || todo.priority == selectedPriority)
+    }
+  }
 
   var body: some View {
-    NavigationSplitView {
+    NavigationStack {
       List {
-        ForEach(items) { item in
-          NavigationLink {
-            Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-          } label: {
-            Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        if !filteredTodos.isEmpty {
+          ForEach(filteredTodos) { todo in
+            TodoRowView(todo: todo)
           }
+          .onDelete(perform: deleteTodos)
         }
-        .onDelete(perform: deleteItems)
       }
       .toolbar {
-        ToolbarItem(placement: .navigationBarTrailing) {
-          EditButton()
-        }
-        ToolbarItem {
-          Button(action: addItem) {
-            Label("Add Item", systemImage: "plus")
-          }
-        }
       }
-    } detail: {
-      Text("Select an item")
     }
   }
 
-  private func addItem() {
-    withAnimation {
-      let newItem = TodoItem(timestamp: Date())
-      modelContext.insert(newItem)
-    }
-  }
-
-  private func deleteItems(offsets: IndexSet) {
-    withAnimation {
-      for index in offsets {
-        modelContext.delete(items[index])
-      }
+  func deleteTodos(at offsets: IndexSet) {
+    for index in offsets {
+      let todo = filteredTodos[index]
+      modelContext.delete(todo)
     }
   }
 }
