@@ -31,10 +31,42 @@ struct ContentView: View {
             TodoRowView(todo: todo)
           }
           .onDelete(perform: deleteTodos)
+        } else {
+          Text("할 일이 없습니다. 할 일을 추가해보세요!")
+            .foregroundColor(.gray)
+            .padding()
+            .onTapGesture {
+              showingAddTodo = true
+            }
         }
       }
+      .navigationTitle("할 일 목록")
+      .searchable(
+        text: $searchText,
+//        placement: .navigationBarDrawer(displayMode: .always)
+      )
       .toolbar {
+        ToolbarItem(placement: .topBarTrailing) {
+          Picker("우선순위", selection: $selectedPriority) {
+            Text("전체").tag(nil as TodoItem.Priority?)
+            ForEach(TodoItem.Priority.allCases, id: \.self) { priority in
+              Text(priority.name).tag(priority.self as TodoItem.Priority?)
+            }
+          }
+        }
+
+        ToolbarItem(placement: .topBarTrailing) {
+          Button(action: {
+            showingAddTodo = true
+          }) {
+            Label("추가", systemImage: "plus")
+          }
+        }
       }
+    }
+    .sheet(isPresented: $showingAddTodo) {
+      AddTodoView()
+        .environment(\.modelContext, modelContext)
     }
   }
 
