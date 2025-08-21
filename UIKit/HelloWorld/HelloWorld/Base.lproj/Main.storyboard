@@ -77,13 +77,37 @@
                     <view key="view" contentMode="scaleToFill" id="B0X-Q7-AFU">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="mr2-yY-Vp8">
+                                <rect key="frame" x="0.0" y="124" width="440" height="230"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wl2-vm-1ON">
+                                <rect key="frame" x="145" y="164" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="Zmn-cl-S6G"/>
+                                    <constraint firstAttribute="height" constant="150" id="cjJ-YR-ga1"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Gv0-PQ-Bto"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Gv0-PQ-Bto" firstAttribute="bottom" secondItem="mr2-yY-Vp8" secondAttribute="bottom" constant="534" id="3pR-QJ-hTt"/>
+                            <constraint firstItem="mr2-yY-Vp8" firstAttribute="centerX" secondItem="B0X-Q7-AFU" secondAttribute="centerX" id="Ay9-ik-ced"/>
+                            <constraint firstItem="mr2-yY-Vp8" firstAttribute="leading" secondItem="Gv0-PQ-Bto" secondAttribute="leading" id="XNQ-YQ-vVx"/>
+                            <constraint firstItem="wl2-vm-1ON" firstAttribute="centerX" secondItem="mr2-yY-Vp8" secondAttribute="centerX" id="eRL-RW-v4B"/>
+                            <constraint firstItem="wl2-vm-1ON" firstAttribute="centerY" secondItem="mr2-yY-Vp8" secondAttribute="centerY" id="ltX-1m-KJU"/>
+                            <constraint firstItem="mr2-yY-Vp8" firstAttribute="top" secondItem="Gv0-PQ-Bto" secondAttribute="top" id="tQt-NK-ePC"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="backgroundImageView" destination="mr2-yY-Vp8" id="Kr2-Mn-8DN"/>
+                        <outlet property="profileImageView" destination="wl2-vm-1ON" id="KzM-oY-ZBy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bau-EZ-Z7D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="45" y="721"/>
+            <point key="canvasLocation" x="45" y="720.50209205020928"/>
         </scene>
         <!--Text Field Example View Controller-->
         <scene sceneID="zOt-7R-qVD">
@@ -198,6 +222,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="background" width="4176" height="2784"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
