@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--ViewController-->
+        <!--뷰 컨트롤러-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="HelloWorld" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="뷰 컨트롤러" id="BYZ-38-t0r" customClass="ViewController" customModule="HelloWorld" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -42,6 +42,15 @@
                                     <action selector="sayHelloButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pMR-EI-cF4"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NHk-dB-Bo8">
+                                <rect key="frame" x="131" y="409" width="130" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="LabelExample"/>
+                                <connections>
+                                    <segue destination="29K-Ye-4yR" kind="show" id="ggd-rY-re4"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -51,7 +60,7 @@
                             <constraint firstItem="Foe-nd-Gmr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="f56-AI-0Fd"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="ViewController" id="o37-fx-59S"/>
+                    <navigationItem key="navigationItem" id="o37-fx-59S"/>
                     <connections>
                         <outlet property="greetingLabel" destination="Foe-nd-Gmr" id="So9-mL-k4z"/>
                         <outlet property="nameTextField" destination="AkF-ZN-pZi" id="4cU-BB-CTL"/>
@@ -60,6 +69,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="933.58778625954199" y="41.549295774647888"/>
+        </scene>
+        <!--LabelExample-->
+        <scene sceneID="HJk-1G-TLg">
+            <objects>
+                <viewController id="29K-Ye-4yR" customClass="LabelExampleViewController" customModule="HelloWorld" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bv8-Ag-Rcc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="E5n-k1-sNu"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="LabelExample" id="yOP-dt-fr2"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OgF-5h-8ho" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1702" y="42"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1sk-tV-zeN">
