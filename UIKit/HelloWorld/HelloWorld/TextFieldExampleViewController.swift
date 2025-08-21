@@ -33,6 +33,22 @@ class TextFieldExampleViewController: UIViewController {
     emailTextField.leftView = emailIcon
     emailTextField.leftViewMode = .always
   }
+
+  func validateEmail(_ email: String) {
+    let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+    let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+    let isValid = emailPredicate.evaluate(with: email)
+
+    emailTextField.rightView = UIImageView(image: UIImage(systemName: isValid ? "checkmark.circle" : "xmark.circle"))
+    emailTextField.rightView?.tintColor = isValid ? .green : .red
+    emailTextField.rightViewMode = email.isEmpty ? .never : .always
+
+    if isValid {
+      print("유효한 이메일 형식입니다.")
+    } else {
+      print("유효하지 않은 이메일 형식입니다.")
+    }
+  }
 }
 
 extension TextFieldExampleViewController: UITextFieldDelegate {
@@ -54,22 +70,5 @@ extension TextFieldExampleViewController: UITextFieldDelegate {
       validateEmail(updatedText)
     }
     return true
-  }
-
-  @MainActor
-  func validateEmail(_ email: String) {
-    let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-    let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-    let isValid = emailPredicate.evaluate(with: email)
-
-    emailTextField.rightView = UIImageView(image: UIImage(systemName: isValid ? "checkmark.circle" : "xmark.circle"))
-    emailTextField.rightView?.tintColor = isValid ? .green : .red
-    emailTextField.rightViewMode = email.isEmpty ? .never : .always
-
-    if isValid {
-      print("유효한 이메일 형식입니다.")
-    } else {
-      print("유효하지 않은 이메일 형식입니다.")
-    }
   }
 }
