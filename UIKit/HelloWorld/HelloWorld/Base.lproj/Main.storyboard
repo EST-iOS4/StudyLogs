@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="4Fo-Ip-2bi">
-    <device id="retina6_12" orientation="portrait" appearance="dark"/>
+    <device id="retina6_9" orientation="portrait" appearance="dark"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -13,11 +13,11 @@
             <objects>
                 <viewController title="뷰 컨트롤러" id="BYZ-38-t0r" customClass="ViewController" customModule="HelloWorld" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Foe-nd-Gmr">
-                                <rect key="frame" x="45" y="172" width="303" height="21"/>
+                                <rect key="frame" x="45" y="178" width="350" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="ABv-Dc-6dx"/>
                                 </constraints>
@@ -75,19 +75,20 @@
             <objects>
                 <viewController id="29K-Ye-4yR" customClass="LabelExampleViewController" customModule="HelloWorld" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bv8-Ag-Rcc">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C97-cp-ccv">
-                                <rect key="frame" x="16" y="287" width="361" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C97-cp-ccv">
+                                <rect key="frame" x="20" y="293" width="400" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J6Q-wj-j0P">
-                                <rect key="frame" x="16" y="416" width="361" height="248"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J6Q-wj-j0P">
+                                <rect key="frame" x="20" y="520" width="400" height="248"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="248" id="oEP-zn-Yj9"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -95,6 +96,14 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="E5n-k1-sNu"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="E5n-k1-sNu" firstAttribute="bottom" secondItem="J6Q-wj-j0P" secondAttribute="bottom" constant="120" id="5Wd-jo-DGo"/>
+                            <constraint firstItem="C97-cp-ccv" firstAttribute="leading" secondItem="bv8-Ag-Rcc" secondAttribute="leadingMargin" id="8g8-Se-zfq"/>
+                            <constraint firstItem="C97-cp-ccv" firstAttribute="top" secondItem="E5n-k1-sNu" secondAttribute="top" constant="125" id="98Y-nJ-gc4"/>
+                            <constraint firstItem="C97-cp-ccv" firstAttribute="trailing" secondItem="J6Q-wj-j0P" secondAttribute="trailing" id="OJA-Gn-Tpq"/>
+                            <constraint firstItem="C97-cp-ccv" firstAttribute="leading" secondItem="J6Q-wj-j0P" secondAttribute="leading" id="VOo-cb-EvH"/>
+                            <constraint firstItem="C97-cp-ccv" firstAttribute="trailing" secondItem="bv8-Ag-Rcc" secondAttribute="trailingMargin" id="hEi-YG-vBA"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="LabelExample" id="yOP-dt-fr2"/>
                     <connections>
@@ -112,7 +121,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4Fo-Ip-2bi" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="PQP-hT-eVf">
-                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="124" width="440" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
