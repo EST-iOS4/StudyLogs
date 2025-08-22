@@ -87,4 +87,32 @@ extension ViewController: UITableViewDelegate {
     present(alert, animated: true)
   }
 
+  // 커스텀 스와이프 액션
+  func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+
+    let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completionHandler in
+      self.items.remove(at: indexPath.row)
+      tableView.deleteRows(at: [indexPath], with: .fade)
+      completionHandler(true)
+    }
+
+    let favoriteAction = UIContextualAction(style: .normal, title: "즐겨찾기") { _, _, completionHandler in
+      let item = self.items[indexPath.row]
+      print("\(item)이(가) 즐겨찾기에 추가되었습니다.")
+      completionHandler(true)
+    }
+
+    return UISwipeActionsConfiguration(actions: [deleteAction, favoriteAction])
+  }
+
+  func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    let favoriteAction = UIContextualAction(style: .normal, title: "즐겨찾기") { _, _, completionHandler in
+      let item = self.items[indexPath.row]
+      print("\(item)이(가) 즐겨찾기에 추가되었습니다.")
+      completionHandler(true)
+    }
+    return UISwipeActionsConfiguration(actions: [favoriteAction])
+
+  }
+
 }
