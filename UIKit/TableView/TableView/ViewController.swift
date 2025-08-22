@@ -8,11 +8,15 @@
 import UIKit
 
 class ViewController: UIViewController {
-  @IBOutlet weak var tableView: UITableView!
+  let tableView: UITableView = {
+    let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), style: .plain)
+    return tableView
+  }()
 
   var fruits:[String: [String]] = [:]
   var sectionTitles: [String] = []
 
+  // 검색
   let searchController = UISearchController(searchResultsController: nil)
 
   var filteredItems: [String] = []
@@ -22,6 +26,8 @@ class ViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    view.addSubview(tableView)
 
     title = "TableView Example"
 
@@ -35,13 +41,14 @@ class ViewController: UIViewController {
 
     setupData()
     setupSearchController()
+    setupRefreshControl()
   }
 
   func setupData() {
     // 데이터 초기화
     fruits = [
-      "A": ["Apple #1", "Apricot"],
-      "B": ["Banana #2", "Blueberry"],
+      "A": ["Apple #1", "Apricot \(Date())"],
+      "B": ["Banana #2 \(Date())", "Blueberry"],
       "C": ["Cherry #3", "Clementine"],
       "D": ["Date #4", "Dragonfruit"],
       "E": ["Elderberry #5", "Eggplant"],
@@ -65,9 +72,25 @@ class ViewController: UIViewController {
     searchController.searchBar.tintColor = .systemBlue
   }
 
+  func setupRefreshControl() {
+    let refreshControl = UIRefreshControl()
+    refreshControl.attributedTitle = NSAttributedString(string: "새로고침 중...")
+    refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+    tableView.refreshControl = refreshControl
+  }
+
   @objc func editButtonTapped() {
     tableView.isEditing.toggle()
     navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "완료" : "편집"
+  }
+
+  @objc func refreshData() {
+    // 데이터 새로고침 로직 (비동기 함수 호출)
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+      self.setupData()
+      self.tableView.reloadData()
+      self.tableView.refreshControl?.endRefreshing()
+    }
   }
 }
 
@@ -207,4 +230,8 @@ extension ViewController: UISearchResultsUpdating {
     }
     tableView.reloadData()
   }
+}
+
+#Preview {
+  UINavigationController(rootViewController: ViewController())
 }
