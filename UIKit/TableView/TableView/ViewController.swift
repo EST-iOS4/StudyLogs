@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     tableView.delegate = self
     tableView.dataSource = self
 
-    tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+    tableView.register(CustomCell.self, forCellReuseIdentifier: "Cell")
   }
 }
 
@@ -27,8 +27,8 @@ extension ViewController: UITableViewDataSource {
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-    cell.textLabel?.text = "행 \(indexPath.row + 1)"
+    let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
+    cell.configure(with: "행 \(indexPath.row + 1)")
     return cell
   }
 }
