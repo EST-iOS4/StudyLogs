@@ -7,19 +7,32 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		CC7138B12E57EC1600C2B4A0 /* SignupForm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SignupForm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC7138C82E57ECB800C2B4A0 /* SignupForm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SignupForm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CC7138DA2E57ECB900C2B4A0 /* Exceptions for "SignupForm" folder in "SignupForm" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CC7138C72E57ECB800C2B4A0 /* SignupForm */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CC7138B32E57EC1600C2B4A0 /* SignupForm */ = {
+		CC7138CA2E57ECB800C2B4A0 /* SignupForm */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CC7138DA2E57ECB900C2B4A0 /* Exceptions for "SignupForm" folder in "SignupForm" target */,
+			);
 			path = SignupForm;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		CC7138AE2E57EC1600C2B4A0 /* Frameworks */ = {
+		CC7138C52E57ECB800C2B4A0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -29,18 +42,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		CC7138A82E57EC1600C2B4A0 = {
+		CC7138BF2E57ECB800C2B4A0 = {
 			isa = PBXGroup;
 			children = (
-				CC7138B32E57EC1600C2B4A0 /* SignupForm */,
-				CC7138B22E57EC1600C2B4A0 /* Products */,
+				CC7138CA2E57ECB800C2B4A0 /* SignupForm */,
+				CC7138C92E57ECB800C2B4A0 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		CC7138B22E57EC1600C2B4A0 /* Products */ = {
+		CC7138C92E57ECB800C2B4A0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CC7138B12E57EC1600C2B4A0 /* SignupForm.app */,
+				CC7138C82E57ECB800C2B4A0 /* SignupForm.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,64 +61,64 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CC7138B02E57EC1600C2B4A0 /* SignupForm */ = {
+		CC7138C72E57ECB800C2B4A0 /* SignupForm */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CC7138BC2E57EC1700C2B4A0 /* Build configuration list for PBXNativeTarget "SignupForm" */;
+			buildConfigurationList = CC7138DB2E57ECB900C2B4A0 /* Build configuration list for PBXNativeTarget "SignupForm" */;
 			buildPhases = (
-				CC7138AD2E57EC1600C2B4A0 /* Sources */,
-				CC7138AE2E57EC1600C2B4A0 /* Frameworks */,
-				CC7138AF2E57EC1600C2B4A0 /* Resources */,
+				CC7138C42E57ECB800C2B4A0 /* Sources */,
+				CC7138C52E57ECB800C2B4A0 /* Frameworks */,
+				CC7138C62E57ECB800C2B4A0 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				CC7138B32E57EC1600C2B4A0 /* SignupForm */,
+				CC7138CA2E57ECB800C2B4A0 /* SignupForm */,
 			);
 			name = SignupForm;
 			packageProductDependencies = (
 			);
 			productName = SignupForm;
-			productReference = CC7138B12E57EC1600C2B4A0 /* SignupForm.app */;
+			productReference = CC7138C82E57ECB800C2B4A0 /* SignupForm.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		CC7138A92E57EC1600C2B4A0 /* Project object */ = {
+		CC7138C02E57ECB800C2B4A0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
-					CC7138B02E57EC1600C2B4A0 = {
+					CC7138C72E57ECB800C2B4A0 = {
 						CreatedOnToolsVersion = 16.4;
 					};
 				};
 			};
-			buildConfigurationList = CC7138AC2E57EC1600C2B4A0 /* Build configuration list for PBXProject "SignupForm" */;
+			buildConfigurationList = CC7138C32E57ECB800C2B4A0 /* Build configuration list for PBXProject "SignupForm" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = CC7138A82E57EC1600C2B4A0;
+			mainGroup = CC7138BF2E57ECB800C2B4A0;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = CC7138B22E57EC1600C2B4A0 /* Products */;
+			productRefGroup = CC7138C92E57ECB800C2B4A0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CC7138B02E57EC1600C2B4A0 /* SignupForm */,
+				CC7138C72E57ECB800C2B4A0 /* SignupForm */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		CC7138AF2E57EC1600C2B4A0 /* Resources */ = {
+		CC7138C62E57ECB800C2B4A0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -115,7 +128,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		CC7138AD2E57EC1600C2B4A0 /* Sources */ = {
+		CC7138C42E57ECB800C2B4A0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -125,7 +138,63 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		CC7138BA2E57EC1700C2B4A0 /* Debug */ = {
+		CC7138DC2E57ECB900C2B4A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 59FP2PXRXK;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SignupForm/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.codegrove.SignupForm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CC7138DD2E57ECB900C2B4A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 59FP2PXRXK;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SignupForm/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.codegrove.SignupForm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CC7138DE2E57ECB900C2B4A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -189,7 +258,7 @@
 			};
 			name = Debug;
 		};
-		CC7138BB2E57EC1700C2B4A0 /* Release */ = {
+		CC7138DF2E57ECB900C2B4A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -246,84 +315,28 @@
 			};
 			name = Release;
 		};
-		CC7138BD2E57EC1700C2B4A0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 59FP2PXRXK;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.codegrove.SignupForm;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		CC7138BE2E57EC1700C2B4A0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 59FP2PXRXK;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.codegrove.SignupForm;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CC7138AC2E57EC1600C2B4A0 /* Build configuration list for PBXProject "SignupForm" */ = {
+		CC7138C32E57ECB800C2B4A0 /* Build configuration list for PBXProject "SignupForm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CC7138BA2E57EC1700C2B4A0 /* Debug */,
-				CC7138BB2E57EC1700C2B4A0 /* Release */,
+				CC7138DE2E57ECB900C2B4A0 /* Debug */,
+				CC7138DF2E57ECB900C2B4A0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CC7138BC2E57EC1700C2B4A0 /* Build configuration list for PBXNativeTarget "SignupForm" */ = {
+		CC7138DB2E57ECB900C2B4A0 /* Build configuration list for PBXNativeTarget "SignupForm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CC7138BD2E57EC1700C2B4A0 /* Debug */,
-				CC7138BE2E57EC1700C2B4A0 /* Release */,
+				CC7138DC2E57ECB900C2B4A0 /* Debug */,
+				CC7138DD2E57ECB900C2B4A0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = CC7138A92E57EC1600C2B4A0 /* Project object */;
+	rootObject = CC7138C02E57ECB800C2B4A0 /* Project object */;
 }
