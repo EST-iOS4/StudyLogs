@@ -32,28 +32,32 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UITableViewDataSource {
-  // DataSource
+  // 데이터 아이템의 개수
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return items.count
   }
 
+  // 셀 단위의 편집 기능 활성화 여부
   func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
     return true
   }
 
+  // 셀을 이동할 수 있는지 여부
   func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
     return true
   }
 
+  // 셀을 이동할 때 호출되는 메서드
   func tableView(
     _ tableView: UITableView,
-    moveRowAt sourceIndexPath: IndexPath,
-    to destinationIndexPath: IndexPath
+    moveRowAt sourceIndexPath: IndexPath, // 이동할 셀의 현재 위치
+    to destinationIndexPath: IndexPath // 이동할 셀의 새로운 위치
   ) {
     let moveItem = items.remove(at: sourceIndexPath.row)
     items.insert(moveItem, at: destinationIndexPath.row)
   }
 
+  // 셀을 삭제할 때 호출되는 메서드
   func tableView(
     _ tableView: UITableView,
     commit editingStyle: UITableViewCell.EditingStyle,
@@ -65,6 +69,7 @@ extension ViewController: UITableViewDataSource {
     }
   }
 
+  // 셀을 구성하는 메서드
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 //    cell.configure(with: items[indexPath.row])
@@ -74,7 +79,7 @@ extension ViewController: UITableViewDataSource {
 }
 
 extension ViewController: UITableViewDelegate {
-  // Delegate
+  // 셀이 선택될 때 호출되는 메서드
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     let alert = UIAlertController(title: "선택됨", message: "행 \(indexPath.row + 1)을 선택했습니다.", preferredStyle: .alert)
