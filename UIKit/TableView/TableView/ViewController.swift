@@ -10,11 +10,13 @@ import UIKit
 class ViewController: UIViewController {
   @IBOutlet weak var tableView: UITableView!
 
-  var items = ["Apple #1", "Banana #2", "Cherry #3", "Date #4",
-               "Elderberry #5", "Fig #6", "Grape #7", "Honeydew #8"]
+  var fruits:[String: [String]] = [:]
+  var sectionTitles: [String] = []
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    title = "TableView Example"
 
     tableView.delegate = self
     tableView.dataSource = self
@@ -23,6 +25,24 @@ class ViewController: UIViewController {
 
     navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .plain,
                                                         target: self, action: #selector(editButtonTapped))
+
+    setupData()
+  }
+
+  func setupData() {
+    // 데이터 초기화
+    fruits = [
+      "A": ["Apple #1", "Apricot"],
+      "B": ["Banana #2", "Blueberry"],
+      "C": ["Cherry #3", "Clementine"],
+      "D": ["Date #4", "Dragonfruit"],
+      "E": ["Elderberry #5", "Eggplant"],
+      "F": ["Fig #6", "Feijoa"],
+      "G": ["Grape #7", "Guava"],
+      "H": ["Honeydew #8", "Huckleberry"]
+    ]
+
+    sectionTitles = fruits.keys.sorted()
   }
 
   @objc func editButtonTapped() {
@@ -32,9 +52,14 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UITableViewDataSource {
-  // 데이터 아이템의 개수
+  func numberOfSections(in tableView: UITableView) -> Int {
+    return sectionTitles.count
+  }
+
+  // 데이터 섹션 행 아이템의 개수
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return items.count
+    let sectionTitle = sectionTitles[section]
+    return fruits[sectionTitle]?.count ?? 0
   }
 
   // 셀 단위의 편집 기능 활성화 여부
@@ -53,8 +78,15 @@ extension ViewController: UITableViewDataSource {
     moveRowAt sourceIndexPath: IndexPath, // 이동할 셀의 현재 위치
     to destinationIndexPath: IndexPath // 이동할 셀의 새로운 위치
   ) {
-    let moveItem = items.remove(at: sourceIndexPath.row)
-    items.insert(moveItem, at: destinationIndexPath.row)
+    let sectionTitle = sectionTitles[sourceIndexPath.section]
+    guard var items = fruits[sectionTitle] else { return }
+
+    // 이동할 아이템을 제거하고 새로운 위치에 삽입
+    let item = items.remove(at: sourceIndexPath.row)
+    items.insert(item, at: destinationIndexPath.row)
+
+    // 섹션의 아이템을 업데이트
+    fruits[sectionTitle] = items
   }
 
   // 셀을 삭제할 때 호출되는 메서드
@@ -64,16 +96,39 @@ extension ViewController: UITableViewDataSource {
     forRowAt indexPath: IndexPath
   ) {
     if editingStyle == .delete {
+      let sectionTitle = sectionTitles[indexPath.section]
+      guard var items = fruits[sectionTitle] else { return }
+
+      // 해당 아이템을 삭제
       items.remove(at: indexPath.row)
-      tableView.deleteRows(at: [indexPath], with: .fade)
+
+      // 섹션의 아이템을 업데이트
+      if items.isEmpty {
+        fruits.removeValue(forKey: sectionTitle)
+        sectionTitles.remove(at: indexPath.section)
+        tableView.deleteSections(IndexSet(integer: indexPath.section), with: .fade)
+      } else {
+        fruits[sectionTitle] = items
+        tableView.deleteRows(at: [indexPath], with: .fade)
+      }
     }
+  }
+
+  // 섹션 헤더 타이틀
+  func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    return sectionTitles[section]
   }
 
   // 셀을 구성하는 메서드
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-//    cell.configure(with: items[indexPath.row])
-    cell.textLabel?.text = items[indexPath.row]
+
+    let sectionTitle = sectionTitles[indexPath.section]
+    if let items = fruits[sectionTitle] {
+      cell.textLabel?.text = items[indexPath.row]
+    } else {
+      cell.textLabel?.text = "데이터 없음"
+    }
     return cell
   }
 }
@@ -91,28 +146,22 @@ extension ViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
     let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completionHandler in
-      self.items.remove(at: indexPath.row)
-      tableView.deleteRows(at: [indexPath], with: .fade)
+      let sectionTitle = self.sectionTitles[indexPath.section]
+      guard var items = self.fruits[sectionTitle] else { return }
+      // 해당 아이템을 삭제
+      items.remove(at: indexPath.row)
+      // 섹션의 아이템을 업데이트
+      if items.isEmpty {
+        self.fruits.removeValue(forKey: sectionTitle)
+        self.sectionTitles.remove(at: indexPath.section)
+        tableView.deleteSections(IndexSet(integer: indexPath.section), with: .fade)
+      } else {
+        self.fruits[sectionTitle] = items
+        tableView.deleteRows(at: [indexPath], with: .fade)
+      }
       completionHandler(true)
     }
 
-    let favoriteAction = UIContextualAction(style: .normal, title: "즐겨찾기") { _, _, completionHandler in
-      let item = self.items[indexPath.row]
-      print("\(item)이(가) 즐겨찾기에 추가되었습니다.")
-      completionHandler(true)
-    }
-
-    return UISwipeActionsConfiguration(actions: [deleteAction, favoriteAction])
+    return UISwipeActionsConfiguration(actions: [deleteAction])
   }
-
-  func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-    let favoriteAction = UIContextualAction(style: .normal, title: "즐겨찾기") { _, _, completionHandler in
-      let item = self.items[indexPath.row]
-      print("\(item)이(가) 즐겨찾기에 추가되었습니다.")
-      completionHandler(true)
-    }
-    return UISwipeActionsConfiguration(actions: [favoriteAction])
-
-  }
-
 }
