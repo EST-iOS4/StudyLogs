@@ -13,6 +13,13 @@ class ViewController: UIViewController {
   var fruits:[String: [String]] = [:]
   var sectionTitles: [String] = []
 
+  let searchController = UISearchController(searchResultsController: nil)
+
+  var filteredItems: [String] = []
+  var isSearching: Bool {
+    return searchController.isActive && !(searchController.searchBar.text?.isEmpty ?? true)
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -27,6 +34,7 @@ class ViewController: UIViewController {
                                                         target: self, action: #selector(editButtonTapped))
 
     setupData()
+    setupSearchController()
   }
 
   func setupData() {
@@ -45,6 +53,18 @@ class ViewController: UIViewController {
     sectionTitles = fruits.keys.sorted()
   }
 
+  func setupSearchController() {
+    searchController.searchResultsUpdater = self
+    searchController.obscuresBackgroundDuringPresentation = false
+    searchController.searchBar.placeholder = "과일 검색"
+    navigationItem.searchController = searchController
+    definesPresentationContext = true
+
+    // 검색바의 스타일 설정
+    searchController.searchBar.barStyle = .default
+    searchController.searchBar.tintColor = .systemBlue
+  }
+
   @objc func editButtonTapped() {
     tableView.isEditing.toggle()
     navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "완료" : "편집"
@@ -53,23 +73,23 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDataSource {
   func numberOfSections(in tableView: UITableView) -> Int {
-    return sectionTitles.count
+    return isSearching ? 1 : sectionTitles.count
   }
 
   // 데이터 섹션 행 아이템의 개수
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     let sectionTitle = sectionTitles[section]
-    return fruits[sectionTitle]?.count ?? 0
+    return isSearching ? filteredItems.count : (fruits[sectionTitle]?.count ?? 0)
   }
 
   // 셀 단위의 편집 기능 활성화 여부
   func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-    return true
+    return isSearching ? false : true
   }
 
   // 셀을 이동할 수 있는지 여부
   func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-    return true
+    return isSearching ? false : true
   }
 
   // 셀을 이동할 때 호출되는 메서드
@@ -116,12 +136,17 @@ extension ViewController: UITableViewDataSource {
 
   // 섹션 헤더 타이틀
   func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    return sectionTitles[section]
+    return isSearching ? "검색 결과" : sectionTitles[section]
   }
 
   // 셀을 구성하는 메서드
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+
+    if isSearching {
+      cell.textLabel?.text = filteredItems[indexPath.row]
+      return cell
+    }
 
     let sectionTitle = sectionTitles[indexPath.section]
     if let items = fruits[sectionTitle] {
@@ -163,5 +188,23 @@ extension ViewController: UITableViewDelegate {
     }
 
     return UISwipeActionsConfiguration(actions: [deleteAction])
+  }
+}
+
+extension ViewController: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+    guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
+      filteredItems.removeAll()
+      tableView.reloadData()
+      return
+    }
+    filterContentForSearchText(searchText)
+  }
+
+  func filterContentForSearchText(_ searchText: String) {
+    filteredItems = sectionTitles.flatMap { sectionTitle in
+      fruits[sectionTitle]?.filter { $0.localizedCaseInsensitiveContains(searchText) } ?? []
+    }
+    tableView.reloadData()
   }
 }
