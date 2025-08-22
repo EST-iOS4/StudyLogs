@@ -10,6 +10,9 @@ import UIKit
 class ViewController: UIViewController {
   @IBOutlet weak var tableView: UITableView!
 
+  let items = ["Apple #1", "Banana #2", "Cherry #3", "Date #4",
+               "Elderberry #5", "Fig #6", "Grape #7", "Honeydew #8"]
+
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -23,12 +26,12 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource {
   // DataSource
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 20 // 예시로 20개의 행을 표시
+    return items.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
-    cell.configure(with: "행 \(indexPath.row + 1)")
+    cell.configure(with: items[indexPath.row])
     return cell
   }
 }

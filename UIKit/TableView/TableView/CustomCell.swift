@@ -12,7 +12,7 @@ class CustomCell: UITableViewCell {
   private let titleLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-    label.textColor = .systemGray
+    label.textColor = .black
     label.frame = CGRect(x: 15, y: 10, width: 200, height: 20)
     return label
   }()
@@ -28,7 +28,7 @@ class CustomCell: UITableViewCell {
 
   private func setupUI() {
     self.contentView.addSubview(titleLabel)
-    contentView.backgroundColor = .systemMint
+    contentView.backgroundColor = .systemGray6
   }
 
   func configure(with title: String) {
