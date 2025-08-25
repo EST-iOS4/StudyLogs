@@ -60,14 +60,7 @@ class TodoTableViewCell: UITableViewCell {
           value: NSUnderlineStyle.single.rawValue,
           range: NSRange(location: 0, length: text.count)
         )
-    } else {
-      attributeString
-        .removeAttribute(
-          .strikethroughStyle,
-          range: NSRange(location: 0, length: text.count)
-        )
     }
-    print("\(attributeString.debugDescription)")
     return attributeString
   }
 
