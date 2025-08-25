@@ -16,6 +16,13 @@ class ViewController: UIViewController {
     .systemIndigo, .systemBrown, .systemGray, .systemCyan
   ]
 
+  struct Section {
+    let title: String
+    let items: [UIColor]
+  }
+
+  var sections: [Section] = []
+
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -23,6 +30,15 @@ class ViewController: UIViewController {
     collectionView.delegate = self
 
     setupLayout()
+    setupSections()
+
+    let headerNib = UINib(nibName: "SectionHeaderView", bundle: nil)
+    collectionView
+      .register(
+        headerNib,
+        forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+        withReuseIdentifier: "SectionHeader"
+      )
   }
 
   func setupLayout() {
@@ -42,11 +58,40 @@ class ViewController: UIViewController {
     collectionView
       .register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
   }
+
+  func setupSections() {
+    sections = [
+      Section(title: "1번째", items: colors),
+      Section(title: "2번째", items: colors),
+      Section(title: "3번째", items: colors),
+    ]
+  }
 }
 
 extension ViewController: UICollectionViewDataSource {
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
+    return sections.count
+  }
+
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return colors.count * 3
+    return sections[section].items.count
+  }
+
+  func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    if kind == UICollectionView.elementKindSectionHeader {
+      let header = collectionView.dequeueReusableSupplementaryView(
+        ofKind: kind,
+        withReuseIdentifier: "SectionHeader",
+        for: indexPath
+      ) as! SectionHeaderView
+
+      let section = sections[indexPath.section]
+
+      header.configure(title: section.title, count: section.items.count)
+
+      return header
+    }
+    return UICollectionReusableView()
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -60,6 +105,8 @@ extension ViewController: UICollectionViewDataSource {
   }
 }
 
-extension ViewController: UICollectionViewDelegate {
-
+extension ViewController: UICollectionViewDelegateFlowLayout {
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    return CGSize(width: collectionView.frame.width, height: 50)
+  }
 }
