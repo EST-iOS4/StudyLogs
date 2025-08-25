@@ -20,13 +20,49 @@
                                 <rect key="frame" x="0.0" y="162" width="393" height="622"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Ba1-nc-AvE">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="44.666667938232422"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TodoCell" id="Ba1-nc-AvE" customClass="TodoTableViewCell" customModule="TodoList" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="45.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ba1-nc-AvE" id="cxf-aM-Smr">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="44.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="45.333332061767578"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cdk-UH-g8Y">
+                                                    <rect key="frame" x="76" y="12" width="220" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="220" id="ykX-YI-oKr"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aoG-rP-fNi">
+                                                    <rect key="frame" x="20" y="5" width="35" height="35"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="tinted" title="Button"/>
+                                                </button>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zwH-80-g5v">
+                                                    <rect key="frame" x="304" y="11" width="69" height="23"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="cdk-UH-g8Y" firstAttribute="centerY" secondItem="aoG-rP-fNi" secondAttribute="centerY" id="0Sl-LW-SD0"/>
+                                                <constraint firstItem="zwH-80-g5v" firstAttribute="top" secondItem="cxf-aM-Smr" secondAttribute="topMargin" id="6po-Gl-bre"/>
+                                                <constraint firstItem="cdk-UH-g8Y" firstAttribute="centerY" secondItem="cxf-aM-Smr" secondAttribute="centerY" id="JPs-bJ-g8j"/>
+                                                <constraint firstItem="cdk-UH-g8Y" firstAttribute="leading" secondItem="cxf-aM-Smr" secondAttribute="leading" constant="76" id="Kbu-1k-tS4"/>
+                                                <constraint firstItem="cdk-UH-g8Y" firstAttribute="top" secondItem="cxf-aM-Smr" secondAttribute="topMargin" constant="1" id="MTM-NK-72U"/>
+                                                <constraint firstItem="cdk-UH-g8Y" firstAttribute="leading" secondItem="aoG-rP-fNi" secondAttribute="trailing" constant="21" id="jZJ-Uf-qkh"/>
+                                                <constraint firstItem="cdk-UH-g8Y" firstAttribute="centerY" secondItem="zwH-80-g5v" secondAttribute="centerY" id="sgk-HT-QrT"/>
+                                                <constraint firstItem="zwH-80-g5v" firstAttribute="leading" secondItem="cdk-UH-g8Y" secondAttribute="trailing" constant="8" id="zhS-tN-bcX"/>
+                                                <constraint firstItem="zwH-80-g5v" firstAttribute="trailing" secondItem="cxf-aM-Smr" secondAttribute="trailingMargin" id="zoH-87-SVm"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="checkButton" destination="aoG-rP-fNi" id="mxy-80-4nq"/>
+                                            <outlet property="priorityView" destination="zwH-80-g5v" id="Z2Z-H7-0Ca"/>
+                                            <outlet property="titleLabel" destination="cdk-UH-g8Y" id="y6x-tv-Jna"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
