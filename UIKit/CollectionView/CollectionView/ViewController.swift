@@ -56,7 +56,12 @@ class ViewController: UIViewController {
 
     //    collectionView.collectionViewLayout = layout
     // 캐러셀
-    collectionView.collectionViewLayout = CarouselLayout()
+//    collectionView.collectionViewLayout = CarouselLayout()
+    // Pinterest
+    let pinterestLayout = PinterestLayout()
+    pinterestLayout.delegate = self
+    collectionView.collectionViewLayout = pinterestLayout
+
     collectionView
       .register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
   }
@@ -76,7 +81,7 @@ extension ViewController: UICollectionViewDataSource {
   }
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return sections[section].items.count
+    return sections[section].items.count * 4
   }
 
   func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -110,5 +115,17 @@ extension ViewController: UICollectionViewDataSource {
 extension ViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
     return CGSize(width: collectionView.frame.width, height: 50)
+  }
+}
+
+extension ViewController: PinterestLayoutDelegate {
+  func collectionView(_ collectionView: UICollectionView, heightForItemAt indexPath: IndexPath) -> CGFloat {
+    switch indexPath.item % 3 {
+    case 0: return 50
+    case 1: return 70
+    case 2: return 100
+    default:
+      return 30
+    }
   }
 }
