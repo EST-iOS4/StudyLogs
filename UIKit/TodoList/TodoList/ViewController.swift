@@ -68,11 +68,14 @@ extension ViewController: UITableViewDataSource {
     cell.configure(with: todos[indexPath.row])
 
     cell.onToggleComplete = {
-      print("클로저 호출")
-      self.todos[indexPath.row].isCompleted.toggle()
-      self.tableView.reloadRows(at: [indexPath], with: .none)
+      self.toggleComplete(index: indexPath.row)
     }
-
     return cell
+  }
+
+  func toggleComplete(index: Int) {
+    self.todos[index].isCompleted.toggle()
+    let indexPath = IndexPath(row: index, section: 0)
+    self.tableView.reloadRows(at: [indexPath], with: .none)
   }
 }

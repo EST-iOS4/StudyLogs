@@ -27,21 +27,20 @@ class TodoTableViewCell: UITableViewCell {
 
   override func prepareForReuse() {
     super.prepareForReuse()
-    print("취소선이 이상해요 \(titleLabel.attributedText.debugDescription)")
     titleLabel.attributedText = nil
     titleLabel.text = nil
     priorityView.backgroundColor = .clear
     checkButton.setImage(UIImage(systemName: "circle"), for: .normal)
+    titleLabel.layoutIfNeeded()
   }
 
   func configure(with todo: TodoItem) {
-    print("\(todo.title): \(todo.isCompleted)")
+    titleLabel.text = todo.title
     titleLabel.textColor = todo.isCompleted ? .systemGray : .label
     titleLabel.attributedText = attributedText(
       text: todo.title,
       isCompleted: todo.isCompleted
     )
-    titleLabel.text = todo.title
 
     checkButton
       .setImage(
@@ -65,7 +64,6 @@ class TodoTableViewCell: UITableViewCell {
           range: NSRange(location: 0, length: text.count)
         )
     } else {
-      print("여기로 오세요 \(text)")
       attributeString
         .removeAttribute(
           .strikethroughStyle,
