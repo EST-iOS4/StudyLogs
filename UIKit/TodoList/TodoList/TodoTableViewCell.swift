@@ -23,12 +23,32 @@ class TodoTableViewCell: UITableViewCell {
       .addTarget(self, action: #selector(toggleComplete), for: .touchUpInside)
   }
 
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    titleLabel.attributedText = nil
+    titleLabel.text = ""
+    priorityView.backgroundColor = .clear
+    checkButton.setImage(UIImage(systemName: "circle"), for: .normal)
+  }
+
   func configure(with todo: TodoItem) {
-    titleLabel.text = todo.title
+    print("\(todo.title): \(todo.isCompleted)")
     titleLabel.textColor = todo.isCompleted ? .systemGray : .label
     titleLabel.attributedText = todo.isCompleted ? strikeThrough(
       text: todo.title
     ) : NSAttributedString(string: todo.title)
+    titleLabel.text = todo.title
+
+    checkButton
+      .setImage(
+        UIImage(
+          systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle"
+        ),
+        for: .normal
+      )
+    checkButton.tintColor = todo.isCompleted ? .systemBlue : .systemGray
+
+    priorityView.backgroundColor = todo.priority.color
   }
 
   func strikeThrough(text: String) -> NSAttributedString {
@@ -45,4 +65,5 @@ class TodoTableViewCell: UITableViewCell {
   @objc func toggleComplete() {
     onToggleComplete?()
   }
+
 }
