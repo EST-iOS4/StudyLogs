@@ -18,6 +18,8 @@ class TodoTableViewCell: UITableViewCell {
   override func awakeFromNib() {
     super.awakeFromNib()
     // Initialization code
+    titleLabel.attributedText = nil
+    titleLabel.text = nil
     priorityView.layer.cornerRadius = 4
     checkButton
       .addTarget(self, action: #selector(toggleComplete), for: .touchUpInside)
@@ -25,8 +27,9 @@ class TodoTableViewCell: UITableViewCell {
 
   override func prepareForReuse() {
     super.prepareForReuse()
+    print("취소선이 이상해요 \(titleLabel.attributedText.debugDescription)")
     titleLabel.attributedText = nil
-    titleLabel.text = ""
+    titleLabel.text = nil
     priorityView.backgroundColor = .clear
     checkButton.setImage(UIImage(systemName: "circle"), for: .normal)
   }
@@ -34,9 +37,10 @@ class TodoTableViewCell: UITableViewCell {
   func configure(with todo: TodoItem) {
     print("\(todo.title): \(todo.isCompleted)")
     titleLabel.textColor = todo.isCompleted ? .systemGray : .label
-    titleLabel.attributedText = todo.isCompleted ? strikeThrough(
-      text: todo.title
-    ) : NSAttributedString(string: todo.title)
+    titleLabel.attributedText = attributedText(
+      text: todo.title,
+      isCompleted: todo.isCompleted
+    )
     titleLabel.text = todo.title
 
     checkButton
@@ -51,14 +55,24 @@ class TodoTableViewCell: UITableViewCell {
     priorityView.backgroundColor = todo.priority.color
   }
 
-  func strikeThrough(text: String) -> NSAttributedString {
+  func attributedText(text: String, isCompleted: Bool) -> NSAttributedString {
     let attributeString = NSMutableAttributedString(string: text)
-    attributeString
-      .addAttribute(
-        .strikethroughStyle,
-        value: NSUnderlineStyle.single.rawValue,
-        range: NSRange(location: 0, length: text.count)
-      )
+    if isCompleted {
+      attributeString
+        .addAttribute(
+          .strikethroughStyle,
+          value: NSUnderlineStyle.single.rawValue,
+          range: NSRange(location: 0, length: text.count)
+        )
+    } else {
+      print("여기로 오세요 \(text)")
+      attributeString
+        .removeAttribute(
+          .strikethroughStyle,
+          range: NSRange(location: 0, length: text.count)
+        )
+    }
+    print("\(attributeString.debugDescription)")
     return attributeString
   }
 

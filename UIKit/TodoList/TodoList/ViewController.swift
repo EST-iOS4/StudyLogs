@@ -42,7 +42,7 @@ class ViewController: UIViewController {
       self.todos.append(newTodo)
       // 뷰 업데이트
       let indexPath = IndexPath(row: self.todos.count - 1, section: 0)
-      self.tableView.insertRows(at: [indexPath], with: .automatic)
+      self.tableView.insertRows(at: [indexPath], with: .top)
     }
 
     alert.addAction(saveAction)
@@ -62,11 +62,15 @@ extension ViewController: UITableViewDataSource {
       for: indexPath
     ) as! TodoTableViewCell
 
+    print(
+      "todos[indexPath.row] \(self.todos[indexPath.row].isCompleted): \(self.todos[indexPath.row].title)"
+    )
     cell.configure(with: todos[indexPath.row])
 
     cell.onToggleComplete = {
+      print("클로저 호출")
       self.todos[indexPath.row].isCompleted.toggle()
-      self.tableView.reloadRows(at: [indexPath], with: .automatic)
+      self.tableView.reloadRows(at: [indexPath], with: .none)
     }
 
     return cell
