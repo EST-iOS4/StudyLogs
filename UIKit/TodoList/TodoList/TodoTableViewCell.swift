@@ -19,7 +19,6 @@ class TodoTableViewCell: UITableViewCell {
     super.awakeFromNib()
     // Initialization code
     titleLabel.attributedText = nil
-    titleLabel.text = nil
     priorityView.layer.cornerRadius = 4
     checkButton
       .addTarget(self, action: #selector(toggleComplete), for: .touchUpInside)
@@ -28,14 +27,12 @@ class TodoTableViewCell: UITableViewCell {
   override func prepareForReuse() {
     super.prepareForReuse()
     titleLabel.attributedText = nil
-    titleLabel.text = nil
     priorityView.backgroundColor = .clear
     checkButton.setImage(UIImage(systemName: "circle"), for: .normal)
     titleLabel.layoutIfNeeded()
   }
 
   func configure(with todo: TodoItem) {
-    titleLabel.text = todo.title
     titleLabel.textColor = todo.isCompleted ? .systemGray : .label
     titleLabel.attributedText = attributedText(
       text: todo.title,
