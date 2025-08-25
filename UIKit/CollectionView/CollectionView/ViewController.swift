@@ -54,7 +54,9 @@ class ViewController: UIViewController {
     layout.minimumLineSpacing = spacing
     layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
 
-    collectionView.collectionViewLayout = layout
+    //    collectionView.collectionViewLayout = layout
+    // 캐러셀
+    collectionView.collectionViewLayout = CarouselLayout()
     collectionView
       .register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
   }
