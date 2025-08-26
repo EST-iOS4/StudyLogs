@@ -109,7 +109,7 @@ class ViewController: UIViewController {
 
     let groupSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(0.85),
-      heightDimension: .absolute(200)
+      heightDimension: .absolute(250)
     )
     let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
@@ -144,7 +144,7 @@ class ViewController: UIViewController {
 
     let groupSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1.0),
-      heightDimension: .absolute(150)
+      heightDimension: .absolute(160)
     )
     let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
