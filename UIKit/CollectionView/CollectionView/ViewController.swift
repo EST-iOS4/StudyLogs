@@ -18,7 +18,7 @@ class ViewController: UIViewController {
 
   struct Section {
     let title: String
-    let items: [UIColor]
+    var items: [UIColor]
   }
 
   var sections: [Section] = []
@@ -39,6 +39,10 @@ class ViewController: UIViewController {
         forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
         withReuseIdentifier: "SectionHeader"
       )
+
+    collectionView.dragDelegate = self
+    collectionView.dropDelegate = self
+    collectionView.dragInteractionEnabled = true
   }
 
   func setupLayout() {
@@ -166,7 +170,7 @@ extension ViewController: UICollectionViewDataSource {
   }
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return sections[section].items.count * 4
+    return sections[section].items.count
   }
 
   func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -190,7 +194,8 @@ extension ViewController: UICollectionViewDataSource {
     let cell = collectionView
       .dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
 
-    cell.backgroundColor = colors[indexPath.row % colors.count]
+    let section = sections[indexPath.section]
+    cell.backgroundColor = section.items[indexPath.item]
     cell.layer.cornerRadius = 8
 
     return cell
@@ -212,5 +217,72 @@ extension ViewController: PinterestLayoutDelegate {
     default:
       return 30
     }
+  }
+}
+
+// MARK: - UICollectionViewDragDelegate
+extension ViewController: UICollectionViewDragDelegate {
+  func collectionView(_ collectionView: UICollectionView,
+                      itemsForBeginning session: UIDragSession,
+                      at indexPath: IndexPath) -> [UIDragItem] {
+    // 선택된 아이템 가져오기
+    let section = sections[indexPath.section]
+    let item = section.items[indexPath.item]
+
+    // NSItemProvider를 생성하여 드래그할 데이터 설정
+    let itemProvider = NSItemProvider(object: item as UIColor)
+    // UIDragItem 생성
+    let dragItem = UIDragItem(itemProvider: itemProvider)
+    // 로컬 객체로 원본 데이터 저장 (앱 내에서만 사용)
+    dragItem.localObject = item
+
+    return [dragItem]
+  }
+}
+
+// MARK: - UICollectionViewDropDelegate
+extension ViewController: UICollectionViewDropDelegate {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    performDropWith coordinator: UICollectionViewDropCoordinator
+  ) {
+    // 드롭 위치가 유효한지 확인
+    guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+
+    // 모든 드롭 아이템에 대해 처리
+    coordinator.items.forEach { dropItem in
+      // 소스 위치와 드래그된 아이템이 유효한지 확인
+      guard let sourceIndexPath = dropItem.sourceIndexPath,
+            let item = dropItem.dragItem.localObject as? UIColor else { return }
+
+      // 배치 업데이트를 사용하여 애니메이션과 함께 이동 처리
+      collectionView.performBatchUpdates({
+
+        // 컬렉션 뷰에서 시각적 이동 처리
+        collectionView.deleteItems(at: [sourceIndexPath])      // 원래 셀 삭제
+        collectionView.insertItems(at: [destinationIndexPath]) // 새 위치에 셀 삽입
+
+        // 데이터 소스에서 아이템 이동
+        sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.item)      // 원래 위치에서 제거
+        sections[destinationIndexPath.section].items.insert(item, at: destinationIndexPath.item) // 새 위치에 삽입
+
+      })
+
+      // 드롭 애니메이션 실행
+      coordinator.drop(dropItem.dragItem, toItemAt: destinationIndexPath)
+    }
+  }
+
+  func collectionView(_ collectionView: UICollectionView,
+                      dropSessionDidUpdate session: UIDropSession,
+                      withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+    // 같은 앱 내에서의 드래그인지 확인
+    if session.localDragSession != nil {
+      // 이동 동작으로 설정하고 목적지 인덱스 위치에 삽입
+      return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+
+    // 외부 앱에서의 드래그는 금지
+    return UICollectionViewDropProposal(operation: .forbidden)
   }
 }
