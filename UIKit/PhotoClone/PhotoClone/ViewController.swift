@@ -33,12 +33,52 @@ class ViewController: UIViewController {
     }
   }
 
+  // 데이터를 담는 구조체들
+  struct PhotoData {
+    let id: String
+    let imageName: String
+    let date: Date
+  }
+
+  // 각 섹션의 샘플 데이터
+  var photos: [PhotoData] = []
+
   override func viewDidLoad() {
     super.viewDidLoad()
     title = "Photo Clone"
     view.backgroundColor = .systemBackground
 
+    collectionView.dataSource = self
     collectionView.delegate = self
+
+    loadSampleData()
+
+    registerCells()
+
+  }
+
+  // 셀 등록
+  func registerCells() {
+    collectionView.register(SimplePhotoCell.self, forCellWithReuseIdentifier: "PhotoCell")
+  }
+
+
+  func loadSampleData() {
+    // 샘플 사진 데이터 생성
+    let calendar = Calendar.current
+    let today = Date()
+
+    photos = (1...50).map { index in
+      let daysAgo = -index
+      let date = calendar.date(byAdding: .day, value: daysAgo, to: today) ?? today
+
+      return PhotoData(
+        id: "photo_\(index)",
+        imageName: "photo.fill",  // 시스템 아이콘 사용
+        date: date
+      )
+    }
+
   }
 
   func createLayout() -> UICollectionViewLayout {
@@ -179,6 +219,55 @@ class ViewController: UIViewController {
   }
 }
 
+extension ViewController: UICollectionViewDataSource {
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
+    return Section.allCases.count
+  }
+
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    guard let sectionType = Section(rawValue: section) else { return 0 }
+
+    switch sectionType {
+    case .years:
+      return 3  // 3개의 연도
+    case .months:
+      return 6  // 6개의 월
+    case .days:
+      return 10 // 10개의 일
+    case .allPhotos:
+      return photos.count
+    }
+
+  }
+
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! SimplePhotoCell
+
+    guard let sectionType = Section(rawValue: indexPath.section) else {
+      return cell
+    }
+
+    // 섹션별로 다른 설정
+    switch sectionType {
+    case .years:
+      cell.configure(title: "202\(indexPath.item + 2)", subtitle: "\(100 * (indexPath.item + 1))장")
+    case .months:
+      cell.configure(title: "\(indexPath.item + 1)월", subtitle: "\(50 + indexPath.item * 10)장")
+    case .days:
+      cell.configure(title: "\(indexPath.item + 1)일", subtitle: "\(10 + indexPath.item)장")
+    case .allPhotos:
+      if indexPath.item < photos.count {
+        let photo = photos[indexPath.item]
+        cell.configure(with: photo)
+      }
+    }
+
+    return cell
+  }
+
+
+}
+
 extension ViewController: UICollectionViewDelegate {
-  
+
 }
