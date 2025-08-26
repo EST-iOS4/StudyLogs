@@ -40,18 +40,18 @@ class ViewController: UIViewController {
   }
 
   func createLayout() -> UICollectionViewLayout {
-    return UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment -> NSCollectionLayoutSection? in
+    return UICollectionViewCompositionalLayout { [weak self] sectionIndex, layoutEnvironment -> NSCollectionLayoutSection? in
       guard let section = Section(rawValue: sectionIndex) else { return nil }
 
       switch section {
       case .years:
-        return self.createFeaturedSection()
+        return self?.createFeaturedSection()
       case .months:
-        return self.createMediumGridSection()
+        return self?.createMediumGridSection()
       case .days:
-        return self.createSmallGridSection()
+        return self?.createSmallGridSection()
       case .allPhotos:
-        return self.createMainGridSection()
+        return self?.createMainGridSection()
       }
     }
   }
