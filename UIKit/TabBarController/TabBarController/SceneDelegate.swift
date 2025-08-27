@@ -18,28 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     guard let windowScene = (scene as? UIWindowScene) else { return }
 
     window = UIWindow(windowScene: windowScene)
-    // 홈 뷰 컨트롤러 생성
-    let viewController = ViewController()
 
-    viewController.tabBarItem = UITabBarItem(
-      title: "홈",
-      image: UIImage(systemName: "house"),
-      tag: 0
-    )
-
-    // 두번쨰 뷰 컨트롤러 생성 (기본 뷰 컨트롤러)
-    let secondViewController = UIViewController()
-
-    secondViewController.tabBarItem = UITabBarItem(
-      title: "검색",
-      image: UIImage(systemName: "magnifyingglass"),
-      tag: 1
-    )
-
-
-    // 탭바 컨트롤러 생성 후 두개의 뷰 컨트롤러를 추가
-    let tabBarController = UITabBarController()
-    tabBarController.viewControllers = [viewController, secondViewController]
+    // 탭바 컨트롤러 생성
+    let tabBarController = MainTabBarViewController()
 
     // 탭바 컨트롤러로 윈도우 시작
     window?.rootViewController = tabBarController
