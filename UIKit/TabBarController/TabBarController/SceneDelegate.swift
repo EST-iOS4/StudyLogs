@@ -38,7 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     // 탭바 컨트롤러 생성 후 두개의 뷰 컨트롤러를 추가
-    let tabBarController =  ()
+    let tabBarController = UITabBarController()
     tabBarController.viewControllers = [viewController, secondViewController]
 
     // 탭바 컨트롤러로 윈도우 시작
