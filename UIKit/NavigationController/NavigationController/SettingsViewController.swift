@@ -8,22 +8,45 @@
 import UIKit
 
 class SettingsViewController: UIViewController {
+  // 임시 데이터 (저장 여부)
+  var hasUnsavedChanges = false
 
   override func viewDidLoad() {
     super.viewDidLoad()
     title = "Settings"
     view.backgroundColor = .systemBackground
+
+    setupNavigationItems()
   }
 
+  func setupNavigationItems() {
+    navigationItem.leftBarButtonItem = UIBarButtonItem(
+      title: "닫기",
+      style: .plain,
+      target: self,
+      action: #selector(customBackAction)
+    )
+  }
 
-  /*
-   // MARK: - Navigation
+  @objc func customBackAction() {
+    if hasUnsavedChanges {
+      showSaveAlert()
+    } else {
+      navigationController?.popViewController(animated: true)
+    }
+  }
 
-   // In a storyboard-based application, you will often want to do a little preparation before navigation
-   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-   // Get the new view controller using segue.destination.
-   // Pass the selected object to the new view controller.
-   }
-   */
+  func showSaveAlert() {
+    
+  }
+}
 
+#Preview {
+  let viewController = ViewController()
+  let navigationController = UINavigationController(
+    rootViewController: viewController)
+  navigationController.pushViewController(SettingsViewController(),
+                                          animated: false)
+  viewController.setupNavigationBar()
+  return navigationController
 }
