@@ -21,12 +21,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // 홈 뷰 컨트롤러 생성
     let viewController = ViewController()
 
+    viewController.tabBarItem = UITabBarItem(
+      title: "홈",
+      image: UIImage(systemName: "house"),
+      tag: 0
+    )
+
     // 두번쨰 뷰 컨트롤러 생성 (기본 뷰 컨트롤러)
     let secondViewController = UIViewController()
-    secondViewController.title = "두번째"
+
+    secondViewController.tabBarItem = UITabBarItem(
+      title: "검색",
+      image: UIImage(systemName: "magnifyingglass"),
+      tag: 1
+    )
+
 
     // 탭바 컨트롤러 생성 후 두개의 뷰 컨트롤러를 추가
-    let tabBarController = UITabBarController()
+    let tabBarController =  ()
     tabBarController.viewControllers = [viewController, secondViewController]
 
     // 탭바 컨트롤러로 윈도우 시작
