@@ -9,13 +9,18 @@ import UIKit
 
 class ViewController: UIViewController {
 
+  var recieveData: String = "새 항목 추가"
+
   override func viewDidLoad() {
     super.viewDidLoad()
     title = "Modal Presentaion"
     view.backgroundColor = .systemBackground
+    setupUI()
+  }
 
+  func setupUI() {
     var config = UIButton.Configuration.filled()
-    config.title = "새 항목 추가"
+    config.title = recieveData
 
     let button = UIButton(configuration: config)
     button.translatesAutoresizingMaskIntoConstraints = false
@@ -29,11 +34,12 @@ class ViewController: UIViewController {
       button.widthAnchor.constraint(equalToConstant: 150),
       button.heightAnchor.constraint(equalToConstant: 50)
     ])
-
   }
 
   @objc func buttonTapped(_ sender: UIButton) {
     let modalVC = ModalViewController()
+    modalVC.data = "TEST"
+    modalVC.parentVC = self
     modalVC.modalPresentationStyle = .popover
 
     if let popover = modalVC.popoverPresentationController {

@@ -8,6 +8,11 @@
 import UIKit
 
 class ModalViewController: UIViewController {
+  let textField = UITextField()
+
+  var data: String = ""
+
+  var parentVC: UIViewController?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -20,7 +25,7 @@ class ModalViewController: UIViewController {
     let navBar = UINavigationBar()
     navBar.translatesAutoresizingMaskIntoConstraints = false
 
-    let navItem = UINavigationItem(title: "새 항목 추가")
+    let navItem = UINavigationItem(title: data)
     navItem.leftBarButtonItem = UIBarButtonItem(
       barButtonSystemItem: .cancel,
       target: self,
@@ -41,6 +46,18 @@ class ModalViewController: UIViewController {
       navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
       navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
     ])
+
+    textField.borderStyle = .roundedRect
+    textField.backgroundColor = .systemBackground
+    textField.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(textField)
+
+    NSLayoutConstraint.activate([
+      textField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      textField.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+      textField.widthAnchor.constraint(equalToConstant: 200),
+      textField.heightAnchor.constraint(equalToConstant: 50)
+    ])
   }
 
   @objc func cancelTapped() {
@@ -48,8 +65,14 @@ class ModalViewController: UIViewController {
   }
 
   @objc func saveTapped() {
-//    TODO: 데이터 전달 또는 저장
-    dismiss(animated: true)
+    guard let parentViewController = parentVC as? ViewController else {
+      dismiss(animated: true)
+      return
+    }
+    parentViewController.recieveData = textField.text ?? ""
+    dismiss(animated: true) {
+      parentViewController.setupUI()
+    }
   }
 
 
