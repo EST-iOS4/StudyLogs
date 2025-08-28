@@ -39,7 +39,7 @@ class ViewController: UIViewController {
   @objc func buttonTapped(_ sender: UIButton) {
     let modalVC = ModalViewController()
     modalVC.data = "TEST"
-    modalVC.parentVC = self
+    modalVC.delegate = self
     modalVC.modalPresentationStyle = .popover
 
     if let popover = modalVC.popoverPresentationController {
@@ -52,3 +52,9 @@ class ViewController: UIViewController {
   }
 }
 
+extension ViewController: SendDataDelegate {
+  func sendData(_ data: String) {
+    recieveData = data
+    setupUI()
+  }
+}

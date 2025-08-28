@@ -7,12 +7,16 @@
 
 import UIKit
 
+protocol SendDataDelegate {
+  func sendData(_ data: String)
+}
+
 class ModalViewController: UIViewController {
   let textField = UITextField()
 
   var data: String = ""
 
-  var parentVC: UIViewController?
+  var delegate: SendDataDelegate?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -65,14 +69,8 @@ class ModalViewController: UIViewController {
   }
 
   @objc func saveTapped() {
-    guard let parentViewController = parentVC as? ViewController else {
-      dismiss(animated: true)
-      return
-    }
-    parentViewController.recieveData = textField.text ?? ""
-    dismiss(animated: true) {
-      parentViewController.setupUI()
-    }
+    delegate?.sendData(textField.text ?? "")
+    dismiss(animated: true)
   }
 
 
