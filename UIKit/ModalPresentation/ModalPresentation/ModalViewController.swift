@@ -15,7 +15,7 @@ class ModalViewController: UIViewController {
   }
 
   func setupUI() {
-    view.backgroundColor = .systemBackground
+    view.backgroundColor = .systemGray
 
     let navBar = UINavigationBar()
     navBar.translatesAutoresizingMaskIntoConstraints = false

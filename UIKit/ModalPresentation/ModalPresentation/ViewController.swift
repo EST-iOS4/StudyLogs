@@ -34,8 +34,14 @@ class ViewController: UIViewController {
 
   @objc func buttonTapped() {
     let modalVC = ModalViewController()
-    modalVC.modalPresentationStyle = .fullScreen
-    modalVC.modalTransitionStyle = .coverVertical
+    modalVC.modalPresentationStyle = .pageSheet
+
+    if let sheet = modalVC.sheetPresentationController {
+      sheet.detents = [.medium(), .large()]
+      sheet.prefersGrabberVisible = true
+      sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+    }
+
     present(modalVC, animated: true)
   }
 }
