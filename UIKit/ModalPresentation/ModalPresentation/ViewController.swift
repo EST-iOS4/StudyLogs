@@ -32,14 +32,14 @@ class ViewController: UIViewController {
 
   }
 
-  @objc func buttonTapped() {
+  @objc func buttonTapped(_ sender: UIButton) {
     let modalVC = ModalViewController()
-    modalVC.modalPresentationStyle = .pageSheet
+    modalVC.modalPresentationStyle = .popover
 
-    if let sheet = modalVC.sheetPresentationController {
-      sheet.detents = [.medium(), .large()]
-      sheet.prefersGrabberVisible = true
-      sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+    if let popover = modalVC.popoverPresentationController {
+      popover.sourceView = sender
+      popover.sourceRect = sender.bounds
+      popover.permittedArrowDirections = .left
     }
 
     present(modalVC, animated: true)
