@@ -48,12 +48,48 @@ class ViewController: UIViewController {
     tableView.dataSource = self
     tableView.delegate = self
 
+    setupUI()
     loadNotes()
+  }
+
+  func setupUI() {
+    tableView.tableHeaderView = UIView()
+    tableView.tableHeaderView?.frame = CGRect(
+      x: 0,
+      y: 0,
+      width: view.frame.width,
+      height: 50
+    )
+    tableView.tableHeaderView?.backgroundColor = .systemBackground
+
+    var config = UIButton.Configuration.filled()
+    config.title = "노트추가"
+    let button = UIButton(configuration: config)
+    button.translatesAutoresizingMaskIntoConstraints = false
+
+    button.addTarget(self, action: #selector(addNote), for: .touchUpInside)
+
+    tableView.tableHeaderView?.addSubview(button)
+
+    NSLayoutConstraint.activate([
+      button.centerXAnchor
+        .constraint(equalTo: tableView.tableHeaderView!.centerXAnchor),
+      button.centerYAnchor
+        .constraint(equalTo: tableView.tableHeaderView!.centerYAnchor)
+    ])
   }
 
   func loadNotes() {
     notes = noteManager.searchNotes(keyword: searchBar.text ?? "")
     tableView.reloadData()
+  }
+
+  @objc func addNote() {
+    print("click")
+    let vc = NoteEditorViewController()
+    vc.view.backgroundColor = .systemBackground
+    vc.modalPresentationStyle = .pageSheet
+    present(UINavigationController(rootViewController: vc), animated: true)
   }
 }
 
