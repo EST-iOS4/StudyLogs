@@ -75,6 +75,7 @@ class NoteEditorViewController: UIViewController {
     }
     dismiss(animated: true) {
       print("dismiss completion")
+      NotificationCenter.default.post(name: Notification.Name("itemAdded"), object: nil)
     }
   }
 

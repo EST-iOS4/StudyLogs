@@ -50,6 +50,23 @@ class ViewController: UIViewController {
 
     setupUI()
     loadNotes()
+
+    NotificationCenter.default
+      .addObserver(self,
+                   selector: #selector(itemAdded),
+                   name: Notification.Name("itemAdded"),
+                   object: nil)
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(self,
+                                              name: Notification.Name("itemAdded"),
+                                              object: nil)
+  }
+
+  @objc func itemAdded(_ notification: Notification) {
+    print("itemAdded called")
+    loadNotes()
   }
 
   func setupUI() {
