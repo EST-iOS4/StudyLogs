@@ -61,7 +61,6 @@ class ViewController: UIViewController {
     activityIndicator.startAnimating()
 
     newsService.fetchTopHeadlines { [weak self] result in
-      print("fetchTopHeadlines: \(result)")
       self?.activityIndicator.stopAnimating()
       self?.refreshControl.endRefreshing()
       switch result {
@@ -115,15 +114,36 @@ extension ViewController: UITableViewDataSource {
     dateFormatter.timeStyle = .short
     config.secondaryText = dateFormatter.string(from: article.publishedAt)
 
+    // 이미지 크기 설정
+    config.imageProperties.maximumSize = CGSize(width: 60, height: 60)
+    config.imageProperties.cornerRadius = 8
+    config.imageProperties.reservedLayoutSize = CGSize(width: 60, height: 60)
+
     if let urlString = article.urlToImage,
        let url = URL(string: urlString) {
       let session = URLSession.shared
-      session.dataTask(with: URLRequest(url: url)) { data, response, error in
 
+      session.dataTask(with: URLRequest(url: url)) { data, response, error in
+        print("\(response.debugDescription)")
+        print("==== error: \(error.debugDescription)")
         if let imageData = data {
-          config.image = UIImage(data: imageData)
+          print("get Image \(urlString)")
+          DispatchQueue.main.async {
+            var updatedConfig = cell.defaultContentConfiguration()
+            updatedConfig.text = article.title
+            updatedConfig.secondaryText = dateFormatter.string(from: article.publishedAt)
+            updatedConfig.image = UIImage(data: imageData)
+
+            // 이미지 속성 다시 설정
+            updatedConfig.imageProperties.maximumSize = CGSize(width: 60, height: 60)
+            updatedConfig.imageProperties.cornerRadius = 8
+            updatedConfig.imageProperties.reservedLayoutSize = CGSize(width: 60, height: 60)
+
+            
+            cell.contentConfiguration = updatedConfig
+          }
         }
-      }
+      }.resume()
     } else {
       config.image = UIImage(systemName: "photo")
     }

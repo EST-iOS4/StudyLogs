@@ -13,7 +13,7 @@ class NewsAPIService {
   private let session = URLSession.shared
 
   func fetchTopHeadlines(
-    country: String = "kr",
+    country: String = "us",
     category: String? = nil,
     completion: @escaping (Result<[Article], Error>) -> Void
   ) {
