@@ -8,6 +8,11 @@
 import UIKit
 import CoreData
 
+enum NoteError: Error {
+  case noTitle
+  case noContent
+}
+
 class NoteManager {
   let context = CoreDataStack.shared.viewContext
 
@@ -26,6 +31,23 @@ class NoteManager {
     }
     CoreDataStack.shared.save()
     return note
+  }
+
+  func updateNote(note: Note, title: String, content: String, image: UIImage?) throws {
+    if title.isEmpty {
+      throw NoteError.noTitle
+    }
+    if content.isEmpty {
+      throw NoteError.noContent
+    }
+
+    note.title = title
+    note.content = content
+    if let image = image,
+       let imageData = image.jpegData(compressionQuality: 0.8) {
+      note.imageData = imageData
+    }
+    CoreDataStack.shared.save()
   }
 
   func searchNotes(keyword: String) -> [Note] {

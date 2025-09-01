@@ -107,9 +107,7 @@ class ViewController: UIViewController {
     let vc = NoteEditorViewController()
     vc.view.backgroundColor = .systemBackground
     vc.modalPresentationStyle = .pageSheet
-    present(UINavigationController(rootViewController: vc), animated: true) {
-      print("addNote present completion")
-    }
+    present(UINavigationController(rootViewController: vc), animated: true)
   }
 }
 
@@ -129,7 +127,13 @@ extension ViewController: UITableViewDataSource {
     var config = cell.defaultContentConfiguration()
 
     config.text = note.title
-    config.secondaryText = note.content
+
+    if let modifiedDate = note.modifiedAt {
+      let dateFormatter = DateFormatter()
+      dateFormatter.dateStyle = .none
+      dateFormatter.timeStyle = .long
+      config.secondaryText = dateFormatter.string(from: modifiedDate)
+    }
 
     if let imageData =  note.imageData,
        let image: UIImage = UIImage(data:imageData){
@@ -143,5 +147,14 @@ extension ViewController: UITableViewDataSource {
 }
 
 extension ViewController: UITableViewDelegate {
-
+  func tableView(
+    _ tableView: UITableView,
+    didSelectRowAt indexPath: IndexPath
+  ) {
+    let vc = NoteEditorViewController()
+    vc.note = notes[indexPath.row]
+    vc.view.backgroundColor = .systemBackground
+    vc.modalPresentationStyle = .pageSheet
+    present(UINavigationController(rootViewController: vc), animated: true)
+  }
 }

@@ -18,6 +18,7 @@ class NoteEditorViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupUI()
+    loadData()
   }
 
   func setupUI() {
@@ -65,18 +66,37 @@ class NoteEditorViewController: UIViewController {
     ])
   }
 
+  func loadData() {
+    if let noteData = note {
+      titleText.text = noteData.title
+      contentText.text = noteData.content
+    }
+  }
+
   @objc func save() {
-    if let title = titleText.text,
-       let content = contentText.text {
-      _ = noteManager
-        .createNote(title: title, content: content, image: nil)      
-    } else {
-      // TODO: Alert 오류 표시
+    do {
+      if let title = titleText.text,
+         let content = contentText.text {
+        if let noteData = note {
+          try noteManager
+            .updateNote(note: noteData, title: title, content: content, image: nil)
+        } else {
+          _ = noteManager
+            .createNote(title: title, content: content, image: nil)
+        }
+      } else {
+        // TODO: Alert 오류 표시
+      }
+      dismiss(animated: true) {
+        print("dismiss completion")
+        NotificationCenter.default.post(name: Notification.Name("itemAdded"), object: nil)
+      }
+    } catch {
+      // TODO: Alert 오류 표시 (업데이트)
+      
+      print("\(error)")
     }
-    dismiss(animated: true) {
-      print("dismiss completion")
-      NotificationCenter.default.post(name: Notification.Name("itemAdded"), object: nil)
-    }
+
   }
 
 }
