@@ -8,7 +8,7 @@
 import Foundation
 
 class NewsAPIService {
-  private let apiKey = "b026d8374164440488a002a3173e8016"
+  private let apiKey = "b026d8374164440488a002a3173e8016" // 2025년 9월 2일 만료
   private let baseURL = "https://newsapi.org/v2"
   private let session = URLSession.shared
 
