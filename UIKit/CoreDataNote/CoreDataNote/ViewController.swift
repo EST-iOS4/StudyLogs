@@ -53,6 +53,7 @@ class ViewController: UIViewController {
   }
 
   func setupUI() {
+    tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     tableView.tableHeaderView = UIView()
     tableView.tableHeaderView?.frame = CGRect(
       x: 0,
@@ -89,18 +90,38 @@ class ViewController: UIViewController {
     let vc = NoteEditorViewController()
     vc.view.backgroundColor = .systemBackground
     vc.modalPresentationStyle = .pageSheet
-    present(UINavigationController(rootViewController: vc), animated: true)
+    present(UINavigationController(rootViewController: vc), animated: true) {
+      print("addNote present completion")
+    }
   }
 }
 
 
 extension ViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 0
+    return notes.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    return UITableViewCell()
+    let cell = tableView.dequeueReusableCell(
+      withIdentifier: "Cell",
+      for: indexPath
+    )
+    let note = notes[indexPath.row]
+
+    var config = cell.defaultContentConfiguration()
+
+    config.text = note.title
+    config.secondaryText = note.content
+
+    if let imageData =  note.imageData,
+       let image: UIImage = UIImage(data:imageData){
+      config.image = image
+    }
+
+    cell.contentConfiguration = config
+
+    return cell
   }
 }
 

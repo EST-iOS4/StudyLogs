@@ -31,10 +31,11 @@ class NoteEditorViewController: UIViewController {
     )
 
     // 2. UIAction 을 이용한 버튼 이벤트
-    let cancelAction = UIAction(title: "", image: nil) { _ in
+    let cancelAction = UIAction { _ in
       self.dismiss(animated: true)
     }
-    navigationItem.leftBarButtonItem = UIBarButtonItem(systemItem: .cancel, primaryAction: cancelAction)
+    navigationItem.leftBarButtonItem = UIBarButtonItem(systemItem: .cancel,
+                                                       primaryAction: cancelAction)
 
     titleText.translatesAutoresizingMaskIntoConstraints = false
     titleText.placeholder = "제목"
@@ -72,7 +73,9 @@ class NoteEditorViewController: UIViewController {
     } else {
       // TODO: Alert 오류 표시
     }
-    dismiss(animated: true)
+    dismiss(animated: true) {
+      print("dismiss completion")
+    }
   }
 
 }
