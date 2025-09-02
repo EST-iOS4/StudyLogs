@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     // Do any additional setup after loading the view.
 
     setupTapGestures()
+    setupPanGesture()
   }
 
   func setupTapGestures() {
@@ -26,6 +27,7 @@ class ViewController: UIViewController {
     )
     singleTap.numberOfTapsRequired = 1        // 1번 탭으로 인식
     singleTap.numberOfTouchesRequired = 1     // 손가락 1개 필요
+    singleTap.delegate = self
     imageView.addGestureRecognizer(singleTap)
 
     // 👆👆 더블 탭 제스처 (두 번 연속 탭)
@@ -49,6 +51,38 @@ class ViewController: UIViewController {
     // 🎯 이미지뷰가 터치를 받을 수 있게 설정
     imageView.isUserInteractionEnabled = true
 
+  }
+
+  func setupPanGesture() {
+    let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+    imageView.addGestureRecognizer(panGesture)
+    panGesture.delegate = self
+  }
+
+  @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
+    let translation = gesture.translation(in: view)
+
+    switch gesture.state {
+    case .began:
+      print("🖐️ Pan 시작")
+
+    case .changed:
+      // 뷰 위치 업데이트
+      if let gestureView = gesture.view {
+        gestureView.center = CGPoint(
+          x: gestureView.center.x + translation.x,
+          y: gestureView.center.y + translation.y
+        )
+      }
+      // translation 리셋 (누적되지 않도록)
+      gesture.setTranslation(.zero, in: view)
+
+    case .ended, .cancelled:
+      print("🖐️ Pan 끝")
+
+    default:
+      break
+    }
   }
 
   // 👆 싱글 탭 처리
@@ -147,3 +181,23 @@ class ViewController: UIViewController {
 
 }
 
+extension ViewController: UIGestureRecognizerDelegate {
+  // 동시에 여러 제스처 인식 허용
+  func gestureRecognizer(
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+  ) -> Bool {
+    return true
+  }
+
+  // 제스처 시작 조건 (선택적)
+  func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    if let panGesture = gestureRecognizer as? UIPanGestureRecognizer {
+      let velocity = panGesture.velocity(in: view)
+      // 최소 속도가 있을 때만 pan 시작
+      return abs(velocity.x) > 50 || abs(velocity.y) > 50
+    }
+    return true
+  }
+
+}
