@@ -42,7 +42,7 @@ class ViewController: UIViewController {
 
     print("2초후에 실행됩니다.")
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
 //      var john: Person? = Person(name: "John")  // Person 참조 카운트: 1
 //      var unit4A: Apartment? = Apartment(unit: "4A")  // Apartment 참조 카운트: 1
 //
@@ -54,9 +54,9 @@ class ViewController: UIViewController {
 //      unit4A = nil  // Apartment 참조 카운트: 1 (여전히 tenant가 참조 중)
 //
 //      print("실행 완료")
-
+      
       let vc = MemoryTestViewController()
-      self?.present(vc, animated: true)
+      self.present(vc, animated: true)
     }
 
   }
