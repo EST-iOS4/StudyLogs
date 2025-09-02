@@ -19,6 +19,37 @@ class ViewController: UIViewController {
     setupTapGestures()
     setupPanGesture()
     textField.delegate = self
+
+    NotificationCenter.default
+      .addObserver(
+        self,
+        selector: #selector(keyboardWillShow),
+        name: UIResponder.keyboardWillShowNotification,
+        object: nil
+      )
+    NotificationCenter.default
+      .addObserver(
+        self,
+        selector: #selector(keyboardWillHide),
+        name: UIResponder.keyboardWillHideNotification,
+        object: nil
+      )
+  }
+
+  @objc func keyboardWillShow(_ notification: Notification) {
+    UIView.animate(withDuration: 0.3) {
+      self.view.frame.origin.y -= 400
+    }
+  }
+
+  @objc func keyboardWillHide(_ notification: Notification) {
+    UIView.animate(withDuration: 0.3) {
+      self.view.frame.origin.y = 0
+    }
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(self)
   }
 
   func setupTapGestures() {
@@ -207,13 +238,13 @@ extension ViewController: UIGestureRecognizerDelegate {
 extension ViewController: UITextFieldDelegate {
 
   func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-    view.frame.origin.y -= 400
+//    view.frame.origin.y -= 400
     return true
   }
 
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     textField.resignFirstResponder()
-    view.frame.origin.y += 400
+//    view.frame.origin.y += 400
     return true
   }
 }
