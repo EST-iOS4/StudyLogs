@@ -10,6 +10,7 @@ import UIKit
 class ViewController: UIViewController {
   @IBOutlet weak var imageView: UIImageView!
   @IBOutlet weak var doubleTapLabel: UILabel!
+  @IBOutlet weak var textField: UITextField!
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -17,6 +18,7 @@ class ViewController: UIViewController {
 
     setupTapGestures()
     setupPanGesture()
+    textField.delegate = self
   }
 
   func setupTapGestures() {
@@ -200,4 +202,18 @@ extension ViewController: UIGestureRecognizerDelegate {
     return true
   }
 
+}
+
+extension ViewController: UITextFieldDelegate {
+
+  func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+    view.frame.origin.y -= 400
+    return true
+  }
+
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    textField.resignFirstResponder()
+    view.frame.origin.y += 400
+    return true
+  }
 }

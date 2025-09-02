@@ -18,7 +18,7 @@
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="R0q-ag-TKi">
                                 <rect key="frame" x="76" y="362" width="241" height="128"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RR8-NJ-RKI">
                                 <rect key="frame" x="76" y="499" width="241" height="21"/>
@@ -26,22 +26,31 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YW1-F5-OsK">
+                                <rect key="frame" x="76" y="750" width="241" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="YW1-F5-OsK" firstAttribute="trailing" secondItem="RR8-NJ-RKI" secondAttribute="trailing" id="19h-FJ-5LT"/>
                             <constraint firstItem="R0q-ag-TKi" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="4lk-DO-b7M"/>
                             <constraint firstItem="R0q-ag-TKi" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="242.66666666666669" id="7gm-mU-eM4"/>
                             <constraint firstItem="R0q-ag-TKi" firstAttribute="centerX" secondItem="RR8-NJ-RKI" secondAttribute="centerX" id="JJL-w8-cEl"/>
                             <constraint firstItem="R0q-ag-TKi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="76" id="PZ4-wy-zbC"/>
                             <constraint firstItem="RR8-NJ-RKI" firstAttribute="top" secondItem="R0q-ag-TKi" secondAttribute="bottom" constant="7.6666666666666288" id="Sep-5a-rjZ"/>
+                            <constraint firstItem="YW1-F5-OsK" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="d6V-Wq-eB0"/>
                             <constraint firstItem="R0q-ag-TKi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dEn-Ch-zWL"/>
+                            <constraint firstItem="YW1-F5-OsK" firstAttribute="leading" secondItem="RR8-NJ-RKI" secondAttribute="leading" id="fWB-yU-a6m"/>
                             <constraint firstItem="RR8-NJ-RKI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="76" id="hZk-Ki-jY8"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="doubleTapLabel" destination="RR8-NJ-RKI" id="jPS-zh-Qcv"/>
                         <outlet property="imageView" destination="R0q-ag-TKi" id="FsN-Iv-hom"/>
+                        <outlet property="textField" destination="YW1-F5-OsK" id="VWy-L5-lcj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
