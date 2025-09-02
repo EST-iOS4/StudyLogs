@@ -7,60 +7,61 @@
 
 import UIKit
 
-class Person {
-  let name: String
-  weak var apartment: Apartment?  // Person이 Apartment를 참조
-
-  init(name: String) {
-    self.name = name
-    print("👤 \(name)이 생성되었습니다")
-  }
-
-  deinit {
-    print("👤 \(name)이 메모리에서 해제되었습니다")
-  }
-}
-
-class Apartment {
-  let unit: String
-  var tenant: Person?  // Apartment가 Person을 참조
-
-  init(unit: String) {
-    self.unit = unit
-    print("🏠 아파트 \(unit)가 생성되었습니다")
-  }
-
-  deinit {
-    print("🏠 아파트 \(unit)가 메모리에서 해제되었습니다")
-  }
-}
-
 class ViewController: UIViewController {
+  @IBOutlet weak var tableView: UITableView!
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    print("2초후에 실행됩니다.")
+    tableView.estimatedRowHeight = 100
+    tableView.rowHeight = UITableView.automaticDimension
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//      var john: Person? = Person(name: "John")  // Person 참조 카운트: 1
-//      var unit4A: Apartment? = Apartment(unit: "4A")  // Apartment 참조 카운트: 1
-//
-//      john?.apartment = unit4A  // Apartment 참조 카운트: 2
-//      unit4A?.tenant = john     // Person 참조 카운트: 2
-//
-//      // ❌ john과 unit4A를 nil로 설정해도 deinit이 호출되지 않음!
-//      john = nil    // Person 참조 카운트: 1 (여전히 apartment가 참조 중)
-//      unit4A = nil  // Apartment 참조 카운트: 1 (여전히 tenant가 참조 중)
-//
-//      print("실행 완료")
-      
-      let vc = MemoryTestViewController()
-      self.present(vc, animated: true)
-    }
+    tableView.prefetchDataSource = self
 
+    tableView.register(ComplexTableViewCell.self, forCellReuseIdentifier: "ComplexCell")
+  }
+}
+
+extension ViewController: UITableViewDataSource {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    1000
   }
 
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(
+      withIdentifier: "ComplexCell",
+      for: indexPath
+    ) as! ComplexTableViewCell
+    return cell
+  }
 
 }
 
+extension ViewController: UITableViewDelegate {
+
+}
+
+extension ViewController: UITableViewDataSourcePrefetching {
+  func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+
+  }
+}
+
+// 🎨 ComplexTableViewCell - 재사용 가능한 셀
+class ComplexTableViewCell: UITableViewCell {
+  var imageLoadTask: URLSessionDataTask?
+
+  // 🔄 셀 재사용 준비 (중요!)
+  override func prepareForReuse() {
+    super.prepareForReuse()
+
+    // 🖼️ 이미지 초기화
+    imageView?.image = nil
+
+    // 🚫 진행 중인 작업 취소
+    imageLoadTask?.cancel()
+    imageLoadTask = nil
+
+    print("♻️ 셀 재사용 준비 완료")
+  }
+}
