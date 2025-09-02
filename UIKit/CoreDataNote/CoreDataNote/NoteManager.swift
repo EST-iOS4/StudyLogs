@@ -55,7 +55,7 @@ class NoteManager {
 
     if !keyword.isEmpty {
       request.predicate = NSPredicate(
-        format: "title CONTAIN[cd] %@ OR content CONTAIN[cd] %@",
+        format: "title CONTAINS[cd] %@",
         keyword, keyword)
     }
 

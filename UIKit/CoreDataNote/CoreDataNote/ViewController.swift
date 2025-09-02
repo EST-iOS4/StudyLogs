@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     let searchBar = UISearchBar()
     searchBar.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(searchBar)
-
+    searchBar.delegate = self
     NSLayoutConstraint.activate([
       searchBar.topAnchor
         .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -156,5 +156,24 @@ extension ViewController: UITableViewDelegate {
     vc.view.backgroundColor = .systemBackground
     vc.modalPresentationStyle = .pageSheet
     present(UINavigationController(rootViewController: vc), animated: true)
+  }
+}
+
+
+extension ViewController: UISearchBarDelegate {
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    // (멤버변수 태스크) 아직 실행되지 않았다다면, invalidate => 작업 취소
+    print(searchText)
+    if !searchText.isEmpty {
+
+      // Search Task 등록 (멤버변수 태스크) self.searchTask = Task
+      // 0.2 초 후 실행되도록 스케줄링
+      DispatchQueue.main.async {
+        self.notes = self.noteManager.searchNotes(keyword: searchText)
+        self.tableView.reloadData()
+      }
+    } else {
+      loadNotes()
+    }
   }
 }
