@@ -58,6 +58,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     CoreDataStack.shared.save()
   }
 
+  
 
 }
 

@@ -177,3 +177,7 @@ extension ViewController: UISearchBarDelegate {
     }
   }
 }
+
+#Preview {
+  ViewController()
+}
