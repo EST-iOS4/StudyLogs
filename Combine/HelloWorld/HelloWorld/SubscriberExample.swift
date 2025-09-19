@@ -14,6 +14,7 @@ class WeatherViewModel: ObservableObject {
 
   func fetchWeather() {
     isLoading = true
+    // 실제 네트워크 호출 대신 2초 지연 후 값 갱신
     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
       self.temperature = Double.random(in: 15...30)
       self.isLoading = false
@@ -21,28 +22,39 @@ class WeatherViewModel: ObservableObject {
   }
 }
 
+final class TemperatureFormatter: ObservableObject {
+  private let weather: WeatherViewModel
+  @Published var displayText = "--"
+  private var cancelables = Set<AnyCancellable>()
+
+  init(weather: WeatherViewModel = .init()) {
+    self.weather = weather
+
+    weather.$temperature
+      .map { String(format: "%.1f", $0) }
+      .sink { [weak self] formatted in
+        self?.displayText = formatted
+      }
+      .store(in: &cancelables)
+  }
+
+  func refresh() {
+    weather.fetchWeather()
+  }
+}
+
 struct SubscriberExample: View {
-  @StateObject private var viewModel = WeatherViewModel()
-  @State private var temperatureText = "--"
+  @StateObject private var viewModel = TemperatureFormatter()
 
   var body: some View {
     VStack(spacing: 20) {
-      Text("온도: \(temperatureText)°C")
+      Text("온도: \(viewModel.displayText)°C")
         .font(.system(.largeTitle))
 
       Button("날씨 업데이트") {
-        viewModel.fetchWeather()
+        viewModel.refresh()
       }
       .buttonStyle(.borderedProminent)
-
-      if viewModel.isLoading {
-        ProgressView()
-      } else {
-        EmptyView()
-      }
-    }
-    .onReceive(viewModel.$temperature) {
-      temperatureText = String(format: "%.1f", $0)
     }
   }
 }
