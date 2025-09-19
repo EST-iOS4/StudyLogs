@@ -27,6 +27,10 @@ final class TemperatureFormatter: ObservableObject {
   @Published var displayText = "--"
   private var cancelables = Set<AnyCancellable>()
 
+  var isLoading: AnyPublisher<Bool,Never> {
+    return weather.$isLoading.eraseToAnyPublisher()
+  }
+
   init(weather: WeatherViewModel = .init()) {
     self.weather = weather
 
@@ -55,6 +59,12 @@ struct SubscriberExample: View {
         viewModel.refresh()
       }
       .buttonStyle(.borderedProminent)
+    }
+    .onReceive(viewModel.$displayText) { textValue in
+      print("1> \(textValue)")
+    }
+    .onReceive(viewModel.isLoading) { isLoading in
+      print("2> \(isLoading)")
     }
   }
 }
