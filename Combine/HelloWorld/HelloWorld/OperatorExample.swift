@@ -8,28 +8,44 @@
 import SwiftUI
 import Combine
 
-final class SearchViewModel: ObservableObject {
-  @Published var searchText = ""
-  @Published private(set) var searchResults: [String] = []
+@Observable
+class SearchViewModel {
+  var searchText = "" {
+    didSet {
+      // searchText 변경 → subject 로 전송
+      searchTextSubject.send(searchText)
+    }
+  }
+  private(set) var searchResults: [String] = []
 
   private let allItems = [
     "사과", "사과주스", "바나나", "바나나우유", "오렌지",
     "오렌지주스", "포도", "포도주스", "딸기", "딸기우유"
   ]
 
+  // Combine 스트림용 subject
+  private let searchTextSubject = PassthroughSubject<String, Never>()
+  private var cancellables = Set<AnyCancellable>()
+
   init() {
-    $searchText
+    searchTextSubject
       .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
       .removeDuplicates()
       .map { [allItems] term in
-        term.isEmpty ? allItems : allItems.filter { $0.contains(term) }
+        term.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        ? allItems
+        : allItems.filter { $0.contains(term) }
       }
-      .assign(to: &$searchResults)
+      .assign(to: \.searchResults, on: self)
+      .store(in: &cancellables)
+
+    // 초기값도 반영
+    searchTextSubject.send(searchText)
   }
 }
 
 struct OperatorExample: View {
-  @StateObject private var viewModel = SearchViewModel()
+  @State private var viewModel = SearchViewModel()
 
   var body: some View {
     VStack {
@@ -40,6 +56,7 @@ struct OperatorExample: View {
         Text(item)
       }
     }
+    .padding()
   }
 }
 
