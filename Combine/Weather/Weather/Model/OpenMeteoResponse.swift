@@ -10,8 +10,8 @@ import Foundation
 struct OpenMeteoResponse: Decodable {
   struct Current: Decodable {
     let temperature: Double
-    let windSpeed: Double
-    let weatherCode: Int
+    let windspeed: Double
+    let weathercode: Int
   }
   let current_weather: Current
 }
