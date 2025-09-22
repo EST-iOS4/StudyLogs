@@ -53,7 +53,6 @@ final class WeatherService: ObservableObject {
 
     let url = openMeteoURL(lat: lat, lon: lon)
 
-    print(url)
     URLSession.shared.dataTaskPublisher(for: url)
       .map(\.data)
       .decode(type: OpenMeteoResponse.self, decoder: JSONDecoder())
