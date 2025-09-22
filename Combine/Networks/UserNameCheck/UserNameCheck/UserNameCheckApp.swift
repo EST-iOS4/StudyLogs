@@ -11,7 +11,7 @@ import SwiftUI
 struct UserNameCheckApp: App {
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      UserNameCheckView()
     }
   }
 }
