@@ -18,29 +18,64 @@ class SignUpFormViewModel: ObservableObject {
   @Published var passwordMatch = false
   @Published var isFormValid = false
 
-  init() {
-    setupValidation()
-  }
+  @Published var emailMessage = ""
+  @Published var passwordMessage = ""
 
-  private func setupValidation() {
+
+  private lazy var isEmailValidPublisher: AnyPublisher<Bool, Never> = {
     $email
       .map { email in
         email.contains("@") && email.contains(".")
       }
-      .assign(to: &$isEmailValid)
+      .eraseToAnyPublisher()
+  }()
 
+  private lazy var isPasswordLengthValidPublisher: AnyPublisher<Bool, Never> = {
     $password
       .map { password in
         password.count >= 8
       }
-      .assign(to: &$isPasswordValid)
+      .eraseToAnyPublisher()
+  }()
 
+  private lazy var isPasswordValidPublisher: AnyPublisher<Bool, Never> = {
     $password
       .combineLatest($confirmPassword)
       .map { password, confirmPassword in
         password == confirmPassword && !password.isEmpty
       }
+      .eraseToAnyPublisher()
+  }()
+
+  init() {
+    setupValidation()
+  }
+
+  private func setupValidation() {
+    isEmailValidPublisher
+      .assign(to: &$isEmailValid)
+
+    isEmailValidPublisher
+      .map { $0 ? "" : "Enter a valid email address." }
+      .assign(to: &$emailMessage)
+
+    isPasswordLengthValidPublisher
+      .assign(to: &$isPasswordValid)
+
+    isPasswordValidPublisher
       .assign(to: &$passwordMatch)
+
+    isPasswordLengthValidPublisher
+      .combineLatest(isPasswordValidPublisher)
+      .map { lengthValid, matchValid in
+        if !lengthValid {
+          return "비밀번호는 8자 이상 입력하세요."
+        } else if !matchValid {
+          return "비밀번호가 일치하지 않습니다."
+        }
+        return ""
+      }
+      .assign(to: &$passwordMessage)
 
     $isEmailValid
       .combineLatest($isPasswordValid, $passwordMatch)
@@ -52,18 +87,6 @@ class SignUpFormViewModel: ObservableObject {
 struct SignUpForm: View {
   @StateObject var viewModel = SignUpFormViewModel()
 
-  private var emailMessage: String {
-    viewModel.email.isEmpty || viewModel.isEmailValid ? "" : "Enter a valid email address."
-  }
-
-  private var passwordMessage: String {
-    if viewModel.password.isEmpty && viewModel.confirmPassword.isEmpty { return "" }
-    var parts: [String] = []
-    if !viewModel.isPasswordValid { parts.append("Password must be at least 8 characters.") }
-    if !viewModel.passwordMatch { parts.append("Passwords must match.") }
-    return parts.joined(separator: " ")
-  }
-
   var body: some View {
     Form {
       // Email
@@ -73,7 +96,7 @@ struct SignUpForm: View {
           .disableAutocorrection(true)
           .keyboardType(.emailAddress)
       } footer: {
-        Text(emailMessage)
+        Text(viewModel.emailMessage)
           .foregroundColor(.red)
       }
 
@@ -82,7 +105,7 @@ struct SignUpForm: View {
         SecureField("Password", text: $viewModel.password)
         SecureField("Repeat password", text: $viewModel.confirmPassword)
       } footer: {
-        Text(passwordMessage)
+        Text(viewModel.passwordMessage)
           .foregroundColor(.red)
       }
 
