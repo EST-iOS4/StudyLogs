@@ -20,9 +20,21 @@ struct ContentView: View {
           retry: viewModel.fetchData
         )
       } else {
-        DataListView(data: viewModel.data)
-          .searchable(text: $viewModel.searchText, isPresented: .constant(true))
+        switch viewModel.phase {
+        case .idle:
+          DataListView(data: viewModel.data)
+        case .empty:
+          Text("데이터가 없습니다.")
+        case .results(let results):
+          DataListView(data: results)
+        case .loading:
+          ProgressView("로딩 중...")
+        case .failed(_):
+          Text("오류")
+        }
       }
+        EmptyView()
+          .searchable(text: $viewModel.searchText, isPresented: .constant(true))
     }
     .onAppear {
       viewModel.fetchData()
