@@ -12,7 +12,7 @@ struct ContentView: View {
 
   var body: some View {
     Group {
-      if viewModel.isLoading {
+      if viewModel.isLoading {ㅍ
         ProgressView("로딩 중...")
       } else if !viewModel.errorMessage.isEmpty {
         ErrorView(

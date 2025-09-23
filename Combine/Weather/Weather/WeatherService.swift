@@ -28,6 +28,12 @@ final class WeatherService: ObservableObject {
   @Published var isLoading = false
   @Published var errorMessage = ""
 
+  private let loadingSubject = CurrentValueSubject<Bool, Never>(false)
+
+  init() {
+    loadingSubject.assign(to: &$isLoading)
+  }
+
   private var cancellables = Set<AnyCancellable>()
 
   private let seoul = (lat: 37.5665, lon: 126.9780, name: "서울")
@@ -48,12 +54,12 @@ final class WeatherService: ObservableObject {
   }
 
   func fetch(lat: Double, lon: Double, cityName: String) {
-    isLoading = true
     errorMessage = ""
 
     let url = openMeteoURL(lat: lat, lon: lon)
 
     URLSession.shared.dataTaskPublisher(for: url)
+      .trackActivity(loadingSubject)
       .map(\.data)
       .decode(type: OpenMeteoResponse.self, decoder: JSONDecoder())
       .map { response in
@@ -68,7 +74,6 @@ final class WeatherService: ObservableObject {
       .sink(
         receiveCompletion: { [weak self] completion in
           guard let self else { return }
-          self.isLoading = false
           if case .failure(let error) = completion {
             self.errorMessage = error.localizedDescription
           }
