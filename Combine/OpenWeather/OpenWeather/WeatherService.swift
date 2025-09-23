@@ -46,7 +46,7 @@ final class WeatherService {
     errorMessage = nil
 
     // 공백 제거
-    let apiKey = ""
+    let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as! String
     // 섭씨 사용을 위해 units=metric 추가, 필요 시 언어(lang)도 설정 가능
     let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=\(apiKey)&units=metric&lang=kr")!
 
