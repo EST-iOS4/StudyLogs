@@ -15,13 +15,13 @@ final class DataViewModel: ObservableObject {
 
   private let client = NetworkClient()
   private var cancellables = Set<AnyCancellable>()
-  private let url = URL(string: "https://example.com/api/list")!
+  private let url = URL(string: "https://jsonplaceholder.typicode.com/todos")!
 
   func fetchData() {
     isLoading = true
     errorMessage = ""
     client.request(url)
-      .decode(type: [String].self, decoder: JSONDecoder())
+      .decode(type: [Todo].self, decoder: JSONDecoder())
       .receive(on: DispatchQueue.main)
       .sink(
         receiveCompletion: { [weak self] completion in
@@ -32,7 +32,7 @@ final class DataViewModel: ObservableObject {
           }
         },
         receiveValue: { [weak self] values in
-          self?.data = values
+          self?.data = values.map(\.title)
         }
       )
       .store(in: &cancellables)
