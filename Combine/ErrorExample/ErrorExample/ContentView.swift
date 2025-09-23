@@ -8,14 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+  @StateObject private var viewModel = DataViewModel()
+
   var body: some View {
-    VStack {
-      Image(systemName: "globe")
-        .imageScale(.large)
-        .foregroundStyle(.tint)
-      Text("Hello, world!")
+    Group {
+      if viewModel.isLoading {
+        ProgressView("로딩 중...")
+      } else if !viewModel.errorMessage.isEmpty {
+        ErrorView(
+          message: viewModel.errorMessage,
+          retry: viewModel.fetchData
+        )
+      } else {
+        DataListView(data: viewModel.data)
+      }
     }
-    .padding()
+    .onAppear {
+      viewModel.fetchData()
+    }
   }
 }
 
