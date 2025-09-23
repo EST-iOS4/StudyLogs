@@ -8,14 +8,49 @@
 import Foundation
 import Combine
 
+enum SearchPhase {
+  case idle
+  case loading
+  case results([String])
+  case empty
+  case failed(String)
+}
+
 final class DataViewModel: ObservableObject {
   @Published var isLoading = false
   @Published var errorMessage = ""
   @Published var data: [String] = []
 
+  @Published var searchText = ""
+
+  @Published private(set) var phase: SearchPhase = .idle
+
   private let client = NetworkClient()
   private var cancellables = Set<AnyCancellable>()
   private let url = URL(string: "https://jsonplaceholder.typicode.com/todos")!
+
+  init() {
+    bind()
+  }
+
+  func bind() {
+    $searchText
+      .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
+      .removeDuplicates()
+      .map { query -> AnyPublisher<SearchPhase,Never> in
+        guard !query.isEmpty else { return Just(.idle).eraseToAnyPublisher() }
+        let results: [String] = self.data.filter({ $0.contains(query) })
+        return results.isEmpty ?
+          Just(.empty).eraseToAnyPublisher() :
+          Just(.results(results)).eraseToAnyPublisher()
+      }
+      .switchToLatest()
+      .receive(on: RunLoop.main)
+      .sink { [weak self] phase in
+        self?.phase = phase
+      }
+      .store(in: &cancellables)
+  }
 
   func fetchData() {
     isLoading = true

@@ -11,7 +11,7 @@ struct ContentView: View {
   @StateObject private var viewModel = DataViewModel()
 
   var body: some View {
-    Group {
+    NavigationStack {
       if viewModel.isLoading {
         ProgressView("로딩 중...")
       } else if !viewModel.errorMessage.isEmpty {
@@ -21,6 +21,7 @@ struct ContentView: View {
         )
       } else {
         DataListView(data: viewModel.data)
+          .searchable(text: $viewModel.searchText, isPresented: .constant(true))
       }
     }
     .onAppear {
