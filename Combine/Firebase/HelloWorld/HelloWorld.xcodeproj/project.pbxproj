@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CC65C1382E8372E400B925F5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CC65C1372E8372E400B925F5 /* FirebaseAuth */; };
-		CC65C13A2E8372E400B925F5 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = CC65C1392E8372E400B925F5 /* FirebaseCore */; };
-		CC65C13C2E8372E400B925F5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CC65C13B2E8372E400B925F5 /* FirebaseFirestore */; };
+		CC65C1582E8374B700B925F5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CC65C1572E8374B700B925F5 /* FirebaseAuth */; };
+		CC65C15A2E8374B700B925F5 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = CC65C1592E8374B700B925F5 /* FirebaseCore */; };
+		CC65C15C2E8374B700B925F5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CC65C15B2E8374B700B925F5 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CC41C7302E7D15BF004B40CC /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC65C1462E8373AF00B925F5 /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CC41C7322E7D15BF004B40CC /* HelloWorld */ = {
+		CC65C1482E8373AF00B925F5 /* HelloWorld */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = HelloWorld;
 			sourceTree = "<group>";
@@ -25,31 +25,31 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		CC41C72D2E7D15BF004B40CC /* Frameworks */ = {
+		CC65C1432E8373AF00B925F5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC65C13A2E8372E400B925F5 /* FirebaseCore in Frameworks */,
-				CC65C1382E8372E400B925F5 /* FirebaseAuth in Frameworks */,
-				CC65C13C2E8372E400B925F5 /* FirebaseFirestore in Frameworks */,
+				CC65C15A2E8374B700B925F5 /* FirebaseCore in Frameworks */,
+				CC65C1582E8374B700B925F5 /* FirebaseAuth in Frameworks */,
+				CC65C15C2E8374B700B925F5 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		CC41C7272E7D15BF004B40CC = {
+		CC65C13D2E8373AF00B925F5 = {
 			isa = PBXGroup;
 			children = (
-				CC41C7322E7D15BF004B40CC /* HelloWorld */,
-				CC41C7312E7D15BF004B40CC /* Products */,
+				CC65C1482E8373AF00B925F5 /* HelloWorld */,
+				CC65C1472E8373AF00B925F5 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		CC41C7312E7D15BF004B40CC /* Products */ = {
+		CC65C1472E8373AF00B925F5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CC41C7302E7D15BF004B40CC /* HelloWorld.app */,
+				CC65C1462E8373AF00B925F5 /* HelloWorld.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -57,70 +57,70 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CC41C72F2E7D15BF004B40CC /* HelloWorld */ = {
+		CC65C1452E8373AF00B925F5 /* HelloWorld */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CC41C73B2E7D15C0004B40CC /* Build configuration list for PBXNativeTarget "HelloWorld" */;
+			buildConfigurationList = CC65C1512E8373B000B925F5 /* Build configuration list for PBXNativeTarget "HelloWorld" */;
 			buildPhases = (
-				CC41C72C2E7D15BF004B40CC /* Sources */,
-				CC41C72D2E7D15BF004B40CC /* Frameworks */,
-				CC41C72E2E7D15BF004B40CC /* Resources */,
+				CC65C1422E8373AF00B925F5 /* Sources */,
+				CC65C1432E8373AF00B925F5 /* Frameworks */,
+				CC65C1442E8373AF00B925F5 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				CC41C7322E7D15BF004B40CC /* HelloWorld */,
+				CC65C1482E8373AF00B925F5 /* HelloWorld */,
 			);
 			name = HelloWorld;
 			packageProductDependencies = (
-				CC65C1372E8372E400B925F5 /* FirebaseAuth */,
-				CC65C1392E8372E400B925F5 /* FirebaseCore */,
-				CC65C13B2E8372E400B925F5 /* FirebaseFirestore */,
+				CC65C1572E8374B700B925F5 /* FirebaseAuth */,
+				CC65C1592E8374B700B925F5 /* FirebaseCore */,
+				CC65C15B2E8374B700B925F5 /* FirebaseFirestore */,
 			);
 			productName = HelloWorld;
-			productReference = CC41C7302E7D15BF004B40CC /* HelloWorld.app */;
+			productReference = CC65C1462E8373AF00B925F5 /* HelloWorld.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		CC41C7282E7D15BF004B40CC /* Project object */ = {
+		CC65C13E2E8373AF00B925F5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
-					CC41C72F2E7D15BF004B40CC = {
-						CreatedOnToolsVersion = 26.0;
+					CC65C1452E8373AF00B925F5 = {
+						CreatedOnToolsVersion = 26.0.1;
 					};
 				};
 			};
-			buildConfigurationList = CC41C72B2E7D15BF004B40CC /* Build configuration list for PBXProject "HelloWorld" */;
+			buildConfigurationList = CC65C1412E8373AF00B925F5 /* Build configuration list for PBXProject "HelloWorld" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = CC41C7272E7D15BF004B40CC;
+			mainGroup = CC65C13D2E8373AF00B925F5;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				CC65C1362E8372E400B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				CC65C1562E8374B700B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = CC41C7312E7D15BF004B40CC /* Products */;
+			productRefGroup = CC65C1472E8373AF00B925F5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CC41C72F2E7D15BF004B40CC /* HelloWorld */,
+				CC65C1452E8373AF00B925F5 /* HelloWorld */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		CC41C72E2E7D15BF004B40CC /* Resources */ = {
+		CC65C1442E8373AF00B925F5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -130,7 +130,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		CC41C72C2E7D15BF004B40CC /* Sources */ = {
+		CC65C1422E8373AF00B925F5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -140,7 +140,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		CC41C7392E7D15C0004B40CC /* Debug */ = {
+		CC65C14F2E8373B000B925F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -204,7 +204,7 @@
 			};
 			name = Debug;
 		};
-		CC41C73A2E7D15C0004B40CC /* Release */ = {
+		CC65C1502E8373B000B925F5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -261,7 +261,7 @@
 			};
 			name = Release;
 		};
-		CC41C73C2E7D15C0004B40CC /* Debug */ = {
+		CC65C1522E8373B000B925F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -293,7 +293,7 @@
 			};
 			name = Debug;
 		};
-		CC41C73D2E7D15C0004B40CC /* Release */ = {
+		CC65C1532E8373B000B925F5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -328,20 +328,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CC41C72B2E7D15BF004B40CC /* Build configuration list for PBXProject "HelloWorld" */ = {
+		CC65C1412E8373AF00B925F5 /* Build configuration list for PBXProject "HelloWorld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CC41C7392E7D15C0004B40CC /* Debug */,
-				CC41C73A2E7D15C0004B40CC /* Release */,
+				CC65C14F2E8373B000B925F5 /* Debug */,
+				CC65C1502E8373B000B925F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CC41C73B2E7D15C0004B40CC /* Build configuration list for PBXNativeTarget "HelloWorld" */ = {
+		CC65C1512E8373B000B925F5 /* Build configuration list for PBXNativeTarget "HelloWorld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CC41C73C2E7D15C0004B40CC /* Debug */,
-				CC41C73D2E7D15C0004B40CC /* Release */,
+				CC65C1522E8373B000B925F5 /* Debug */,
+				CC65C1532E8373B000B925F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -349,7 +349,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CC65C1362E8372E400B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		CC65C1562E8374B700B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
@@ -360,22 +360,22 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CC65C1372E8372E400B925F5 /* FirebaseAuth */ = {
+		CC65C1572E8374B700B925F5 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CC65C1362E8372E400B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = CC65C1562E8374B700B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
 		};
-		CC65C1392E8372E400B925F5 /* FirebaseCore */ = {
+		CC65C1592E8374B700B925F5 /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CC65C1362E8372E400B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = CC65C1562E8374B700B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
 		};
-		CC65C13B2E8372E400B925F5 /* FirebaseFirestore */ = {
+		CC65C15B2E8374B700B925F5 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CC65C1362E8372E400B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = CC65C1562E8374B700B925F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = CC41C7282E7D15BF004B40CC /* Project object */;
+	rootObject = CC65C13E2E8373AF00B925F5 /* Project object */;
 }
