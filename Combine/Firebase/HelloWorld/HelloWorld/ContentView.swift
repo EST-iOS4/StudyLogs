@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
   @State var bookViewModel = BookViewModel()
@@ -15,8 +16,16 @@ struct ContentView: View {
       List(bookViewModel.books) { book in
         Text(book.title)
       }
-      Button("새로고침") {
-        bookViewModel.fetchData()
+      if bookViewModel.isLoading {
+        ProgressView()
+        Button("종료") {
+          bookViewModel.stopListening()
+        }
+
+      } else {
+        Button("새로고침") {
+          bookViewModel.fetchData()
+        }
       }
     }
     .padding()
