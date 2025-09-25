@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
@@ -20,7 +21,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     settings.cacheSettings = MemoryCacheSettings() // Or PersistentCacheSettings() if you need persistence
 
     Firestore.firestore().settings = settings
-    
+
+    Auth.auth().useEmulator(withHost: "localhost", port: 9099)
+
     return true
   }
 }
@@ -29,9 +32,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct HelloWorldApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
+  @StateObject var authService = AuthenticationService()
+
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      if authService.isAuthenticated {
+        ContentView()
+          .environmentObject(authService)
+      } else {
+        LoginView()
+          .environmentObject(authService)
+      }
     }
   }
 }
