@@ -1,0 +1,29 @@
+{
+  "name": "firebase-books-data-generator",
+  "version": "1.0.0",
+  "description": "Generate dummy books data for Firebase Firestore emulator",
+  "main": "generate-books-data.js",
+  "scripts": {
+    "generate": "node generate-books-data.js",
+    "start": "firebase emulators:start",
+    "emulators": "firebase emulators:start --only firestore",
+    "seed": "node generate-books-data.js"
+  },
+  "keywords": [
+    "firebase",
+    "firestore",
+    "dummy-data",
+    "books"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  },
+  "devDependencies": {
+    "firebase-tools": "^13.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
