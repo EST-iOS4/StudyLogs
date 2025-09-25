@@ -8,14 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
+  @StateObject private var viewModel = MemoViewModel()
+
   var body: some View {
-    VStack {
-      Image(systemName: "globe")
-        .imageScale(.large)
-        .foregroundStyle(.tint)
-      Text("Hello, world!")
+    NavigationStack {
+      TextEditor(text: $viewModel.text)
+        .padding()
+        .navigationTitle("Memo")
+        .task {
+          await viewModel.load()
+        }
+        .onChange(of: viewModel.text) { _, _ in
+          viewModel.scheduleSave()
+        }
     }
-    .padding()
   }
 }
 
