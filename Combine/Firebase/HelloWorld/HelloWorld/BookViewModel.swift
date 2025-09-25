@@ -17,10 +17,6 @@ final class BookViewModel {
   var cancellables = Set<AnyCancellable>()
   private var listenerCancellable: AnyCancellable?
 
-  init() {
-    startListening()
-  }
-
   func startListening() {
     isLoading = true
 

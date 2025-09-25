@@ -29,6 +29,9 @@ struct ContentView: View {
       }
     }
     .padding()
+    .onAppear {
+      bookViewModel.startListening()
+    }
   }
 }
 
