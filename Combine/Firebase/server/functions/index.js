@@ -1,0 +1,147 @@
+/**
+ * Import function triggers from their respective submodules:
+ *
+ * const {onCall} = require("firebase-functions/v2/https");
+ * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
+ *
+ * See a full list of supported triggers at https://firebase.google.com/docs/functions
+ */
+
+const {setGlobalOptions} = require("firebase-functions");
+const {onRequest} = require("firebase-functions/https");
+const logger = require("firebase-functions/logger");
+const admin = require("firebase-admin");
+
+// Initialize Firebase Admin SDK
+admin.initializeApp();
+
+// For cost control, you can set the maximum number of containers that can be
+// running at the same time. This helps mitigate the impact of unexpected
+// traffic spikes by instead downgrading performance. This limit is a
+// per-function limit. You can override the limit for each function using the
+// `maxInstances` option in the function's options, e.g.
+// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
+// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
+// functions should each use functions.runWith({ maxInstances: 10 }) instead.
+// In the v1 API, each function can only serve one request per container, so
+// this will be the maximum concurrent request count.
+setGlobalOptions({maxInstances: 10});
+
+// Create and deploy your first functions
+// https://firebase.google.com/docs/functions/get-started
+
+// Search books in Firestore by title or author
+exports.search = onRequest(async (request, response) => {
+  try {
+    // Enable CORS
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "GET");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "GET") {
+      response.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    const searchTerm = request.query.q;
+
+    if (!searchTerm) {
+      response.status(400).json({
+        error: "검색어가 필요합니다. ?q=검색어 형식으로 요청해주세요.",
+      });
+      return;
+    }
+
+    logger.info("Searching for:", searchTerm);
+
+    const db = admin.firestore();
+    const booksRef = db.collection("books");
+
+    // Firestore에서는 부분 문자열 검색이 제한적이므로
+    // 대소문자를 구분하지 않는 검색을 위해 소문자로 변환
+    const searchTermLower = searchTerm.toLowerCase();
+
+    // 모든 books를 가져와서 클라이언트 측에서 필터링
+    // 실제 프로덕션에서는 Algolia 등 전문 검색 서비스를 사용하는 것이 좋습니다
+    const snapshot = await booksRef.get();
+
+    const results = [];
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const title = (data.title || "").toLowerCase();
+      const author = (data.author || "").toLowerCase();
+
+      // title 또는 author에 검색어가 포함되어 있는지 확인
+      if (title.includes(searchTermLower) || author.includes(searchTermLower)) {
+        // publishedDate와 createdAt을 적절한 형식으로 변환
+        const formattedData = {...data};
+
+        // publishedDate 포맷팅
+        if (data.publishedDate) {
+          // Firestore Timestamp를 ISO 8601 문자열로 변환
+          if (data.publishedDate.toDate) {
+            const date = data.publishedDate.toDate();
+            formattedData.publishedDate = date.toISOString();
+          } else if (typeof data.publishedDate === "string") {
+            // 이미 문자열인 경우 Date 객체로 변환 후 ISO 형식으로
+            try {
+              const date = new Date(data.publishedDate);
+              formattedData.publishedDate = date.toISOString();
+            } catch (e) {
+              // 변환 실패 시 원본 유지
+              formattedData.publishedDate = data.publishedDate;
+            }
+          }
+        }
+
+        // createdAt 포맷팅
+        if (data.createdAt) {
+          // Firestore Timestamp를 ISO 8601 문자열로 변환
+          if (data.createdAt.toDate) {
+            const date = data.createdAt.toDate();
+            formattedData.createdAt = date.toISOString();
+          } else if (typeof data.createdAt === "string") {
+            // 이미 문자열인 경우 Date 객체로 변환 후 ISO 형식으로
+            try {
+              const date = new Date(data.createdAt);
+              formattedData.createdAt = date.toISOString();
+            } catch (e) {
+              // 변환 실패 시 원본 유지
+              formattedData.createdAt = data.createdAt;
+            }
+          }
+        }
+
+        results.push({
+          id: doc.id,
+          ...formattedData,
+        });
+      }
+    });
+
+    logger.info(`Found ${results.length} results for "${searchTerm}"`);
+
+    response.json({
+      query: searchTerm,
+      results: results,
+      count: results.length,
+    });
+  } catch (error) {
+    logger.error("Search error:", error);
+    response.status(500).json({
+      error: "검색 중 오류가 발생했습니다.",
+      message: error.message,
+    });
+  }
+});
+
+// exports.helloWorld = onRequest((request, response) => {
+//   logger.info("Hello logs!", {structuredData: true});
+//   response.send("Hello from Firebase!");
+// });
