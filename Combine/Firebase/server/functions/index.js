@@ -143,7 +143,7 @@ exports.search = onRequest(async (request, response) => {
 
 // TodoItem CRUD API
 
-// GET /todos - 모든 TodoItem 조회
+// GET /todos - 페이징된 TodoItem 조회
 exports.getTodos = onRequest(async (request, response) => {
   try {
     // Enable CORS
@@ -161,11 +161,42 @@ exports.getTodos = onRequest(async (request, response) => {
       return;
     }
 
+    // 페이징 파라미터 파싱
+    const page = parseInt(request.query.page) || 1; // 기본값: 1페이지
+    const limit = parseInt(request.query.limit) || 20; // 기본값: 20개
+    const offset = (page - 1) * limit;
+
+    // 페이징 파라미터 검증
+    if (page < 1) {
+      response.status(400).json({
+        error: "페이지 번호는 1 이상이어야 합니다.",
+      });
+      return;
+    }
+
+    if (limit < 1 || limit > 100) {
+      response.status(400).json({
+        error: "limit은 1-100 사이의 값이어야 합니다.",
+      });
+      return;
+    }
+
     const db = admin.firestore();
     const todosRef = db.collection("todos");
 
-    // createdAt 기준으로 정렬하여 조회
-    const snapshot = await todosRef.orderBy("createdAt", "desc").get();
+    // 전체 개수 조회 (페이징 정보용)
+    const totalSnapshot = await todosRef.get();
+    const totalCount = totalSnapshot.size;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    // 페이징된 데이터 조회
+    let query = todosRef.orderBy("createdAt", "desc");
+
+    if (offset > 0) {
+      query = query.offset(offset);
+    }
+
+    const snapshot = await query.limit(limit).get();
 
     const todos = [];
     snapshot.forEach((doc) => {
@@ -183,10 +214,18 @@ exports.getTodos = onRequest(async (request, response) => {
       });
     });
 
-    logger.info(`Retrieved ${todos.length} todos`);
+    logger.info(`Retrieved ${todos.length} todos for page ${page}`);
+
     response.json({
       todos: todos,
-      count: todos.length,
+      pagination: {
+        currentPage: page,
+        limit: limit,
+        totalCount: totalCount,
+        totalPages: totalPages,
+        hasNext: page < totalPages,
+        hasPrevious: page > 1,
+      },
     });
   } catch (error) {
     logger.error("Get todos error:", error);
