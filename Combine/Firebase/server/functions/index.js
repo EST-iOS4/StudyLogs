@@ -141,6 +141,331 @@ exports.search = onRequest(async (request, response) => {
   }
 });
 
+// TodoItem CRUD API
+
+// GET /todos - 모든 TodoItem 조회
+exports.getTodos = onRequest(async (request, response) => {
+  try {
+    // Enable CORS
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "GET");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "GET") {
+      response.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    const db = admin.firestore();
+    const todosRef = db.collection("todos");
+
+    // createdAt 기준으로 정렬하여 조회
+    const snapshot = await todosRef.orderBy("createdAt", "desc").get();
+
+    const todos = [];
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const formattedData = {...data};
+
+      // createdAt 포맷팅
+      if (data.createdAt && data.createdAt.toDate) {
+        formattedData.createdAt = data.createdAt.toDate().toISOString();
+      }
+
+      todos.push({
+        id: doc.id,
+        ...formattedData,
+      });
+    });
+
+    logger.info(`Retrieved ${todos.length} todos`);
+    response.json({
+      todos: todos,
+      count: todos.length,
+    });
+  } catch (error) {
+    logger.error("Get todos error:", error);
+    response.status(500).json({
+      error: "Todo 조회 중 오류가 발생했습니다.",
+      message: error.message,
+    });
+  }
+});
+
+// POST /todos - 새 TodoItem 생성
+exports.createTodo = onRequest(async (request, response) => {
+  try {
+    // Enable CORS
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "POST");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "POST") {
+      response.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    const {title, completed} = request.body;
+
+    if (!title || typeof title !== "string" || title.trim() === "") {
+      response.status(400).json({
+        error: "제목이 필요합니다.",
+      });
+      return;
+    }
+
+    const todoData = {
+      title: title.trim(),
+      completed: completed || false,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    const db = admin.firestore();
+    const docRef = await db.collection("todos").add(todoData);
+
+    logger.info("Created todo with ID:", docRef.id);
+
+    // 생성된 문서 다시 조회하여 timestamp가 포함된 데이터 반환
+    const doc = await docRef.get();
+    const data = doc.data();
+    const formattedData = {...data};
+
+    if (data.createdAt && data.createdAt.toDate) {
+      formattedData.createdAt = data.createdAt.toDate().toISOString();
+    }
+
+    response.status(201).json({
+      id: doc.id,
+      ...formattedData,
+    });
+  } catch (error) {
+    logger.error("Create todo error:", error);
+    response.status(500).json({
+      error: "Todo 생성 중 오류가 발생했습니다.",
+      message: error.message,
+    });
+  }
+});
+
+// PUT /todos/{id} - TodoItem 업데이트
+exports.updateTodo = onRequest(async (request, response) => {
+  try {
+    // Enable CORS
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "PUT");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "PUT") {
+      response.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    // URL에서 ID 추출 (예: /todos/abc123)
+    const pathParts = request.path.split("/");
+    const todoId = pathParts[pathParts.length - 1];
+
+    if (!todoId) {
+      response.status(400).json({
+        error: "Todo ID가 필요합니다.",
+      });
+      return;
+    }
+
+    const {title, completed} = request.body;
+
+    const updateData = {};
+    if (title !== undefined) {
+      if (typeof title !== "string" || title.trim() === "") {
+        response.status(400).json({
+          error: "유효한 제목이 필요합니다.",
+        });
+        return;
+      }
+      updateData.title = title.trim();
+    }
+    if (completed !== undefined) {
+      updateData.completed = Boolean(completed);
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      response.status(400).json({
+        error: "업데이트할 데이터가 없습니다.",
+      });
+      return;
+    }
+
+    const db = admin.firestore();
+    const docRef = db.collection("todos").doc(todoId);
+
+    // 문서 존재 확인
+    const doc = await docRef.get();
+    if (!doc.exists) {
+      response.status(404).json({
+        error: "해당 Todo를 찾을 수 없습니다.",
+      });
+      return;
+    }
+
+    await docRef.update(updateData);
+
+    logger.info("Updated todo with ID:", todoId);
+
+    // 업데이트된 문서 다시 조회
+    const updatedDoc = await docRef.get();
+    const data = updatedDoc.data();
+    const formattedData = {...data};
+
+    if (data.createdAt && data.createdAt.toDate) {
+      formattedData.createdAt = data.createdAt.toDate().toISOString();
+    }
+
+    response.json({
+      id: updatedDoc.id,
+      ...formattedData,
+    });
+  } catch (error) {
+    logger.error("Update todo error:", error);
+    response.status(500).json({
+      error: "Todo 업데이트 중 오류가 발생했습니다.",
+      message: error.message,
+    });
+  }
+});
+
+// DELETE /todos/{id} - TodoItem 삭제
+exports.deleteTodo = onRequest(async (request, response) => {
+  try {
+    // Enable CORS
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "DELETE");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "DELETE") {
+      response.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    // URL에서 ID 추출 (예: /todos/abc123)
+    const pathParts = request.path.split("/");
+    const todoId = pathParts[pathParts.length - 1];
+
+    if (!todoId) {
+      response.status(400).json({
+        error: "Todo ID가 필요합니다.",
+      });
+      return;
+    }
+
+    const db = admin.firestore();
+    const docRef = db.collection("todos").doc(todoId);
+
+    // 문서 존재 확인
+    const doc = await docRef.get();
+    if (!doc.exists) {
+      response.status(404).json({
+        error: "해당 Todo를 찾을 수 없습니다.",
+      });
+      return;
+    }
+
+    await docRef.delete();
+
+    logger.info("Deleted todo with ID:", todoId);
+
+    response.json({
+      message: "Todo가 성공적으로 삭제되었습니다.",
+      id: todoId,
+    });
+  } catch (error) {
+    logger.error("Delete todo error:", error);
+    response.status(500).json({
+      error: "Todo 삭제 중 오류가 발생했습니다.",
+      message: error.message,
+    });
+  }
+});
+
+// GET /todos/{id} - 특정 TodoItem 조회
+exports.getTodo = onRequest(async (request, response) => {
+  try {
+    // Enable CORS
+    response.set("Access-Control-Allow-Origin", "*");
+    response.set("Access-Control-Allow-Methods", "GET");
+    response.set("Access-Control-Allow-Headers", "Content-Type");
+
+    if (request.method === "OPTIONS") {
+      response.status(204).send("");
+      return;
+    }
+
+    if (request.method !== "GET") {
+      response.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    // URL에서 ID 추출 (예: /todos/abc123)
+    const pathParts = request.path.split("/");
+    const todoId = pathParts[pathParts.length - 1];
+
+    if (!todoId) {
+      response.status(400).json({
+        error: "Todo ID가 필요합니다.",
+      });
+      return;
+    }
+
+    const db = admin.firestore();
+    const doc = await db.collection("todos").doc(todoId).get();
+
+    if (!doc.exists) {
+      response.status(404).json({
+        error: "해당 Todo를 찾을 수 없습니다.",
+      });
+      return;
+    }
+
+    const data = doc.data();
+    const formattedData = {...data};
+
+    if (data.createdAt && data.createdAt.toDate) {
+      formattedData.createdAt = data.createdAt.toDate().toISOString();
+    }
+
+    logger.info("Retrieved todo with ID:", todoId);
+
+    response.json({
+      id: doc.id,
+      ...formattedData,
+    });
+  } catch (error) {
+    logger.error("Get todo error:", error);
+    response.status(500).json({
+      error: "Todo 조회 중 오류가 발생했습니다.",
+      message: error.message,
+    });
+  }
+});
+
 // exports.helloWorld = onRequest((request, response) => {
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
