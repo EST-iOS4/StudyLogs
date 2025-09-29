@@ -26,9 +26,8 @@ class ViewController: UIViewController {
       .assign(to: \.text, on: countLabel)
       .store(in: &cancellables)
 
-    incrementButton.publisher
+    incrementButton.publisher(for: .touchUpInside)
       .sink { [weak self] event in
-        print("event: \(event.debugDescription)")
         let currentValue = self?.count.value ?? 0
         self?.count.send(currentValue + 1)
       }
