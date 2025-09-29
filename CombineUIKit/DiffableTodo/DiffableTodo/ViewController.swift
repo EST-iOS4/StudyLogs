@@ -24,6 +24,7 @@ class ViewController: UIViewController {
       config.text = item.title
       config.textProperties.color = item.isCompleted ? .gray : .label
       cell.contentConfiguration = config
+
       return cell
     }
   }()
@@ -32,8 +33,10 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     title = "Diffable Todo"
 
-    setupBindings()
+    // Ensure delegate is set to receive selection events
+    tableView.delegate = self
 
+    setupBindings()
   }
 
   private func setupBindings() {
@@ -66,3 +69,10 @@ class ViewController: UIViewController {
 
 }
 
+extension ViewController: UITableViewDelegate {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+    guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+    viewModel.toggleTodo(id: item.id)
+  }
+}
