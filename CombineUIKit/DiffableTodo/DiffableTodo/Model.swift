@@ -10,6 +10,7 @@ import Foundation
 nonisolated enum Section: CaseIterable {
   case todo
   case completed
+  case next
 }
 
 nonisolated struct TodoItem: Hashable, Identifiable, Codable {

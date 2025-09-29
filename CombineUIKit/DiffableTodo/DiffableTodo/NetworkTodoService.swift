@@ -12,33 +12,20 @@ class NetworkTodoService {
   private let baseURL = URL(string: "http://127.0.0.1:5001/est-ios04/us-central1/")!
   private var cancellables = Set<AnyCancellable>()
 
-  private let todosSubject = CurrentValueSubject<[TodoItem], Never>([])
+  // 페이지 파라미터 추가
+  func fetchTodos(page: Int = 1) -> AnyPublisher<TodoResponse, Error> {
+    var components = URLComponents(url: baseURL.appendingPathComponent("getTodos"), resolvingAgainstBaseURL: false)!
+    components.queryItems = [
+      URLQueryItem(name: "page", value: String(page))
+    ]
 
-  var todos: AnyPublisher<[TodoItem], Never> {
-    todosSubject.eraseToAnyPublisher()
-  }
+    let url = components.url!
 
-  func startRealtimeSync() {
-    Timer.publish(every: 5.0, on: .main, in: .common)
-      .autoconnect()
-      .flatMap { _ in self.fetchTodos() }
-      .sink(receiveCompletion: { completion in
-        if case .failure(let error) = completion {
-          print("동기화 오류: \(error)")
-        }
-      },
-            receiveValue: { [weak self] todos in
-        self?.todosSubject.send(todos)
-      })
-      .store(in: &cancellables)
-  }
-
-  private func fetchTodos() -> AnyPublisher<[TodoItem], Error> {
-    URLSession.shared
-      .dataTaskPublisher(for: baseURL.appendingPathComponent("getTodos"))
+    return URLSession.shared
+      .dataTaskPublisher(for: url)
       .map(\.data)
       .decode(type: TodoResponse.self, decoder: JSONDecoder())
-      .map(\.todos)
       .eraseToAnyPublisher()
   }
 }
+
