@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Section: Int, CaseIterable {
+nonisolated enum Section: CaseIterable {
   case todo
   case completed
 }
