@@ -83,9 +83,53 @@ class NetworkTodoService {
       .eraseToAnyPublisher()
   }
 
-  func updateTodo(item: TodoItem) -> AnyPublisher<TodoItem, Error> {
-    return Just(item)
-      .setFailureType(to: Error.self)
+  func updateTodo(item: TodoItem) -> AnyPublisher<TodoItem, NetworkError> {
+    var components = URLComponents(
+      url: baseURL.appending(components: "updateTodo", item.id),
+      resolvingAgainstBaseURL: false
+    )!
+
+    let url = components.url!
+
+    var request = URLRequest(url: url)
+    request.httpMethod = "PUT"
+
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+    do {
+      let encoder = JSONEncoder()
+      request.httpBody = try encoder.encode(item)
+    } catch {
+      return Fail(error: .underlying(error)).eraseToAnyPublisher()
+    }
+
+    return URLSession.shared
+      .dataTaskPublisher(for: request)
+      .subscribe(on: DispatchQueue.global(qos: .background))
+      .tryMap { data, response -> Data in
+        guard let httpResponse = response as? HTTPURLResponse else {
+          throw NetworkError.noData
+        }
+        if !(200...299).contains(httpResponse.statusCode) {
+          throw NetworkError.invalidResponse(statusCode: httpResponse.statusCode)
+        }
+        return data
+      }
+      .decode(type: TodoItem.self, decoder: JSONDecoder())
+      .mapError { error in
+        switch error {
+        case let decodingError as DecodingError:
+          return .decodingError(decodingError)
+        case let urlError as URLError:
+          return .underlying(urlError)
+        case let netErr as NetworkError:
+          return netErr
+        default:
+          return .underlying(error)
+        }
+      }
+      .receive(on: DispatchQueue.main)
       .eraseToAnyPublisher()
   }
 

@@ -47,8 +47,19 @@ final class TodoViewModel {
   }
 
   func toggleTodo(id: TodoItem.ID) {
-//    guard let index = todos.firstIndex(where: { $0.id == id }) else { return }
-//    todos[index].isCompleted.toggle()
+    guard let index = todos.firstIndex(where: { $0.id == id }) else { return }
+    var item = todos[index]
+    item.isCompleted.toggle()
+    service.updateTodo(item: item)
+      .sink(receiveCompletion: { completion in
+        if case .failure(let error) = completion {
+          print("오류 \(error)")
+        }
+      }, receiveValue: {
+        [weak self] receiveItem in
+        self?.todos[index] = receiveItem
+      })
+      .store(in: &cancellables)
   }
 
   // 다음 페이지 로드
