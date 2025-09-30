@@ -84,7 +84,7 @@ class NetworkTodoService {
   }
 
   func updateTodo(item: TodoItem) -> AnyPublisher<TodoItem, NetworkError> {
-    var components = URLComponents(
+    let components = URLComponents(
       url: baseURL.appending(components: "updateTodo", item.id),
       resolvingAgainstBaseURL: false
     )!
@@ -133,9 +133,43 @@ class NetworkTodoService {
       .eraseToAnyPublisher()
   }
 
-  func deleteTodo(id: String) -> AnyPublisher<String,Error>  {
-    return Just("삭제완료")
-      .setFailureType(to: Error.self)
+  func deleteTodo(id: String) -> AnyPublisher<DeleteResponse,NetworkError>  {
+    let components = URLComponents(
+      url: baseURL.appending(components: "deleteTodo", id),
+      resolvingAgainstBaseURL: false
+    )!
+
+    let url = components.url!
+
+    var request = URLRequest(url: url)
+    request.httpMethod = "DELETE"
+
+    return URLSession.shared
+      .dataTaskPublisher(for: request)
+      .subscribe(on: DispatchQueue.global(qos: .background))
+      .tryMap { data, response -> Data in
+        guard let httpResponse = response as? HTTPURLResponse else {
+          throw NetworkError.noData
+        }
+        if !(200...299).contains(httpResponse.statusCode) {
+          throw NetworkError.invalidResponse(statusCode: httpResponse.statusCode)
+        }
+        return data
+      }
+      .decode(type: DeleteResponse.self, decoder: JSONDecoder())
+      .mapError { error in
+        switch error {
+        case let decodingError as DecodingError:
+          return .decodingError(decodingError)
+        case let urlError as URLError:
+          return .underlying(urlError)
+        case let netErr as NetworkError:
+          return netErr
+        default:
+          return .underlying(error)
+        }
+      }
+      .receive(on: DispatchQueue.main)
       .eraseToAnyPublisher()
   }
 }

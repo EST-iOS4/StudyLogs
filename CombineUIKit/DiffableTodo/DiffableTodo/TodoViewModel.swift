@@ -62,6 +62,22 @@ final class TodoViewModel {
       .store(in: &cancellables)
   }
 
+  func deleteTodo(id: TodoItem.ID) {
+    guard let index = todos.firstIndex(where: { $0.id == id }) else { return }
+    let removeCandidate = todos.remove(at: index)
+    service.deleteTodo(id: id)
+      .sink(receiveCompletion: { [weak self] completion in
+        if case .failure(let error) = completion {
+          print("오류 \(error)")
+          self?.todos.insert(removeCandidate, at: index)
+        }
+      }, receiveValue: {
+        deleteResponse in
+        print("성공: \(deleteResponse.message ?? "")")
+      })
+      .store(in: &cancellables)
+  }
+
   // 다음 페이지 로드
   func loadMoreTodo() {
     guard hasNext, isLoadingNext == false else { return }

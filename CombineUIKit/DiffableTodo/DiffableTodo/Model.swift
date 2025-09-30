@@ -43,3 +43,9 @@ nonisolated struct TodoResponse: Codable {
 struct TitleRequest: Encodable {
   let title: String
 }
+
+struct DeleteResponse: Codable {
+  var id: String?
+  var message: String?
+  var error: String?
+}

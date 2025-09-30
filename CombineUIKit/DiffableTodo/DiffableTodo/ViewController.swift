@@ -158,5 +158,25 @@ extension ViewController: UITableViewDelegate {
 
     viewModel.loadMoreTodo()
   }
+
+  func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    let deleteAction = UIContextualAction(
+      style: .destructive,
+      title: "삭제") { [weak self] (action, view, completionHandler) in
+        guard let self else {
+          completionHandler(false)
+          return
+        }
+
+        if let item = dataSource.itemIdentifier(for: indexPath) {
+          self.viewModel.deleteTodo(id: item.id)
+        }
+        completionHandler(true)
+      }
+    deleteAction.backgroundColor = .red
+    let config = UISwipeActionsConfiguration(actions: [deleteAction])
+    config.performsFirstActionWithFullSwipe = true
+    return config
+  }
 }
 
