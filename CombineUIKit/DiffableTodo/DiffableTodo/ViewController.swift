@@ -38,6 +38,35 @@ class ViewController: UIViewController {
     // Ensure delegate is set to receive selection events
     tableView.delegate = self
 
+    navigationItem.rightBarButtonItem = UIBarButtonItem(
+      systemItem: .add,
+      primaryAction: UIAction {
+        [weak self] _ in
+        let alert = UIAlertController(
+          title: "새 할 일",
+          message: nil,
+          preferredStyle: .alert
+        )
+
+        alert.addTextField { textField in
+          textField.placeholder = "할 일을 입력하세요."
+        }
+
+        let addAction = UIAlertAction(title: "추가", style: .default) {
+          [weak self] _ in
+          guard let self,
+                let text = alert.textFields?.first?.text,
+                !text.isEmpty
+          else { return }
+          self.viewModel.addTodo(text)
+        }
+
+        alert.addAction(addAction)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        self?.present(alert, animated: true)
+      })
+
+
     setupBindings()
   }
 

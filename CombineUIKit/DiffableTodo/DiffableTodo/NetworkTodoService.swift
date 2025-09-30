@@ -27,5 +27,22 @@ class NetworkTodoService {
       .decode(type: TodoResponse.self, decoder: JSONDecoder())
       .eraseToAnyPublisher()
   }
-}
 
+  func createTodo(title: String) -> AnyPublisher<TodoItem, Error> {
+    return Just(TodoItem(title: title))
+      .setFailureType(to: Error.self)
+      .eraseToAnyPublisher()
+  }
+
+  func updateTodo(item: TodoItem) -> AnyPublisher<TodoItem, Error> {
+    return Just(item)
+      .setFailureType(to: Error.self)
+      .eraseToAnyPublisher()
+  }
+
+  func deleteTodo(id: String) -> AnyPublisher<String,Error>  {
+    return Just("삭제완료")
+      .setFailureType(to: Error.self)
+      .eraseToAnyPublisher()
+  }
+}

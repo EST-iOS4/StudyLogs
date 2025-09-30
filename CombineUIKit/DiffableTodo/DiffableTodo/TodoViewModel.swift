@@ -35,7 +35,15 @@ final class TodoViewModel {
   }
 
   func addTodo(_ title: String) {
-//    todos.append(TodoItem(title: title))
+    service.createTodo(title: title)
+      .sink(receiveCompletion: { completion in
+        if case .failure(let error) = completion {
+          print("오류: \(error)")
+        }
+      }, receiveValue: { [weak self] item in
+        self?.todos.insert(item, at: 0)
+      })
+      .store(in: &cancellables)
   }
 
   func toggleTodo(id: TodoItem.ID) {
