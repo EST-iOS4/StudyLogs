@@ -12,6 +12,9 @@ const {onRequest} = require("firebase-functions/https");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 
+const {FieldValue} = require("firebase-admin/firestore");
+const serverTimestamp = () => FieldValue.serverTimestamp();
+
 // Initialize Firebase Admin SDK
 admin.initializeApp();
 
@@ -266,7 +269,7 @@ exports.createTodo = onRequest(async (request, response) => {
     const todoData = {
       title: title.trim(),
       completed: completed || false,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      createdAt: serverTimestamp(),
     };
 
     const db = admin.firestore();

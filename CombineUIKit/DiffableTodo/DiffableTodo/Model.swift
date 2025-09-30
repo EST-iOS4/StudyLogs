@@ -39,3 +39,7 @@ nonisolated struct TodoResponse: Codable {
   var todos: [TodoItem]
   var pagination: Pagination
 }
+
+struct TitleRequest: Encodable {
+  let title: String
+}

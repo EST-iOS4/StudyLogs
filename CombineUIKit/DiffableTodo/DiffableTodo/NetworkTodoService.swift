@@ -8,6 +8,14 @@
 import Foundation
 import Combine
 
+enum NetworkError: Error {
+  case invalidURL
+  case invalidResponse(statusCode: Int)
+  case noData
+  case decodingError(Error)
+  case underlying(Error)
+}
+
 class NetworkTodoService {
   private let baseURL = URL(string: "http://127.0.0.1:5001/est-ios04/us-central1/")!
   private var cancellables = Set<AnyCancellable>()
@@ -28,9 +36,50 @@ class NetworkTodoService {
       .eraseToAnyPublisher()
   }
 
-  func createTodo(title: String) -> AnyPublisher<TodoItem, Error> {
-    return Just(TodoItem(title: title))
-      .setFailureType(to: Error.self)
+  func createTodo(title: String) -> AnyPublisher<TodoItem, NetworkError> {
+    let url = baseURL.appending(path: "createTodo")
+
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+    let body = TitleRequest(title: title)
+    do {
+      let encoder = JSONEncoder()
+      request.httpBody = try encoder.encode(body)
+    } catch {
+      return Fail(error: .underlying(error)).eraseToAnyPublisher()
+    }
+
+
+    return URLSession.shared
+      .dataTaskPublisher(for: request)
+      .subscribe(on: DispatchQueue.global(qos: .background))
+      .tryMap { data, response -> Data in
+        guard let httpResponse = response as? HTTPURLResponse else {
+          throw NetworkError.noData
+        }
+        if !(200...299).contains(httpResponse.statusCode) {
+          throw NetworkError.invalidResponse(statusCode: httpResponse.statusCode)
+        }
+        return data
+      }
+      .decode(type: TodoItem.self, decoder: JSONDecoder())
+      .mapError { error in
+        switch error {
+        case let decodingError as DecodingError:
+          return .decodingError(decodingError)
+        case let urlError as URLError:
+          return .underlying(urlError)
+        case let netErr as NetworkError:
+          return netErr
+        default:
+          return .underlying(error)
+        }
+      }
+      .receive(on: DispatchQueue.main)
       .eraseToAnyPublisher()
   }
 
