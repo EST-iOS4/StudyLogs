@@ -49,15 +49,17 @@ final class TodoViewModel {
   func toggleTodo(id: TodoItem.ID) {
     guard let index = todos.firstIndex(where: { $0.id == id }) else { return }
     var item = todos[index]
+    let org = item
     item.isCompleted.toggle()
+    self.todos[index] = item
     service.updateTodo(item: item)
       .sink(receiveCompletion: { completion in
         if case .failure(let error) = completion {
           print("오류 \(error)")
+          self.todos[index] = org
         }
-      }, receiveValue: {
-        [weak self] receiveItem in
-        self?.todos[index] = receiveItem
+      }, receiveValue: { receiveItem in
+        print("성공")
       })
       .store(in: &cancellables)
   }
