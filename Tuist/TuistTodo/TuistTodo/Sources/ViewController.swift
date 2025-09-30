@@ -4,12 +4,18 @@
 //
 //  Created by Jungman Bae on 9/29/25.
 //
-
 import UIKit
 import Combine
 
 class ViewController: UIViewController {
-  var tableView: UITableView!
+
+  lazy var tableView: UITableView = {
+    let tableView = UITableView(frame: view.bounds)
+    print("tableView: \(tableView.debugDescription)")
+    tableView.delegate = self
+    view.addSubview(tableView)
+    return tableView
+  }()
 
   private var hasNext: Bool = false
 
@@ -37,8 +43,6 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     title = "Diffable Todo"
     view.backgroundColor = .systemBackground
-
-    setupTableView()
 
     navigationItem.rightBarButtonItem = UIBarButtonItem(
       systemItem: .add,
@@ -70,16 +74,6 @@ class ViewController: UIViewController {
 
 
     setupBindings()
-  }
-
-  private func setupTableView() {
-    // Ensure delegate is set to receive selection events
-    tableView.delegate = self
-
-    tableView.frame = view.bounds
-    print("setupTableView")
-
-    view.addSubview(tableView)
   }
 
   private func setupBindings() {

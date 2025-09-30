@@ -11,19 +11,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
   var window: UIWindow?
 
-
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
     // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
     guard let windowScene = (scene as? UIWindowScene) else { return }
 
-    let window = UIWindow(windowScene: windowScene)
+    print("SceneDelegate")
 
-    let controller = ViewController()
-    let navController = UINavigationController(rootViewController: controller)
-    window.rootViewController = navController
-    window.makeKeyAndVisible()
+    // 핵심: 지역 변수 대신 self.window에 할당하여 강한 참조 유지
+    self.window = UIWindow(windowScene: windowScene)
+
+    self.window?.rootViewController = UINavigationController(
+      rootViewController: ViewController()
+    )
+
+    self.window?.makeKeyAndVisible()
   }
 
   func sceneDidDisconnect(_ scene: UIScene) {
@@ -54,6 +57,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // to restore the scene back to its current state.
   }
 
-
 }
-
