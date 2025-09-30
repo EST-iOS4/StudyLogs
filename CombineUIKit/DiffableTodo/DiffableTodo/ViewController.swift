@@ -11,6 +11,8 @@ import Combine
 class ViewController: UIViewController {
   @IBOutlet weak var tableView: UITableView!
 
+  private var hasNext: Bool = false
+
   private let viewModel = TodoViewModel()
   private var cancellables = Set<AnyCancellable>()
   // "더보기" 아이템은 동일 인스턴스를 재사용해 ID가 안정적으로 유지되도록 함
@@ -81,7 +83,7 @@ class ViewController: UIViewController {
     viewModel.$hasNext
       .receive(on: DispatchQueue.main)
       .sink { [weak self] hasNext in
-        print("hasNext: \(hasNext)")
+        self?.hasNext = hasNext
         self?.updateHasNext(with: hasNext)
       }
       .store(in: &cancellables)
@@ -102,6 +104,12 @@ class ViewController: UIViewController {
     if completedTodos.isEmpty == false {
       snapshot.appendSections([.completed])
       snapshot.appendItems(completedTodos, toSection: .completed)
+    }
+
+    // hasNext가 true이면 .next 섹션을 마지막에 추가하고 "더보기" 아이템을 넣음
+    if hasNext {
+      snapshot.appendSections([.next])
+      snapshot.appendItems([loadMoreItem], toSection: .next)
     }
 
     dataSource.apply(snapshot, animatingDifferences: true)
