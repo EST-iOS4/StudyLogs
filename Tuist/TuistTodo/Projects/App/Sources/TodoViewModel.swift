@@ -6,6 +6,7 @@
 //
 import Combine
 import Foundation
+import Core
 
 final class TodoViewModel {
   @Published var todos: [TodoItem] = []

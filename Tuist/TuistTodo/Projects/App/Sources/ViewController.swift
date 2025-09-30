@@ -6,6 +6,7 @@
 //
 import UIKit
 import Combine
+import Core
 
 class ViewController: UIViewController {
 

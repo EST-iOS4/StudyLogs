@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-enum NetworkError: Error {
+public enum NetworkError: Error {
   case invalidURL
   case invalidResponse(statusCode: Int)
   case noData
@@ -16,12 +16,16 @@ enum NetworkError: Error {
   case underlying(Error)
 }
 
-class NetworkTodoService {
+public class NetworkTodoService {
   private let baseURL = URL(string: "http://127.0.0.1:5001/est-ios04/us-central1/")!
   private var cancellables = Set<AnyCancellable>()
 
+  public init() {
+    
+  }
+
   // 페이지 파라미터 추가
-  func fetchTodos(page: Int = 1) -> AnyPublisher<TodoResponse, Error> {
+  public func fetchTodos(page: Int = 1) -> AnyPublisher<TodoResponse, Error> {
     var components = URLComponents(url: baseURL.appendingPathComponent("getTodos"), resolvingAgainstBaseURL: false)!
     components.queryItems = [
       URLQueryItem(name: "page", value: String(page))
@@ -36,7 +40,7 @@ class NetworkTodoService {
       .eraseToAnyPublisher()
   }
 
-  func createTodo(title: String) -> AnyPublisher<TodoItem, NetworkError> {
+  public func createTodo(title: String) -> AnyPublisher<TodoItem, NetworkError> {
     let url = baseURL.appending(path: "createTodo")
 
     var request = URLRequest(url: url)
@@ -52,7 +56,6 @@ class NetworkTodoService {
     } catch {
       return Fail(error: .underlying(error)).eraseToAnyPublisher()
     }
-
 
     return URLSession.shared
       .dataTaskPublisher(for: request)
@@ -83,7 +86,7 @@ class NetworkTodoService {
       .eraseToAnyPublisher()
   }
 
-  func updateTodo(item: TodoItem) -> AnyPublisher<TodoItem, NetworkError> {
+  public func updateTodo(item: TodoItem) -> AnyPublisher<TodoItem, NetworkError> {
     let components = URLComponents(
       url: baseURL.appending(components: "updateTodo", item.id),
       resolvingAgainstBaseURL: false
@@ -133,7 +136,7 @@ class NetworkTodoService {
       .eraseToAnyPublisher()
   }
 
-  func deleteTodo(id: String) -> AnyPublisher<DeleteResponse,NetworkError>  {
+  public func deleteTodo(id: String) -> AnyPublisher<DeleteResponse, NetworkError>  {
     let components = URLComponents(
       url: baseURL.appending(components: "deleteTodo", id),
       resolvingAgainstBaseURL: false
