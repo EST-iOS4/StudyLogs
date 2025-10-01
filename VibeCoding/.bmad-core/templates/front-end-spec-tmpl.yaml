@@ -1,0 +1,350 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: frontend-spec-template-v2
+  name: UI/UX 사양
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/front-end-spec.md
+    title: "{{project_name}} UI/UX 사양"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: introduction
+    title: 소개
+    instruction: |
+      프로젝트 브리프, PRD, 사용자 연구를 포함한 제공된 문서를 검토하여 맥락을 수집하세요. 사양을 시작하기 전에 사용자 요구사항, 문제점, 원하는 결과를 이해하는 데 집중하세요.
+
+      문서의 목적과 범위를 설정하세요. 아래 내용을 유지하되 프로젝트 이름이 적절히 대체되었는지 확인하세요.
+    content: |
+      이 문서는 {{project_name}}의 사용자 인터페이스에 대한 사용자 경험 목표, 정보 아키텍처, 사용자 플로우, 시각적 디자인 사양을 정의합니다. 이는 시각적 디자인과 프론트엔드 개발의 기초 역할을 하여 일관되고 사용자 중심적인 경험을 보장합니다.
+    sections:
+      - id: ux-goals-principles
+        title: 전체 UX 목표 및 원칙
+        instruction: |
+          사용자와 함께 다음을 수립하고 문서화하세요. 아직 정의되지 않았다면 결정을 위한 논의를 촉진하세요:
+
+          1. 목표 사용자 페르소나 - 세부사항을 유도하거나 PRD의 기존 내용을 확인
+          2. 주요 사용성 목표 - 사용자에게 성공이 무엇인지 이해
+          3. 핵심 디자인 원칙 - 3-5개의 안내 원칙 수립
+        elicit: true
+        sections:
+          - id: user-personas
+            title: 목표 사용자 페르소나
+            template: "{{persona_descriptions}}"
+            examples:
+              - "**파워 유저:** 고급 기능과 효율성이 필요한 기술 전문가"
+              - "**일반 사용자:** 사용 편의성과 명확한 안내를 우선시하는 가끔 사용자"
+              - "**관리자:** 제어와 감독 기능이 필요한 시스템 관리자"
+          - id: usability-goals
+            title: 사용성 목표
+            template: "{{usability_goals}}"
+            examples:
+              - "학습 용이성: 새로운 사용자가 5분 내에 핵심 작업을 완료할 수 있음"
+              - "사용 효율성: 파워 유저가 최소한의 클릭으로 자주 하는 작업을 완료할 수 있음"
+              - "오류 방지: 파괴적인 작업에 대한 명확한 검증과 확인"
+              - "기억 용이성: 자주 사용하지 않는 사용자가 다시 학습 없이 돌아올 수 있음"
+          - id: design-principles
+            title: 디자인 원칙
+            template: "{{design_principles}}"
+            type: numbered-list
+            examples:
+              - "**영리함보다 명확함** - 미적 혁신보다 명확한 소통을 우선시"
+              - "**점진적 공개** - 필요할 때 필요한 것만 보여주기"
+              - "**일관된 패턴** - 애플리케이션 전반에 걸쳐 친숙한 UI 패턴 사용"
+              - "**즉각적인 피드백** - 모든 작업은 명확하고 즉각적인 응답이 있어야 함"
+              - "**기본적으로 접근 가능** - 처음부터 모든 사용자를 위한 디자인"
+      - id: changelog
+        title: 변경 로그
+        type: table
+        columns: [날짜, 버전, 설명, 작성자]
+        instruction: 문서 버전과 변경 사항 추적
+
+  - id: information-architecture
+    title: 정보 아키텍처 (IA)
+    instruction: |
+      사용자와 협력하여 포괄적인 정보 아키텍처를 생성하세요:
+
+      1. 모든 주요 영역을 보여주는 사이트 맵 또는 화면 인벤토리를 구축
+      2. 네비게이션 구조 정의 (기본, 보조, 브레드크럼)
+      3. 시각적 표현을 위해 Mermaid 다이어그램 사용
+      4. 사용자 정신 모델과 예상 그룹화 고려
+    elicit: true
+    sections:
+      - id: sitemap
+        title: 사이트 맵 / 화면 인벤토리
+        type: mermaid
+        mermaid_type: graph
+        template: "{{sitemap_diagram}}"
+        examples:
+          - |
+            graph TD
+                A[홈페이지] --> B[대시보드]
+                A --> C[제품]
+                A --> D[계정]
+                B --> B1[분석]
+                B --> B2[최근 활동]
+                C --> C1[탐색]
+                C --> C2[검색]
+                C --> C3[제품 상세]
+                D --> D1[프로필]
+                D --> D2[설정]
+                D --> D3[결제]
+      - id: navigation-structure
+        title: 네비게이션 구조
+        template: |
+          **기본 네비게이션:** {{primary_nav_description}}
+
+          **보조 네비게이션:** {{secondary_nav_description}}
+
+          **브레드크럼 전략:** {{breadcrumb_strategy}}
+
+  - id: user-flows
+    title: 사용자 플로우
+    instruction: |
+      PRD에서 식별된 각 중요한 사용자 작업에 대해:
+
+      1. 사용자의 목표를 명확히 정의
+      2. 결정 지점을 포함한 모든 단계 매핑
+      3. 엣지 케이스와 오류 상태 고려
+      4. 명확성을 위해 Mermaid 플로우 다이어그램 사용
+      5. 상세한 플로우가 있는 경우 외부 도구(Figma/Miro) 링크
+
+      각 주요 플로우에 대한 하위 섹션을 생성하세요.
+    elicit: true
+    repeatable: true
+    sections:
+      - id: flow
+        title: "{{flow_name}}"
+        template: |
+          **사용자 목표:** {{flow_goal}}
+
+          **진입점:** {{entry_points}}
+
+          **성공 기준:** {{success_criteria}}
+        sections:
+          - id: flow-diagram
+            title: 플로우 다이어그램
+            type: mermaid
+            mermaid_type: graph
+            template: "{{flow_diagram}}"
+          - id: edge-cases
+            title: "엣지 케이스 및 오류 처리:"
+            type: bullet-list
+            template: "- {{edge_case}}"
+          - id: notes
+            template: "**참고사항:** {{flow_notes}}"
+
+  - id: wireframes-mockups
+    title: 와이어프레임 및 목업
+    instruction: |
+      상세한 시각적 디자인이 생성될 위치(Figma, Sketch 등)와 참조 방법을 명확히 하세요. 로우 파이델리티 와이어프레임이 필요한 경우 주요 화면의 레이아웃 개념화를 도와주세요.
+    elicit: true
+    sections:
+      - id: design-files
+        template: "**기본 디자인 파일:** {{design_tool_link}}"
+      - id: key-screen-layouts
+        title: 주요 화면 레이아웃
+        repeatable: true
+        sections:
+          - id: screen
+            title: "{{screen_name}}"
+            template: |
+              **목적:** {{screen_purpose}}
+
+              **주요 요소:**
+              - {{element_1}}
+              - {{element_2}}
+              - {{element_3}}
+
+              **상호작용 참고사항:** {{interaction_notes}}
+
+              **디자인 파일 참조:** {{specific_frame_link}}
+
+  - id: component-library
+    title: 컴포넌트 라이브러리 / 디자인 시스템
+    instruction: |
+      기존 디자인 시스템을 사용할지 새로운 것을 만들지 논의하세요. 새로 만드는 경우 기본 컴포넌트와 주요 상태를 식별하세요. 상세한 기술 사양은 front-end-architecture에 속한다는 점을 참고하세요.
+    elicit: true
+    sections:
+      - id: design-system-approach
+        template: "**디자인 시스템 접근 방식:** {{design_system_approach}}"
+      - id: core-components
+        title: 핵심 컴포넌트
+        repeatable: true
+        sections:
+          - id: component
+            title: "{{component_name}}"
+            template: |
+              **목적:** {{component_purpose}}
+
+              **변형:** {{component_variants}}
+
+              **상태:** {{component_states}}
+
+              **사용 가이드라인:** {{usage_guidelines}}
+
+  - id: branding-style
+    title: 브랜딩 및 스타일 가이드
+    instruction: 기존 스타일 가이드에 링크하거나 주요 브랜드 요소를 정의하세요. 회사 브랜드 가이드라인이 있는 경우 일관성을 보장하세요.
+    elicit: true
+    sections:
+      - id: visual-identity
+        title: 시각적 아이덴티티
+        template: "**브랜드 가이드라인:** {{brand_guidelines_link}}"
+      - id: color-palette
+        title: 색상 팔레트
+        type: table
+        columns: ["색상 유형", "Hex 코드", "사용처"]
+        rows:
+          - ["기본", "{{primary_color}}", "{{primary_usage}}"]
+          - ["보조", "{{secondary_color}}", "{{secondary_usage}}"]
+          - ["강조", "{{accent_color}}", "{{accent_usage}}"]
+          - ["성공", "{{success_color}}", "긍정적 피드백, 확인"]
+          - ["경고", "{{warning_color}}", "주의사항, 중요한 알림"]
+          - ["오류", "{{error_color}}", "오류, 파괴적 작업"]
+          - ["중립", "{{neutral_colors}}", "텍스트, 테두리, 배경"]
+      - id: typography
+        title: 타이포그래피
+        sections:
+          - id: font-families
+            title: 폰트 패밀리
+            template: |
+              - **기본:** {{primary_font}}
+              - **보조:** {{secondary_font}}
+              - **모노스페이스:** {{mono_font}}
+          - id: type-scale
+            title: 타입 스케일
+            type: table
+            columns: ["요소", "크기", "굵기", "줄 높이"]
+            rows:
+              - ["H1", "{{h1_size}}", "{{h1_weight}}", "{{h1_line}}"]
+              - ["H2", "{{h2_size}}", "{{h2_weight}}", "{{h2_line}}"]
+              - ["H3", "{{h3_size}}", "{{h3_weight}}", "{{h3_line}}"]
+              - ["본문", "{{body_size}}", "{{body_weight}}", "{{body_line}}"]
+              - ["작은 글씨", "{{small_size}}", "{{small_weight}}", "{{small_line}}"]
+      - id: iconography
+        title: 아이콘그래피
+        template: |
+          **아이콘 라이브러리:** {{icon_library}}
+
+          **사용 가이드라인:** {{icon_guidelines}}
+      - id: spacing-layout
+        title: 간격 및 레이아웃
+        template: |
+          **그리드 시스템:** {{grid_system}}
+
+          **간격 스케일:** {{spacing_scale}}
+
+  - id: accessibility
+    title: 접근성 요구사항
+    instruction: 목표 컴플라이언스 수준과 사용자 요구사항을 기반으로 구체적인 접근성 요구사항을 정의하세요. 포괄적이지만 실용적이어야 합니다.
+    elicit: true
+    sections:
+      - id: compliance-target
+        title: 컴플라이언스 목표
+        template: "**표준:** {{compliance_standard}}"
+      - id: key-requirements
+        title: 주요 요구사항
+        template: |
+          **시각적:**
+          - 색상 대비비: {{contrast_requirements}}
+          - 포커스 표시기: {{focus_requirements}}
+          - 텍스트 크기: {{text_requirements}}
+
+          **상호작용:**
+          - 키보드 네비게이션: {{keyboard_requirements}}
+          - 스크린 리더 지원: {{screen_reader_requirements}}
+          - 터치 타겟: {{touch_requirements}}
+
+          **콘텐츠:**
+          - 대체 텍스트: {{alt_text_requirements}}
+          - 제목 구조: {{heading_requirements}}
+          - 폼 레이블: {{form_requirements}}
+      - id: testing-strategy
+        title: 테스팅 전략
+        template: "{{accessibility_testing}}"
+
+  - id: responsiveness
+    title: 반응형 전략
+    instruction: 다양한 기기 크기에 대한 브레이크포인트와 적응 전략을 정의하세요. 기술적 제약사항과 사용자 맥락을 모두 고려하세요.
+    elicit: true
+    sections:
+      - id: breakpoints
+        title: 브레이크포인트
+        type: table
+        columns: ["브레이크포인트", "최소 너비", "최대 너비", "대상 기기"]
+        rows:
+          - ["모바일", "{{mobile_min}}", "{{mobile_max}}", "{{mobile_devices}}"]
+          - ["태블릿", "{{tablet_min}}", "{{tablet_max}}", "{{tablet_devices}}"]
+          - ["데스크톱", "{{desktop_min}}", "{{desktop_max}}", "{{desktop_devices}}"]
+          - ["와이드", "{{wide_min}}", "-", "{{wide_devices}}"]
+      - id: adaptation-patterns
+        title: 적응 패턴
+        template: |
+          **레이아웃 변경:** {{layout_adaptations}}
+
+          **네비게이션 변경:** {{nav_adaptations}}
+
+          **콘텐츠 우선순위:** {{content_adaptations}}
+
+          **상호작용 변경:** {{interaction_adaptations}}
+
+  - id: animation
+    title: 애니메이션 및 마이크로 상호작용
+    instruction: 모션 디자인 원칙과 주요 상호작용을 정의하세요. 성능과 접근성을 염두에 두세요.
+    elicit: true
+    sections:
+      - id: motion-principles
+        title: 모션 원칙
+        template: "{{motion_principles}}"
+      - id: key-animations
+        title: 주요 애니메이션
+        repeatable: true
+        template: "- **{{animation_name}}:** {{animation_description}} (지속시간: {{duration}}, 이징: {{easing}})"
+
+  - id: performance
+    title: 성능 고려사항
+    instruction: UX 디자인 결정에 영향을 미치는 성능 목표와 전략을 정의하세요.
+    sections:
+      - id: performance-goals
+        title: 성능 목표
+        template: |
+          - **페이지 로드:** {{load_time_goal}}
+          - **상호작용 응답:** {{interaction_goal}}
+          - **애니메이션 FPS:** {{animation_goal}}
+      - id: design-strategies
+        title: 디자인 전략
+        template: "{{performance_strategies}}"
+
+  - id: next-steps
+    title: 다음 단계
+    instruction: |
+      UI/UX 사양 완료 후:
+
+      1. 이해관계자와의 검토 권장
+      2. 디자인 도구에서 시각적 디자인 생성/업데이트 제안
+      3. 프론트엔드 아키텍처를 위한 디자인 아키텍트로의 인계 준비
+      4. 열린 질문이나 필요한 결정 사항 기록
+    sections:
+      - id: immediate-actions
+        title: 즉시 조치사항
+        type: numbered-list
+        template: "{{action}}"
+      - id: design-handoff-checklist
+        title: 디자인 인계 체크리스트
+        type: checklist
+        items:
+          - "모든 사용자 플로우 문서화됨"
+          - "컴포넌트 인벤토리 완료됨"
+          - "접근성 요구사항 정의됨"
+          - "반응형 전략 명확함"
+          - "브랜드 가이드라인 통합됨"
+          - "성능 목표 수립됨"
+
+  - id: checklist-results
+    title: 체크리스트 결과
+    instruction: UI/UX 체크리스트가 존재하는 경우, 이 문서에 대해 실행하고 결과를 여기에 보고하세요.

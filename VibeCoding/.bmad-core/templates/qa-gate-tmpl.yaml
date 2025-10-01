@@ -1,0 +1,103 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: qa-gate-template-v1
+  name: 품질 게이트 결정
+  version: 1.0
+  output:
+    format: yaml
+    filename: qa.qaLocation/gates/{{epic_num}}.{{story_num}}-{{story_slug}}.yml
+    title: "품질 게이트: {{epic_num}}.{{story_num}}"
+
+# 필수 필드들 (이것들을 먼저 유지)
+schema: 1
+story: "{{epic_num}}.{{story_num}}"
+story_title: "{{story_title}}"
+gate: "{{gate_status}}" # PASS|CONCERNS|FAIL|WAIVED
+status_reason: "{{status_reason}}" # 이 게이트 결정 이유에 대한 1-2문장 요약
+reviewer: "Quinn (테스트 아키텍트)"
+updated: "{{iso_timestamp}}"
+
+# 항상 존재하지만 WAIVED일 때만 활성화
+waiver: { active: false }
+
+# 이슈들 (있는 경우) - 고정된 심각도 사용: low | medium | high
+top_issues: []
+
+# 위험 요약 (risk-profile 작업이 실행된 경우)
+risk_summary:
+  totals: { critical: 0, high: 0, medium: 0, low: 0 }
+  recommendations:
+    must_fix: []
+    monitor: []
+
+# 명확성을 위해 블록 스칼라를 사용하는 예제 섹션
+examples:
+  with_issues: |
+    top_issues:
+      - id: "SEC-001"
+        severity: high  # 오직: low|medium|high
+        finding: "로그인 엔드포인트에 속도 제한 없음"
+        suggested_action: "프로덕션 전에 속도 제한 미들웨어 추가"
+      - id: "TEST-001"  
+        severity: medium
+        finding: "인증 플로우에 대한 통합 테스트 누락"
+        suggested_action: "중요한 경로에 대한 테스트 커버리지 추가"
+
+  when_waived: |
+    waiver:
+      active: true
+      reason: "MVP 릴리스를 위해 승인됨 - 다음 스프린트에서 해결 예정"
+      approved_by: "제품 소유자"
+
+# ============ 선택적 확장 필드들 ============
+# 팀에서 더 많은 세부사항을 원한다면 주석을 해제하고 사용하세요
+
+optional_fields_examples:
+  quality_and_expiry: |
+    quality_score: 75  # 0-100 (선택적 점수)
+    expires: "2025-01-26T00:00:00Z"  # 선택적 게이트 신선도 창
+
+  evidence: |
+    evidence:
+      tests_reviewed: 15
+      risks_identified: 3
+      trace:
+        ac_covered: [1, 2, 3]  # 테스트 커버리지가 있는 AC 번호
+        ac_gaps: [4]  # 커버리지가 부족한 AC 번호
+
+  nfr_validation: |
+    nfr_validation:
+      security: { status: CONCERNS, notes: "속도 제한 누락" }
+      performance: { status: PASS, notes: "" }
+      reliability: { status: PASS, notes: "" }
+      maintainability: { status: PASS, notes: "" }
+
+  history: |
+    history:  # 추가 전용 감사 기록
+      - at: "2025-01-12T10:00:00Z"
+        gate: FAIL
+        note: "초기 검토 - 테스트 누락"
+      - at: "2025-01-12T15:00:00Z"  
+        gate: CONCERNS
+        note: "테스트가 추가되었지만 속도 제한은 여전히 누락"
+
+  risk_summary: |
+    risk_summary:  # risk-profile 작업에서
+      totals:
+        critical: 0
+        high: 0
+        medium: 0
+        low: 0
+      # 'highest'는 위험이 존재할 때만 방출됨
+      recommendations:
+        must_fix: []
+        monitor: []
+
+  recommendations: |
+    recommendations:
+      immediate:  # 프로덕션 전에 반드시 수정
+        - action: "인증 엔드포인트에 속도 제한 추가"
+          refs: ["api/auth/login.ts:42-68"]
+      future:  # Can be addressed later
+        - action: "Consider caching for better performance"
+          refs: ["services/data.service.ts"]

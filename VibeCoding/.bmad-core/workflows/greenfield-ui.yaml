@@ -1,0 +1,236 @@
+# <!-- Powered by BMAD™ Core -->
+workflow:
+  id: greenfield-ui
+  name: 그린필드 UI/프론트엔드 개발
+  description: >-
+    개념부터 개발까지 프론트엔드 애플리케이션을 구축하는 에이전트 워크플로우입니다.
+    복잡한 UI를 위한 포괄적인 계획과 간단한 인터페이스를 위한 빠른 프로토타이핑을 모두 지원합니다.
+  type: greenfield
+  project_types:
+    - spa # SPA (Single Page Application)
+    - mobile-app # 모바일 앱
+    - micro-frontend # 마이크로 프론트엔드
+    - static-site # 정적 사이트
+    - ui-prototype # UI 프로토타입
+    - simple-interface # 간단한 인터페이스
+
+  sequence:
+    - agent: analyst
+      creates: project-brief.md
+      optional_steps:
+        - brainstorming_session
+        - market_research_prompt
+      notes: "먼저 브레인스토밍을 수행한 다음, 프로젝트 브리프를 생성하기 전에 선택적으로 심층 연구를 할 수 있습니다. 출력 저장: 최종 project-brief.md를 프로젝트의 docs/ 폴더에 복사."
+
+    - agent: pm
+      creates: prd.md
+      requires: project-brief.md
+      notes: "UI/프론트엔드 요구사항에 중점을 둔 prd-tmpl을 사용하여 프로젝트 브리프에서 PRD를 생성합니다. 출력 저장: 최종 prd.md를 프로젝트의 docs/ 폴더에 복사."
+
+    - agent: ux-expert
+      creates: front-end-spec.md
+      requires: prd.md
+      optional_steps:
+        - user_research_prompt
+      notes: "front-end-spec-tmpl을 사용하여 UI/UX 명세를 생성합니다. 출력 저장: 최종 front-end-spec.md를 프로젝트의 docs/ 폴더에 복사."
+
+    - agent: ux-expert
+      creates: v0_prompt (optional)
+      requires: front-end-spec.md
+      condition: user_wants_ai_generation
+      notes: "선택사항이지만 권장: v0, Lovable 등과 같은 도구를 위한 AI UI 프롬프트를 생성합니다. generate-ai-frontend-prompt 태스크를 사용하세요. 사용자는 외부 도구에서 UI를 생성하고 프로젝트 구조를 다운로드할 수 있습니다."
+
+    - agent: architect
+      creates: front-end-architecture.md
+      requires: front-end-spec.md
+      optional_steps:
+        - technical_research_prompt
+        - review_generated_ui_structure
+      notes: "front-end-architecture-tmpl을 사용하여 프론트엔드 아키텍처를 생성합니다. 사용자가 v0/Lovable로 UI를 생성한 경우, 프로젝트 구조를 아키텍처에 통합할 수 있습니다. PRD 스토리 변경이나 새로운 스토리를 제안할 수 있습니다. 출력 저장: 최종 front-end-architecture.md를 프로젝트의 docs/ 폴더에 복사."
+
+    - agent: pm
+      updates: prd.md (if needed)
+      requires: front-end-architecture.md
+      condition: architecture_suggests_prd_changes
+      notes: "아키텍트가 스토리 변경을 제안하는 경우, PRD를 업데이트하고 완전한 미편집 prd.md를 docs/ 폴더로 다시 내보냅니다."
+
+    - agent: po
+      validates: all_artifacts
+      uses: po-master-checklist
+      notes: "일관성과 완성도를 위해 모든 문서를 검증합니다. 모든 문서의 업데이트가 필요할 수 있습니다."
+
+    - agent: various
+      updates: any_flagged_documents
+      condition: po_checklist_issues
+      notes: "PO가 문제를 발견한 경우, 관련 에이전트로 돌아가서 수정하고 업데이트된 문서를 docs/ 폴더로 다시 내보내기."
+
+    - project_setup_guidance:
+      action: guide_project_structure
+      condition: user_has_generated_ui
+      notes: "사용자가 v0/Lovable로 UI를 생성한 경우: 폴리리포 설정의 경우, 다운로드한 프로젝트를 별도의 프론트엔드 리포에 배치하세요. 모노리포의 경우, apps/web 또는 frontend/ 디렉토리에 배치하세요. 구체적인 가이드는 아키텍처 문서를 참조하세요."
+
+    - agent: po
+      action: shard_documents
+      creates: sharded_docs
+      requires: all_artifacts_in_project
+      notes: |
+        IDE 개발을 위한 문서 샤딩:
+        - 옵션 A: PO 에이전트를 사용한 샤딩: @po 다음 docs/prd.md 샤딩 요청
+        - 옵션 B: 수동: shard-doc 태스크 + docs/prd.md를 채팅으로 드래그
+        - 샤딩된 콘텐츠로 docs/prd/ 및 docs/architecture/ 폴더 생성
+
+    - agent: sm
+      action: create_story
+      creates: story.md
+      requires: sharded_docs
+      repeats: for_each_epic
+      notes: |
+        스토리 생성 사이클:
+        - SM 에이전트 (새 채팅): @sm → *create
+        - 샤딩된 문서에서 다음 스토리 생성
+        - 스토리는 "Draft" 상태로 시작
+
+    - agent: analyst/pm
+      action: review_draft_story
+      updates: story.md
+      requires: story.md
+      optional: true
+      condition: user_wants_story_review
+      notes: |
+        선택사항: 초안 스토리 검토 및 승인
+        - 참고: story-review 태스크 곧 출시 예정
+        - 스토리 완성도 및 정렬 검토
+        - 스토리 상태 업데이트: Draft → Approved
+
+    - agent: dev
+      action: implement_story
+      creates: implementation_files
+      requires: story.md
+      notes: |
+        개발 에이전트 (새 채팅): @dev
+        - 승인된 스토리 구현
+        - 모든 변경사항으로 파일 목록 업데이트
+        - 완료 시 스토리를 "Review"로 표시
+
+    - agent: qa
+      action: review_implementation
+      updates: implementation_files
+      requires: implementation_files
+      optional: true
+      notes: |
+        선택사항: QA 에이전트 (새 채팅): @qa → review-story
+        - 리팩토링 능력을 가진 시니어 개발자 검토
+        - 작은 문제는 직접 수정
+        - 남은 항목에 대한 체크리스트 남김
+        - 스토리 상태 업데이트 (Review → Done 또는 Review 유지)
+
+    - agent: dev
+      action: address_qa_feedback
+      updates: implementation_files
+      condition: qa_left_unchecked_items
+      notes: |
+        QA가 미체크 항목을 남긴 경우:
+        - 개발 에이전트 (새 채팅): 남은 항목 처리
+        - 최종 승인을 위해 QA로 돌아가기
+
+    - repeat_development_cycle:
+      action: continue_for_all_stories
+      notes: |
+        모든 에픽 스토리에 대해 스토리 사이클 반복 (SM → Dev → QA)
+        PRD의 모든 스토리가 완료될 때까지 계속
+
+    - agent: po
+      action: epic_retrospective
+      creates: epic-retrospective.md
+      condition: epic_complete
+      optional: true
+      notes: |
+        선택사항: 에픽 완료 후
+        - 참고: epic-retrospective 태스크 곧 출시 예정
+        - 에픽이 올바르게 완료되었는지 검증
+        - 학습 사항 및 개선점 문서화
+
+    - workflow_end:
+      action: project_complete
+      notes: |
+        모든 스토리가 구현되고 검토되었습니다!
+        프로젝트 개발 단계 완료.
+
+        참조: .bmad-core/data/bmad-kb.md#IDE Development Workflow
+
+  flow_diagram: |
+    ```mermaid
+    graph TD
+        A[시작: UI 개발] --> B[analyst: project-brief.md]
+        B --> C[pm: prd.md]
+        C --> D[ux-expert: front-end-spec.md]
+        D --> D2{v0 프롬프트 생성?}
+        D2 -->|예| D3[ux-expert: v0 프롬프트 생성]
+        D2 -->|아니오| E[architect: front-end-architecture.md]
+        D3 --> D4[사용자: v0/Lovable에서 UI 생성]
+        D4 --> E
+        E --> F{아키텍처가 PRD 변경을 제안하나?}
+        F -->|예| G[pm: prd.md 업데이트]
+        F -->|아니오| H[po: 모든 아티팩트 검증]
+        G --> H
+        H --> I{PO가 문제를 발견했나?}
+        I -->|예| J[수정을 위해 관련 에이전트로 돌아가기]
+        I -->|아니오| K[po: 문서 샤딩]
+        J --> H
+        
+        K --> L[sm: 스토리 생성]
+        L --> M{초안 스토리 검토?}
+        M -->|예| N[analyst/pm: 스토리 검토 및 승인]
+        M -->|아니오| O[dev: 스토리 구현]
+        N --> O
+        O --> P{QA 검토?}
+        P -->|예| Q[qa: 구현 검토]
+        P -->|아니오| R{더 많은 스토리?}
+        Q --> S{QA가 문제를 발견했나?}
+        S -->|예| T[dev: QA 피드백 처리]
+        S -->|아니오| R
+        T --> Q
+        R -->|예| L
+        R -->|아니오| U{에픽 회고?}
+        U -->|예| V[po: 에픽 회고]
+        U -->|아니오| W[프로젝트 완료]
+        V --> W
+
+        B -.-> B1[선택사항: 브레인스토밍]
+        B -.-> B2[선택사항: 시장 연구]
+        D -.-> D1[선택사항: 사용자 연구]
+        E -.-> E1[선택사항: 기술 연구]
+
+        style W fill:#90EE90
+        style K fill:#ADD8E6
+        style L fill:#ADD8E6
+        style O fill:#ADD8E6
+        style D3 fill:#E6E6FA
+        style D4 fill:#E6E6FA
+        style B fill:#FFE4B5
+        style C fill:#FFE4B5
+        style D fill:#FFE4B5
+        style E fill:#FFE4B5
+        style N fill:#F0E68C
+        style Q fill:#F0E68C
+        style V fill:#F0E68C
+    ```
+
+  decision_guidance:
+    when_to_use:
+      - 프로덕션 프론트엔드 애플리케이션 구축
+      - 복잡한 상호작용을 가진 여러 뷰/페이지
+      - 포괄적인 UI/UX 디자인 및 테스트가 필요한 경우
+      - 여러 팀 구성원이 참여할 경우
+      - 장기간 유지보수가 예상되는 경우
+      - 고객 대면 애플리케이션
+
+  handoff_prompts:
+    analyst_to_pm: "프로젝트 브리프가 완료되었습니다. 프로젝트의 docs/project-brief.md로 저장한 다음 PRD를 생성하세요."
+    pm_to_ux: "PRD가 준비되었습니다. 프로젝트의 docs/prd.md로 저장한 다음 UI/UX 명세를 생성하세요."
+    ux_to_architect: "UI/UX 명세가 완료되었습니다. 프로젝트의 docs/front-end-spec.md로 저장한 다음 프론트엔드 아키텍처를 생성하세요."
+    architect_review: "프론트엔드 아키텍처가 완료되었습니다. docs/front-end-architecture.md로 저장하세요. PRD 스토리에 대한 변경을 제안하거나 새로운 스토리를 추가해야 하나요?"
+    architect_to_pm: "제안된 스토리 변경사항으로 PRD를 업데이트한 다음, 완전한 prd.md를 docs/로 다시 내보내 주세요."
+    updated_to_po: "모든 문서가 docs/ 폴더에 준비되었습니다. 일관성을 위해 모든 아티팩트를 검증해 주세요."
+    po_issues: "PO가 [document]에서 문제를 발견했습니다. [agent]로 돌아가서 수정하고 업데이트된 문서를 다시 저장해 주세요."
+    complete: "모든 계획 아티팩트가 검증되어 docs/ 폴더에 저장되었습니다. 개발을 시작하기 위해 IDE 환경으로 이동하세요."

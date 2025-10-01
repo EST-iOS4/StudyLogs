@@ -1,0 +1,138 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: story-template-v2
+  name: 스토리 문서
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/stories/{{epic_num}}.{{story_num}}.{{story_title_short}}.md
+    title: "스토리 {{epic_num}}.{{story_num}}: {{story_title_short}}"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+agent_config:
+  editable_sections:
+    - 상태
+    - 스토리
+    - 승인 기준
+    - 작업 / 하위 작업
+    - 개발 노트
+    - 테스팅
+    - 변경 로그
+
+sections:
+  - id: status
+    title: 상태
+    type: choice
+    choices: [초안, 승인됨, 진행중, 검토, 완료]
+    instruction: 스토리의 현재 상태를 선택하세요
+    owner: scrum-master
+    editors: [scrum-master, dev-agent]
+
+  - id: story
+    title: 스토리
+    type: template-text
+    template: |
+      **사용자로서** {{role}},
+      **나는 원한다** {{action}},
+      **그래서** {{benefit}}
+    instruction: 역할, 행동, 이익을 포함한 표준 형식을 사용하여 사용자 스토리를 정의하세요
+    elicit: true
+    owner: scrum-master
+    editors: [scrum-master]
+
+  - id: acceptance-criteria
+    title: 승인 기준
+    type: numbered-list
+    instruction: 에픽 파일의 승인 기준 번호 목록을 복사하세요
+    elicit: true
+    owner: scrum-master
+    editors: [scrum-master]
+
+  - id: tasks-subtasks
+    title: 작업 / 하위 작업
+    type: bullet-list
+    instruction: |
+      스토리를 구현에 필요한 구체적인 작업과 하위 작업으로 분해하세요.
+      관련이 있는 경우 해당 승인 기준 번호를 참조하세요.
+    template: |
+      - [ ] 작업 1 (AC: # 해당하는 경우)
+        - [ ] 하위작업1.1...
+      - [ ] 작업 2 (AC: # 해당하는 경우)
+        - [ ] 하위작업 2.1...
+      - [ ] 작업 3 (AC: # 해당하는 경우)
+        - [ ] 하위작업 3.1...
+    elicit: true
+    owner: scrum-master
+    editors: [scrum-master, dev-agent]
+
+  - id: dev-notes
+    title: 개발 노트
+    instruction: |
+      관련 정보를 채우세요. 이 스토리와 관련된 docs 폴더의 실제 artifacts에서 가져온 것만:
+      - 정보를 만들어내지 마세요
+      - 알려진 경우 이 스토리와 관련된 관련 소스 트리 정보를 추가하세요
+      - 이 스토리와 관련된 이전 스토리의 중요한 노트가 있다면 여기에 포함하세요
+      - 개발 에이전트가 아키텍처 문서를 읽을 필요가 전혀 없도록 이 섹션에 충분한 정보를 넣으세요. 이 노트들과 작업 및 하위 작업이 개발 에이전트가 최소한의 오버헤드로 모든 AC를 충족하고 모든 작업+하위 작업을 완료하여 스토리를 완료하는 데 필요한 정보를 이해할 수 있는 완전한 맥락을 제공해야 합니다
+    elicit: true
+    owner: scrum-master
+    editors: [scrum-master]
+    sections:
+      - id: testing-standards
+        title: 테스팅
+        instruction: |
+          개발자가 준수해야 하는 아키텍처의 관련 테스팅 표준을 나열하세요:
+          - 테스트 파일 위치
+          - 테스트 표준
+          - 사용할 테스팅 프레임워크와 패턴
+          - 이 스토리의 특정 테스팅 요구사항
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master]
+
+  - id: change-log
+    title: 변경 로그
+    type: table
+    columns: [날짜, 버전, 설명, 작성자]
+    instruction: 이 스토리 문서에 대한 변경 사항 추적
+    owner: scrum-master
+    editors: [scrum-master, dev-agent, qa-agent]
+
+  - id: dev-agent-record
+    title: 개발 에이전트 기록
+    instruction: 이 섹션은 구현 중에 개발 에이전트가 채웁니다
+    owner: dev-agent
+    editors: [dev-agent]
+    sections:
+      - id: agent-model
+        title: 사용된 에이전트 모델
+        template: "{{agent_model_name_version}}"
+        instruction: 개발에 사용된 특정 AI 에이전트 모델과 버전을 기록하세요
+        owner: dev-agent
+        editors: [dev-agent]
+
+      - id: debug-log-references
+        title: 디버그 로그 참조
+        instruction: 개발 중에 생성된 디버그 로그나 트레이스를 참조하세요
+        owner: dev-agent
+        editors: [dev-agent]
+
+      - id: completion-notes
+        title: 완료 노트 목록
+        instruction: 작업 완료와 발생한 문제에 대한 노트
+        owner: dev-agent
+        editors: [dev-agent]
+
+      - id: file-list
+        title: 파일 목록
+        instruction: 스토리 구현 중에 생성, 수정 또는 영향을 받은 모든 파일을 나열하세요
+        owner: dev-agent
+        editors: [dev-agent]
+
+  - id: qa-results
+    title: QA 결과
+    instruction: 완료된 스토리 구현에 대한 QA 에이전트 QA 검토 결과
+    owner: qa-agent
+    editors: [qa-agent]

@@ -1,0 +1,824 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: fullstack-architecture-template-v2
+  name: 풀스택 아키텍처 문서
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/architecture.md
+    title: "{{project_name}} 풀스택 아키텍처 문서"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: introduction
+    title: 소개
+    instruction: |
+      가능하다면 시작하기 전에 관련 문서들을 검토하여 모든 관련 맥락을 수집하세요. 최소한 docs/prd.md와 docs/front-end-spec.md에 접근할 수 있어야 합니다. 필요하지만 찾을 수 없는 문서가 있다면 사용자에게 요청하세요. 이 템플릿은 AI 주도 풀스택 개발을 안내하기 위해 백엔드와 프론트엔드 관심사를 모두 다루는 통합 아키텍처를 생성합니다.
+    elicit: true
+    content: |
+      이 문서는 백엔드 시스템, 프론트엔드 구현, 그리고 이들의 통합을 포함하여 {{project_name}}의 완전한 풀스택 아키텍처를 개략적으로 설명합니다. 이는 전체 기술 스택에 걸쳐 일관성을 보장하는 AI 주도 개발을 위한 단일 정보 소스 역할을 합니다.
+
+      이 통합 접근 방식은 전통적으로 분리되었던 백엔드와 프론트엔드 아키텍처 문서를 결합하여, 이러한 관심사가 점점 더 얽혀가는 현대 풀스택 애플리케이션의 개발 프로세스를 간소화합니다.
+    sections:
+      - id: starter-template
+        title: 스타터 템플릿 또는 기존 프로젝트
+        instruction: |
+          아키텍처 설계를 진행하기 전에 프로젝트가 스타터 템플릿이나 기존 코드베이스를 기반으로 하는지 확인하세요:
+
+          1. PRD와 기타 문서에서 다음을 언급하는지 검토하세요:
+          - 풀스택 스타터 템플릿 (예: T3 Stack, MEAN/MERN 스타터, Django + React 템플릿)
+          - 모노레포 템플릿 (예: Nx, Turborepo 스타터)
+          - 플랫폼별 스타터 (예: Vercel 템플릿, AWS Amplify 스타터)
+          - 확장되거나 복제될 기존 프로젝트
+
+          2. 스타터 템플릿이나 기존 프로젝트가 언급된 경우:
+          - 사용자에게 접근 권한 제공을 요청하세요 (링크, 저장소, 또는 파일)
+          - 미리 구성된 선택과 제약사항을 이해하기 위해 분석하세요
+          - 이미 내린 아키텍처 결정을 기록하세요
+          - 수정할 수 있는 것과 유지해야 하는 것을 식별하세요
+
+          3. 스타터가 언급되지 않았지만 그린필드인 경우:
+          - 기술 선호도를 기반으로 적절한 풀스택 스타터를 제안하세요
+          - 플랫폼별 옵션을 고려하세요 (Vercel, AWS 등)
+          - 사용자가 하나를 사용할지 결정하게 하세요
+
+          4. 결정과 그것이 부과하는 제약사항을 문서화하세요
+
+          없다면 "N/A - 그린필드 프로젝트"라고 기술하세요
+      - id: changelog
+        title: 변경 로그
+        type: table
+        columns: [날짜, 버전, 설명, 작성자]
+        instruction: 문서 버전과 변경 사항 추적
+
+  - id: high-level-architecture
+    title: 고수준 아키텍처
+    instruction: 이 섹션은 기초를 설정하는 여러 하위 섹션을 포함합니다. 모든 하위 섹션을 함께 제시한 다음 완전한 섹션에 대한 피드백을 유도하세요.
+    elicit: true
+    sections:
+      - id: technical-summary
+        title: 기술 요약
+        instruction: |
+          다음을 다루는 포괄적인 개요 (4-6문장)를 제공하세요:
+          - 전체 아키텍처 스타일과 배포 접근 방식
+          - 프론트엔드 프레임워크와 백엔드 기술 선택
+          - 프론트엔드와 백엔드 간의 주요 통합 지점
+          - 인프라 플랫폼과 서비스
+          - 이 아키텍처가 PRD 목표를 달성하는 방법
+      - id: platform-infrastructure
+        title: 플랫폼 및 인프라 선택
+        instruction: |
+          PRD 요구사항과 기술적 가정을 기반으로 플랫폼 권장사항을 제시하세요:
+
+          1. 일반적인 패턴을 고려하세요 (완전한 목록은 아니며, 최적의 판단을 사용하고 필요에 따라 새로운 트렌드를 웹에서 검색하세요):
+          - **Vercel + Supabase**: Next.js로 빠른 개발, 내장 인증/스토리지
+          - **AWS 풀스택**: Lambda, API Gateway, S3, Cognito를 사용한 엔터프라이즈 확장
+          - **Azure**: .NET 생태계나 엔터프라이즈 Microsoft 환경용
+          - **Google Cloud**: ML/AI 중심 애플리케이션이나 Google 생태계 통합용
+
+          2. 명확한 장단점과 함께 2-3개의 실행 가능한 옵션을 제시하세요
+          3. 근거와 함께 권장사항을 제시하세요
+          4. 명시적 사용자 확인을 받으세요
+
+          선택과 사용될 주요 서비스를 문서화하세요.
+        template: |
+          **플랫폼:** {{selected_platform}}
+          **주요 서비스:** {{core_services_list}}
+          **배포 호스트 및 지역:** {{regions}}
+      - id: repository-structure
+        title: 저장소 구조
+        instruction: |
+          PRD 요구사항과 플랫폼 선택을 기반으로 저장소 접근 방식을 정의하고, 확실하지 않다면 근거를 설명하거나 사용자에게 질문하세요:
+
+          1. 현대 풀스택 앱의 경우, 모노레포가 종종 선호됩니다
+          2. 도구 고려 (Nx, Turborepo, Lerna, npm workspaces)
+          3. 패키지/앱 경계 정의
+          4. 프론트엔드와 백엔드 간 공유 코드 계획
+        template: |
+          **구조:** {{repo_structure_choice}}
+          **모노레포 도구:** {{monorepo_tool_if_applicable}}
+          **패키지 조직:** {{package_strategy}}
+      - id: architecture-diagram
+        title: 고수준 아키텍처 다이어그램
+        type: mermaid
+        mermaid_type: graph
+        instruction: |
+          다음을 포함한 완전한 시스템 아키텍처를 보여주는 Mermaid 다이어그램을 생성하세요:
+          - 사용자 진입점 (웹, 모바일)
+          - 프론트엔드 애플리케이션 배포
+          - API 레이어 (REST/GraphQL)
+          - 백엔드 서비스
+          - 데이터베이스 및 스토리지
+          - 외부 통합
+          - CDN 및 캐싱 레이어
+
+          명확성을 위해 적절한 다이어그램 유형을 사용하세요.
+      - id: architectural-patterns
+        title: 아키텍처 패턴
+        instruction: |
+          프론트엔드와 백엔드 개발을 모두 안내할 패턴을 나열하세요. 다음에 대한 패턴을 포함하세요:
+          - 전체 아키텍처 (예: Jamstack, 서버리스, 마이크로서비스)
+          - 프론트엔드 패턴 (예: 컴포넌트 기반, 상태 관리)
+          - 백엔드 패턴 (예: 리포지토리, CQRS, 이벤트 기반)
+          - 통합 패턴 (예: BFF, API 게이트웨이)
+
+          각 패턴에 대해 권장사항과 근거를 제공하세요.
+        repeatable: true
+        template: "- **{{pattern_name}}:** {{pattern_description}} - _근거:_ {{rationale}}"
+        examples:
+          - "**Jamstack 아키텍처:** 서버리스 API를 사용한 정적 사이트 생성 - _근거:_ 콘텐츠 중심 애플리케이션의 최적 성능과 확장성"
+          - "**컴포넌트 기반 UI:** TypeScript를 사용한 재사용 가능한 React 컴포넌트 - _근거:_ 대규모 코드베이스에서 유지보수성과 타입 안전성"
+          - "**리포지토리 패턴:** 데이터 접근 로직 추상화 - _근거:_ 테스팅과 향후 데이터베이스 마이그레이션 유연성 제공"
+          - "**API 게이트웨이 패턴:** 모든 API 호출의 단일 진입점 - _근거:_ 중앙화된 인증, 레이트 제한, 모니터링"
+
+  - id: tech-stack
+    title: 기술 스택
+    instruction: |
+      이것은 전체 프로젝트의 확정적인 기술 선택입니다. 사용자와 함께 모든 선택을 최종 결정하세요. 이 테이블이 유일한 진실의 소스입니다 - 모든 개발은 이 정확한 버전을 사용해야 합니다.
+
+      다뤄야 할 주요 영역:
+      - 프론트엔드 및 백엔드 언어/프레임워크
+      - 데이터베이스 및 캐싱
+      - 인증 및 권한 부여
+      - API 접근 방식
+      - 프론트엔드와 백엔드 모두를 위한 테스팅 도구
+      - 빌드 및 배포 도구
+      - 모니터링 및 로깅
+
+      렌더링 시 즉시 피드백을 유도하세요.
+    elicit: true
+    sections:
+      - id: tech-stack-table
+        title: 기술 스택 테이블
+        type: table
+        columns: [범주, 기술, 버전, 목적, 근거]
+        rows:
+          - ["프론트엔드 언어", "{{fe_language}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - [
+              "Frontend Framework",
+              "{{fe_framework}}",
+              "{{version}}",
+              "{{purpose}}",
+              "{{why_chosen}}",
+            ]
+          - [
+              "UI Component Library",
+              "{{ui_library}}",
+              "{{version}}",
+              "{{purpose}}",
+              "{{why_chosen}}",
+            ]
+          - ["상태 관리", "{{state_mgmt}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["백엔드 언어", "{{be_language}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - [
+              "백엔드 프레임워크",
+              "{{be_framework}}",
+              "{{version}}",
+              "{{purpose}}",
+              "{{why_chosen}}",
+            ]
+          - ["API 스타일", "{{api_style}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["데이터베이스", "{{database}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["캐시", "{{cache}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["파일 저장소", "{{storage}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["인증", "{{auth}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["프론트엔드 테스팅", "{{fe_test}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["백엔드 테스팅", "{{be_test}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["E2E 테스팅", "{{e2e_test}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["빌드 도구", "{{build_tool}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["번들러", "{{bundler}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["IaC 도구", "{{iac_tool}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["CI/CD", "{{cicd}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["모니터링", "{{monitoring}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["로깅", "{{logging}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+          - ["CSS 프레임워크", "{{css_framework}}", "{{version}}", "{{purpose}}", "{{why_chosen}}"]
+
+  - id: data-models
+    title: 데이터 모델
+    instruction: |
+      프론트엔드와 백엔드 간에 공유될 핵심 데이터 모델/엔티티를 정의하세요:
+
+      1. PRD 요구사항을 검토하고 핵심 비즈니스 엔티티를 식별하세요
+      2. 각 모델에 대해 목적과 관계를 설명하세요
+      3. 주요 속성과 데이터 타입을 포함하세요
+      4. 모델 간의 관계를 보여주세요
+      5. 공유 가능한 TypeScript 인터페이스를 생성하세요
+      6. 사용자와 설계 결정사항을 논의하세요
+
+      데이터베이스 스키마로 이동하기 전에 명확한 개념적 모델을 만드세요.
+    elicit: true
+    repeatable: true
+    sections:
+      - id: model
+        title: "{{model_name}}"
+        template: |
+          **목적:** {{model_purpose}}
+
+          **주요 속성:**
+          - {{attribute_1}}: {{type_1}} - {{description_1}}
+          - {{attribute_2}}: {{type_2}} - {{description_2}}
+        sections:
+          - id: typescript-interface
+            title: TypeScript 인터페이스
+            type: code
+            language: typescript
+            template: "{{model_interface}}"
+          - id: relationships
+            title: 관계
+            type: bullet-list
+            template: "- {{relationship}}"
+
+  - id: api-spec
+    title: API 명세
+    instruction: |
+      기술 스택에서 선택한 API 스타일을 기반으로:
+
+      1. REST API인 경우, OpenAPI 3.0 명세를 작성하세요
+      2. GraphQL인 경우, GraphQL 스키마를 제공하세요
+      3. tRPC인 경우, 라우터 정의를 보여주세요
+      4. 에픽/스토리의 모든 엔드포인트를 포함하세요
+      5. 데이터 모델을 기반으로 요청/응답 스키마를 정의하세요
+      6. 인증 요구사항을 문서화하세요
+      7. 요청/응답 예시를 포함하세요
+
+      선택한 API 스타일에 적합한 형식을 사용하세요. API가 없는 경우(예: 정적 사이트), 이 섹션을 건너뛰세요.
+    elicit: true
+    sections:
+      - id: rest-api
+        title: REST API 명세
+        condition: API 스타일이 REST인 경우
+        type: code
+        language: yaml
+        template: |
+          openapi: 3.0.0
+          info:
+            title: {{api_title}}
+            version: {{api_version}}
+            description: {{api_description}}
+          servers:
+            - url: {{server_url}}
+              description: {{server_description}}
+      - id: graphql-api
+        title: GraphQL 스키마
+        condition: API 스타일이 GraphQL인 경우
+        type: code
+        language: graphql
+        template: "{{graphql_schema}}"
+      - id: trpc-api
+        title: tRPC 라우터 정의
+        condition: API 스타일이 tRPC인 경우
+        type: code
+        language: typescript
+        template: "{{trpc_routers}}"
+
+  - id: components
+    title: 컴포넌트
+    instruction: |
+      위의 아키텍처 패턴, 기술 스택, 데이터 모델을 기반으로:
+
+      1. 풀스택 전반에 걸친 주요 논리 컴포넌트/서비스를 식별하세요
+      2. 프론트엔드와 백엔드 컴포넌트를 모두 고려하세요
+      3. 컴포넌트 간의 명확한 경계와 인터페이스를 정의하세요
+      4. 각 컴포넌트에 대해 다음을 명시하세요:
+      - 주요 책임
+      - 노출되는 핵심 인터페이스/API
+      - 다른 컴포넌트에 대한 의존성
+      - 기술 스택 선택에 기반한 기술적 세부사항
+
+      5. 도움이 되는 경우 컴포넌트 다이어그램을 생성하세요
+    elicit: true
+    sections:
+      - id: component-list
+        repeatable: true
+        title: "{{component_name}}"
+        template: |
+          **책임:** {{component_description}}
+
+          **핵심 인터페이스:**
+          - {{interface_1}}
+          - {{interface_2}}
+
+          **의존성:** {{dependencies}}
+
+          **기술 스택:** {{component_tech_details}}
+      - id: component-diagrams
+        title: 컴포넌트 다이어그램
+        type: mermaid
+        instruction: |
+          컴포넌트 관계를 시각화하기 위한 Mermaid 다이어그램을 만드세요. 옵션:
+          - 고수준 뷰를 위한 C4 컨테이너 다이어그램
+          - 상세한 내부 구조를 위한 컴포넌트 다이어그램
+          - 복잡한 상호작용을 위한 시퀀스 다이어그램
+          명확성을 위해 가장 적절한 것을 선택하세요
+
+  - id: external-apis
+    title: 외부 API
+    condition: 프로젝트가 외부 API 통합을 필요로 하는 경우
+    instruction: |
+      각 외부 서비스 통합에 대해:
+
+      1. PRD 요구사항과 컴포넌트 설계를 기반으로 필요한 API를 식별하세요
+      2. 문서 URL을 모르는 경우, 사용자에게 구체적인 정보를 요청하세요
+      3. 인증 방법과 보안 고려사항을 문서화하세요
+      4. 사용될 특정 엔드포인트를 나열하세요
+      5. 레이트 제한이나 사용 제약사항을 기록하세요
+
+      외부 API가 필요하지 않은 경우, 이를 명시하고 다음 섹션으로 건너뛰세요.
+    elicit: true
+    repeatable: true
+    sections:
+      - id: api
+        title: "{{api_name}} API"
+        template: |
+          - **목적:** {{api_purpose}}
+          - **문서:** {{api_docs_url}}
+          - **기본 URL:** {{api_base_url}}
+          - **인증:** {{auth_method}}
+          - **레이트 제한:** {{rate_limits}}
+
+          **사용되는 핵심 엔드포인트:**
+          - `{{method}} {{endpoint_path}}` - {{endpoint_purpose}}
+
+          **통합 참고사항:** {{integration_considerations}}
+
+  - id: core-workflows
+    title: 핵심 워크플로우
+    type: mermaid
+    mermaid_type: sequence
+    instruction: |
+      시퀀스 다이어그램을 사용하여 핵심 시스템 워크플로우를 설명하세요:
+
+      1. PRD에서 중요한 사용자 여정을 식별하세요
+      2. 외부 API를 포함한 컴포넌트 상호작용을 보여주세요
+      3. 프론트엔드와 백엔드 플로우를 모두 포함하세요
+      4. 오류 처리 경로를 포함하세요
+      5. 비동기 작업을 문서화하세요
+      6. 필요에 따라 고수준 및 상세 다이어그램을 생성하세요
+
+      아키텍처 결정이나 복잡한 상호작용을 명확히 하는 워크플로우에 집중하세요.
+    elicit: true
+
+  - id: database-schema
+    title: 데이터베이스 스키마
+    instruction: |
+      개념적 데이터 모델을 구체적인 데이터베이스 스키마로 변환하세요:
+
+      1. 기술 스택에서 선택한 데이터베이스 타입을 사용하세요
+      2. 적절한 표기법을 사용하여 스키마 정의를 생성하세요
+      3. 인덱스, 제약조건, 관계를 포함하세요
+      4. 성능과 확장성을 고려하세요
+      5. NoSQL의 경우, 문서 구조를 보여주세요
+
+      데이터베이스 타입에 적합한 형식(SQL DDL, JSON 스키마 등)으로 스키마를 제시하세요.
+    elicit: true
+
+  - id: frontend-architecture
+    title: 프론트엔드 아키텍처
+    instruction: 프론트엔드별 아키텍처 세부사항을 정의하세요. 각 하위 섹션 후에 계속하기 전에 사용자가 개선하고 싶어하는지 확인하세요.
+    elicit: true
+    sections:
+      - id: component-architecture
+        title: 컴포넌트 아키텍처
+        instruction: 선택한 프레임워크를 기반으로 컴포넌트 구성과 패턴을 정의하세요.
+        sections:
+          - id: component-organization
+            title: 컴포넌트 구성
+            type: code
+            language: text
+            template: "{{component_structure}}"
+          - id: component-template
+            title: 컴포넌트 템플릿
+            type: code
+            language: typescript
+            template: "{{component_template}}"
+      - id: state-management
+        title: 상태 관리 아키텍처
+        instruction: 선택한 솔루션을 기반으로 상태 관리 접근 방식을 상세히 설명하세요.
+        sections:
+          - id: state-structure
+            title: 상태 구조
+            type: code
+            language: typescript
+            template: "{{state_structure}}"
+          - id: state-patterns
+            title: 상태 관리 패턴
+            type: bullet-list
+            template: "- {{pattern}}"
+      - id: routing-architecture
+        title: 라우팅 아키텍처
+        instruction: 프레임워크 선택을 기반으로 라우팅 구조를 정의하세요.
+        sections:
+          - id: route-organization
+            title: 라우트 구성
+            type: code
+            language: text
+            template: "{{route_structure}}"
+          - id: protected-routes
+            title: 보호된 라우트 패턴
+            type: code
+            language: typescript
+            template: "{{protected_route_example}}"
+      - id: frontend-services
+        title: 프론트엔드 서비스 레이어
+        instruction: 프론트엔드가 백엔드와 통신하는 방법을 정의하세요.
+        sections:
+          - id: api-client-setup
+            title: API 클라이언트 설정
+            type: code
+            language: typescript
+            template: "{{api_client_setup}}"
+          - id: service-example
+            title: 서비스 예시
+            type: code
+            language: typescript
+            template: "{{service_example}}"
+
+  - id: backend-architecture
+    title: 백엔드 아키텍처
+    instruction: 백엔드별 아키텍처 세부사항을 정의하세요. 서버리스 vs 전통적인 서버 접근 방식을 고려하세요.
+    elicit: true
+    sections:
+      - id: service-architecture
+        title: 서비스 아키텍처
+        instruction: 플랫폼 선택을 기반으로 서비스 구성을 정의하세요.
+        sections:
+          - id: serverless-architecture
+            condition: 서버리스 아키텍처가 선택된 경우
+            sections:
+              - id: function-organization
+                title: 함수 구성
+                type: code
+                language: text
+                template: "{{function_structure}}"
+              - id: function-template
+                title: 함수 템플릿
+                type: code
+                language: typescript
+                template: "{{function_template}}"
+          - id: traditional-server
+            condition: 전통적인 서버 아키텍처가 선택된 경우
+            sections:
+              - id: controller-organization
+                title: 컨트롤러/라우트 구성
+                type: code
+                language: text
+                template: "{{controller_structure}}"
+              - id: controller-template
+                title: 컨트롤러 템플릿
+                type: code
+                language: typescript
+                template: "{{controller_template}}"
+      - id: database-architecture
+        title: 데이터베이스 아키텍처
+        instruction: 데이터베이스 스키마와 접근 패턴을 정의하세요.
+        sections:
+          - id: schema-design
+            title: 스키마 설계
+            type: code
+            language: sql
+            template: "{{database_schema}}"
+          - id: data-access-layer
+            title: 데이터 접근 레이어
+            type: code
+            language: typescript
+            template: "{{repository_pattern}}"
+      - id: auth-architecture
+        title: 인증 및 권한 부여
+        instruction: 인증 구현 세부사항을 정의하세요.
+        sections:
+          - id: auth-flow
+            title: 인증 플로우
+            type: mermaid
+            mermaid_type: sequence
+            template: "{{auth_flow_diagram}}"
+          - id: auth-middleware
+            title: 미들웨어/가드
+            type: code
+            language: typescript
+            template: "{{auth_middleware}}"
+
+  - id: unified-project-structure
+    title: 통합 프로젝트 구조
+    instruction: 프론트엔드와 백엔드를 모두 수용하는 모노레포 구조를 만드세요. 선택한 도구와 프레임워크에 따라 조정하세요.
+    elicit: true
+    type: code
+    language: plaintext
+    examples:
+      - |
+        {{project-name}}/
+        ├── .github/                    # CI/CD 워크플로우
+        │   └── workflows/
+        │       ├── ci.yaml
+        │       └── deploy.yaml
+        ├── apps/                       # 애플리케이션 패키지
+        │   ├── web/                    # 프론트엔드 애플리케이션
+        │   │   ├── src/
+        │   │   │   ├── components/     # UI 컴포넌트
+        │   │   │   ├── pages/          # 페이지 컴포넌트/라우트
+        │   │   │   ├── hooks/          # 커스텀 React 훅
+        │   │   │   ├── services/       # API 클라이언트 서비스
+        │   │   │   ├── stores/         # 상태 관리
+        │   │   │   ├── styles/         # 글로벌 스타일/테마
+        │   │   │   └── utils/          # 프론트엔드 유틸리티
+        │   │   ├── public/             # 정적 자산
+        │   │   ├── tests/              # 프론트엔드 테스트
+        │   │   └── package.json
+        │   └── api/                    # 백엔드 애플리케이션
+        │       ├── src/
+        │       │   ├── routes/         # API 라우트/컨트롤러
+        │       │   ├── services/       # 비즈니스 로직
+        │       │   ├── models/         # 데이터 모델
+        │       │   ├── middleware/     # Express/API 미들웨어
+        │       │   ├── utils/          # 백엔드 유틸리티
+        │       │   └── {{serverless_or_server_entry}}
+        │       ├── tests/              # 백엔드 테스트
+        │       └── package.json
+        ├── packages/                   # 공유 패키지
+        │   ├── shared/                 # 공유 타입/유틸리티
+        │   │   ├── src/
+        │   │   │   ├── types/          # TypeScript 인터페이스
+        │   │   │   ├── constants/      # 공유 상수
+        │   │   │   └── utils/          # 공유 유틸리티
+        │   │   └── package.json
+        │   ├── ui/                     # 공유 UI 컴포넌트
+        │   │   ├── src/
+        │   │   └── package.json
+        │   └── config/                 # 공유 설정
+        │       ├── eslint/
+        │       ├── typescript/
+        │       └── jest/
+        ├── infrastructure/             # IaC 정의
+        │   └── {{iac_structure}}
+        ├── scripts/                    # 빌드/배포 스크립트
+        ├── docs/                       # 문서
+        │   ├── prd.md
+        │   ├── front-end-spec.md
+        │   └── fullstack-architecture.md
+        ├── .env.example                # 환경 템플릿
+        ├── package.json                # 루트 package.json
+        ├── {{monorepo_config}}         # 모노레포 설정
+        └── README.md
+
+  - id: development-workflow
+    title: 개발 워크플로우
+    instruction: 풀스택 애플리케이션의 개발 설정과 워크플로우를 정의하세요.
+    elicit: true
+    sections:
+      - id: local-setup
+        title: 로컬 개발 설정
+        sections:
+          - id: prerequisites
+            title: 필수 조건
+            type: code
+            language: bash
+            template: "{{prerequisites_commands}}"
+          - id: initial-setup
+            title: 초기 설정
+            type: code
+            language: bash
+            template: "{{setup_commands}}"
+          - id: dev-commands
+            title: 개발 명령어
+            type: code
+            language: bash
+            template: |
+              # 모든 서비스 시작
+              {{start_all_command}}
+
+              # 프론트엔드만 시작
+              {{start_frontend_command}}
+
+              # 백엔드만 시작
+              {{start_backend_command}}
+
+              # 테스트 실행
+              {{test_commands}}
+      - id: environment-config
+        title: 환경 설정
+        sections:
+          - id: env-vars
+            title: 필수 환경 변수
+            type: code
+            language: bash
+            template: |
+              # 프론트엔드 (.env.local)
+              {{frontend_env_vars}}
+
+              # 백엔드 (.env)
+              {{backend_env_vars}}
+
+              # 공유
+              {{shared_env_vars}}
+
+  - id: deployment-architecture
+    title: 배포 아키텍처
+    instruction: 플랫폼 선택을 기반으로 배포 전략을 정의하세요.
+    elicit: true
+    sections:
+      - id: deployment-strategy
+        title: 배포 전략
+        template: |
+          **프론트엔드 배포:**
+          - **플랫폼:** {{frontend_deploy_platform}}
+          - **빌드 명령어:** {{frontend_build_command}}
+          - **출력 디렉토리:** {{frontend_output_dir}}
+          - **CDN/엣지:** {{cdn_strategy}}
+
+          **백엔드 배포:**
+          - **플랫폼:** {{backend_deploy_platform}}
+          - **빌드 명령어:** {{backend_build_command}}
+          - **배포 방법:** {{deployment_method}}
+      - id: cicd-pipeline
+        title: CI/CD 파이프라인
+        type: code
+        language: yaml
+        template: "{{cicd_pipeline_config}}"
+      - id: environments
+        title: 환경
+        type: table
+        columns: [환경, 프론트엔드 URL, 백엔드 URL, 목적]
+        rows:
+          - ["개발", "{{dev_fe_url}}", "{{dev_be_url}}", "로컬 개발"]
+          - ["스테이징", "{{staging_fe_url}}", "{{staging_be_url}}", "프로덕션 전 테스팅"]
+          - ["프로덕션", "{{prod_fe_url}}", "{{prod_be_url}}", "라이브 환경"]
+
+  - id: security-performance
+    title: 보안 및 성능
+    instruction: 풀스택 애플리케이션의 보안 및 성능 고려사항을 정의하세요.
+    elicit: true
+    sections:
+      - id: security-requirements
+        title: 보안 요구사항
+        template: |
+          **프론트엔드 보안:**
+          - CSP 헤더: {{csp_policy}}
+          - XSS 방지: {{xss_strategy}}
+          - 보안 저장소: {{storage_strategy}}
+
+          **백엔드 보안:**
+          - 입력 검증: {{validation_approach}}
+          - 레이트 제한: {{rate_limit_config}}
+          - CORS 정책: {{cors_config}}
+
+          **인증 보안:**
+          - 토큰 저장: {{token_strategy}}
+          - 세션 관리: {{session_approach}}
+          - 비밀번호 정책: {{password_requirements}}
+      - id: performance-optimization
+        title: 성능 최적화
+        template: |
+          **프론트엔드 성능:**
+          - 번들 크기 목표: {{bundle_size}}
+          - 로딩 전략: {{loading_approach}}
+          - 캐싱 전략: {{fe_cache_strategy}}
+
+          **백엔드 성능:**
+          - 응답 시간 목표: {{response_target}}
+          - 데이터베이스 최적화: {{db_optimization}}
+          - 캐싱 전략: {{be_cache_strategy}}
+
+  - id: testing-strategy
+    title: 테스팅 전략
+    instruction: 풀스택 애플리케이션의 종합적인 테스팅 접근 방식을 정의하세요.
+    elicit: true
+    sections:
+      - id: testing-pyramid
+        title: 테스팅 피라미드
+        type: code
+        language: text
+        template: |
+          E2E 테스트
+          /        \
+          통합 테스트
+          /            \
+          프론트엔드 단위  백엔드 단위
+      - id: test-organization
+        title: 테스트 구성
+        sections:
+          - id: frontend-tests
+            title: 프론트엔드 테스트
+            type: code
+            language: text
+            template: "{{frontend_test_structure}}"
+          - id: backend-tests
+            title: 백엔드 테스트
+            type: code
+            language: text
+            template: "{{backend_test_structure}}"
+          - id: e2e-tests
+            title: E2E 테스트
+            type: code
+            language: text
+            template: "{{e2e_test_structure}}"
+      - id: test-examples
+        title: 테스트 예시
+        sections:
+          - id: frontend-test
+            title: 프론트엔드 컴포넌트 테스트
+            type: code
+            language: typescript
+            template: "{{frontend_test_example}}"
+          - id: backend-test
+            title: 백엔드 API 테스트
+            type: code
+            language: typescript
+            template: "{{backend_test_example}}"
+          - id: e2e-test
+            title: E2E 테스트
+            type: code
+            language: typescript
+            template: "{{e2e_test_example}}"
+
+  - id: coding-standards
+    title: 코딩 표준
+    instruction: AI 에이전트를 위한 최소한이지만 중요한 표준을 정의하세요. 일반적인 실수를 방지하는 프로젝트별 규칙에만 집중하세요. 이는 개발 에이전트가 사용할 것입니다.
+    elicit: true
+    sections:
+      - id: critical-rules
+        title: 중요한 풀스택 규칙
+        repeatable: true
+        template: "- **{{rule_name}}:** {{rule_description}}"
+        examples:
+          - "**타입 공유:** 항상 packages/shared에서 타입을 정의하고 여기서 가져오기"
+          - "**API 호출:** 직접적인 HTTP 호출 금지 - 서비스 레이어 사용"
+          - "**환경 변수:** process.env에 직접 접근 금지 - 설정 객체를 통해서만 접근"
+          - "**오류 처리:** 모든 API 라우트는 표준 오류 핸들러를 사용해야 함"
+          - "**상태 업데이트:** 상태를 직접 변경 금지 - 적절한 상태 관리 패턴 사용"
+      - id: naming-conventions
+        title: 명명 규칙
+        type: table
+        columns: [요소, 프론트엔드, 백엔드, 예시]
+        rows:
+          - ["컴포넌트", "PascalCase", "-", "`UserProfile.tsx`"]
+          - ["훅", "camelCase with 'use'", "-", "`useAuth.ts`"]
+          - ["API 라우트", "-", "kebab-case", "`/api/user-profile`"]
+          - ["데이터베이스 테이블", "-", "snake_case", "`user_profiles`"]
+
+  - id: error-handling
+    title: 오류 처리 전략
+    instruction: 프론트엔드와 백엔드에 걸친 통합 오류 처리를 정의하세요.
+    elicit: true
+    sections:
+      - id: error-flow
+        title: 오류 플로우
+        type: mermaid
+        mermaid_type: sequence
+        template: "{{error_flow_diagram}}"
+      - id: error-format
+        title: 오류 응답 형식
+        type: code
+        language: typescript
+        template: |
+          interface ApiError {
+            error: {
+              code: string;
+              message: string;
+              details?: Record<string, any>;
+              timestamp: string;
+              requestId: string;
+            };
+          }
+      - id: frontend-error-handling
+        title: 프론트엔드 오류 처리
+        type: code
+        language: typescript
+        template: "{{frontend_error_handler}}"
+      - id: backend-error-handling
+        title: 백엔드 오류 처리
+        type: code
+        language: typescript
+        template: "{{backend_error_handler}}"
+
+  - id: monitoring
+    title: 모니터링 및 관찰 가능성
+    instruction: 풀스택 애플리케이션의 모니터링 전략을 정의하세요.
+    elicit: true
+    sections:
+      - id: monitoring-stack
+        title: 모니터링 스택
+        template: |
+          - **프론트엔드 모니터링:** {{frontend_monitoring}}
+          - **백엔드 모니터링:** {{backend_monitoring}}
+          - **오류 추적:** {{error_tracking}}
+          - **성능 모니터링:** {{perf_monitoring}}
+      - id: key-metrics
+        title: 핵심 지표
+        template: |
+          **프론트엔드 지표:**
+          - Core Web Vitals
+          - JavaScript 오류
+          - API 응답 시간
+          - 사용자 상호작용
+
+          **백엔드 지표:**
+          - 요청 비율
+          - 오류 비율
+          - 응답 시간
+          - 데이터베이스 쿼리 성능
+
+  - id: checklist-results
+    title: 체크리스트 결과 보고서
+    instruction: 체크리스트를 실행하기 전에 전체 아키텍처 문서를 출력할 것인지 제안하세요. 사용자가 확인하면 architect-checklist를 실행하고 결과를 여기에 입력하세요.

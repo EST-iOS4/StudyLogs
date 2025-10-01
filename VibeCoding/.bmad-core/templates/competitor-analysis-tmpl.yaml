@@ -1,0 +1,307 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: competitor-analysis-template-v2
+  name: 경쟁 분석 보고서
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/competitor-analysis.md
+    title: "경쟁 분석 보고서: {{project_product_name}}"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+  custom_elicitation:
+    title: "경쟁 분석 유도 액션"
+    options:
+      - "특정 경쟁사의 전략에 대한 심층 분석"
+      - "특정 분야의 경쟁 역학 분석"
+      - "귀하의 움직임에 대한 경쟁적 대응 전쟁 게임"
+      - "파트너십 대 경쟁 시나리오 탐색"
+      - "차별화 주장에 대한 스트레스 테스트"
+      - "파괴적 잠재력 분석 (귀하 또는 그들의)"
+      - "인접 시장의 경쟁과 비교"
+      - "승/패 분석 통찰 생성"
+      - "우리가 [경쟁사 X의 계획]에 대해 알았더라면..."
+      - "다음 섹션으로 진행"
+
+sections:
+  - id: executive-summary
+    title: 요약
+    instruction: 높은 수준의 경쟁 통찰, 주요 위협과 기회, 권장 전략적 조치를 제공하세요. 모든 분석을 완료한 후 마지막에 이 섹션을 작성하세요.
+
+  - id: analysis-scope
+    title: 분석 범위 및 방법론
+    instruction: 이 템플릿은 포괄적인 경쟁사 분석을 안내합니다. 사용자의 경쟁 정보 요구사항과 전략적 목표를 이해하는 것부터 시작하세요. 세부 분석에 들어가기 전에 경쟁사를 식별하고 우선순위를 정하는 데 도움을 주세요.
+    sections:
+      - id: analysis-purpose
+        title: 분석 목적
+        instruction: |
+          주요 목적을 정의하세요:
+          - 신규 시장 진입 평가
+          - 제품 포지셔닝 전략
+          - 기능 격차 분석
+          - 가격 전략 개발
+          - 파트너십/인수 대상
+          - 경쟁 위협 평가
+      - id: competitor-categories
+        title: 분석된 경쟁사 범주
+        instruction: |
+          포함된 범주를 나열하세요:
+          - 직접 경쟁사: 동일한 제품/서비스, 동일한 목표 시장
+          - 간접 경쟁사: 다른 제품, 동일한 요구/문제
+          - 잠재적 경쟁사: 쉽게 시장에 진입할 수 있는
+          - 대체 제품: 대안적 솔루션
+          - 지향적 경쟁사: 최고 수준의 예시
+      - id: research-methodology
+        title: 연구 방법론
+        instruction: |
+          접근 방식을 설명하세요:
+          - 사용된 정보 소스
+          - 분석 시간대
+          - 신뢰도 수준
+          - 제한사항
+
+  - id: competitive-landscape
+    title: 경쟁 환경 개요
+    sections:
+      - id: market-structure
+        title: 시장 구조
+        instruction: |
+          경쟁 환경을 설명하세요:
+          - 활성 경쟁사 수
+          - 시장 집중도 (분산/통합)
+          - 경쟁 역학
+          - 최근 시장 진입/퇴출
+      - id: prioritization-matrix
+        title: 경쟁사 우선순위 매트릭스
+        instruction: |
+          시장 점유율과 전략적 위협 수준으로 경쟁사를 분류하는 데 도움을 주세요
+
+          2x2 매트릭스를 생성하세요:
+          - 우선순위 1 (핵심 경쟁사): 높은 시장 점유율 + 높은 위협
+          - 우선순위 2 (새로운 위협): 낮은 시장 점유율 + 높은 위협
+          - 우선순위 3 (기존 플레이어): 높은 시장 점유율 + 낮은 위협
+          - 우선순위 4 (모니터링만): 낮은 시장 점유율 + 낮은 위협
+
+  - id: competitor-profiles
+    title: 개별 경쟁사 프로필
+    instruction: 각 우선순위 1 및 우선순위 2 경쟁사에 대한 상세한 프로필을 생성하세요. 우선순위 3 및 4의 경우 축약된 프로필을 생성하세요.
+    repeatable: true
+    sections:
+      - id: competitor
+        title: "{{competitor_name}} - 우선순위 {{priority_level}}"
+        sections:
+          - id: company-overview
+            title: 회사 개요
+            template: |
+              - **설립:** {{year_founders}}
+              - **본사:** {{location}}
+              - **회사 규모:** {{employees_revenue}}
+              - **펀딩:** {{total_raised_investors}}
+              - **리더십:** {{key_executives}}
+          - id: business-model
+            title: 비즈니스 모델 및 전략
+            template: |
+              - **수익 모델:** {{revenue_model}}
+              - **타겟 시장:** {{customer_segments}}
+              - **가치 제안:** {{value_promise}}
+              - **시장 진입 전략:** {{gtm_approach}}
+              - **전략적 초점:** {{current_priorities}}
+          - id: product-analysis
+            title: 제품/서비스 분석
+            template: |
+              - **핵심 제품:** {{main_products}}
+              - **주요 기능:** {{standout_capabilities}}
+              - **사용자 경험:** {{ux_assessment}}
+              - **기술 스택:** {{tech_stack}}
+              - **가격:** {{pricing_model}}
+          - id: strengths-weaknesses
+            title: 강점 및 약점
+            sections:
+              - id: strengths
+                title: 강점
+                type: bullet-list
+                template: "- {{strength}}"
+              - id: weaknesses
+                title: 약점
+                type: bullet-list
+                template: "- {{weakness}}"
+          - id: market-position
+            title: 시장 포지션 및 성과
+            template: |
+              - **시장 점유율:** {{market_share_estimate}}
+              - **고객 기반:** {{customer_size_notables}}
+              - **성장 궤도:** {{growth_trend}}
+              - **최근 동향:** {{key_news}}
+
+  - id: comparative-analysis
+    title: 비교 분석
+    sections:
+      - id: feature-comparison
+        title: 기능 비교 매트릭스
+        instruction: 경쟁사 간 주요 기능의 상세 비교 테이블을 생성
+        type: table
+        columns:
+          [
+            "기능 범주",
+            "{{your_company}}",
+            "{{competitor_1}}",
+            "{{competitor_2}}",
+            "{{competitor_3}}",
+          ]
+        rows:
+          - category: "핵심 기능"
+            items:
+              - ["기능 A", "{{status}}", "{{status}}", "{{status}}", "{{status}}"]
+              - ["기능 B", "{{status}}", "{{status}}", "{{status}}", "{{status}}"]
+          - category: "사용자 경험"
+            items:
+              - ["모바일 앱", "{{rating}}", "{{rating}}", "{{rating}}", "{{rating}}"]
+              - ["온보딩 시간", "{{time}}", "{{time}}", "{{time}}", "{{time}}"]
+          - category: "통합 및 생태계"
+            items:
+              - [
+                  "API 가용성",
+                  "{{availability}}",
+                  "{{availability}}",
+                  "{{availability}}",
+                  "{{availability}}",
+                ]
+              - ["서드파티 통합", "{{number}}", "{{number}}", "{{number}}", "{{number}}"]
+          - category: "가격 및 플랜"
+            items:
+              - ["시작 가격", "{{price}}", "{{price}}", "{{price}}", "{{price}}"]
+              - ["무료 플랜", "{{yes_no}}", "{{yes_no}}", "{{yes_no}}", "{{yes_no}}"]
+      - id: swot-comparison
+        title: SWOT 비교
+        instruction: 귀하의 솔루션과 상위 경쟁사에 대한 SWOT 분석을 생성
+        sections:
+          - id: your-solution
+            title: 귀하의 솔루션
+            template: |
+              - **강점:** {{strengths}}
+              - **약점:** {{weaknesses}}
+              - **기회:** {{opportunities}}
+              - **위협:** {{threats}}
+          - id: vs-competitor
+            title: "vs. {{main_competitor}}"
+            template: |
+              - **경쟁 우위:** {{your_advantages}}
+              - **경쟁 열세:** {{their_advantages}}
+              - **차별화 기회:** {{differentiation}}
+      - id: positioning-map
+        title: 포지셔닝 맵
+        instruction: |
+          주요 차원에서 경쟁사 위치 설명
+
+          시장과 관련된 2개의 주요 차원을 사용하여 포지셔닝 설명을 생성하세요:
+          - 가격 vs. 기능
+          - 사용 용이성 vs. 성능
+          - 전문화 vs. 폭넓음
+          - 셀프서비스 vs. 고터치
+
+  - id: strategic-analysis
+    title: 전략적 분석
+    sections:
+      - id: competitive-advantages
+        title: 경쟁 우위 평가
+        sections:
+          - id: sustainable-advantages
+            title: 지속 가능한 우위
+            instruction: |
+              해자와 방어 가능한 포지션 식별:
+              - 네트워크 효과
+              - 전환 비용
+              - 브랜드 강도
+              - 기술 장벽
+              - 규제 우위
+          - id: vulnerable-points
+            title: 취약 지점
+            instruction: |
+              경쟁사가 도전받을 수 있는 지점:
+              - 약한 고객 세그먼트
+              - 누락된 기능
+              - 열악한 사용자 경험
+              - 높은 가격
+              - 제한된 지리적 존재
+      - id: blue-ocean
+        title: 블루오션 기회
+        instruction: |
+          경쟁이 없는 시장 공간 식별
+
+          새로운 시장 공간을 창출할 기회 나열:
+          - 서비스가 부족한 세그먼트
+          - 해결되지 않은 사용 사례
+          - 새로운 비즈니스 모델
+          - 지리적 확장
+          - 다른 가치 제안
+
+  - id: strategic-recommendations
+    title: 전략적 권장사항
+    sections:
+      - id: differentiation-strategy
+        title: 차별화 전략
+        instruction: |
+          경쟁사에 대한 포지셔닝 방법:
+          - 강조할 고유한 가치 제안
+          - 우선순위를 둘 기능
+          - 타겟할 세그먼트
+          - 메시징 및 포지셔닝
+      - id: competitive-response
+        title: 경쟁 대응 계획
+        sections:
+          - id: offensive-strategies
+            title: 공격적 전략
+            instruction: |
+              시장 점유율 확보 방법:
+              - 경쟁사 약점 타겟
+              - 경쟁 거래에서 승리
+              - 그들의 고객 확보
+          - id: defensive-strategies
+            title: 방어적 전략
+            instruction: |
+              포지션 보호 방법:
+              - 취약한 영역 강화
+              - 전환 비용 구축
+              - 고객 관계 심화
+      - id: partnership-ecosystem
+        title: 파트너십 및 생태계 전략
+        instruction: |
+          잠재적 협력 기회:
+          - 상호 보완 플레이어
+          - 채널 파트너
+          - 기술 통합
+          - 전략적 제휴
+
+  - id: monitoring-plan
+    title: 모니터링 및 인텔리전스 계획
+    sections:
+      - id: key-competitors
+        title: 추적할 주요 경쟁사
+        instruction: 근거가 포함된 우선순위 목록
+      - id: monitoring-metrics
+        title: 모니터링 지표
+        instruction: |
+          추적할 내용:
+          - 제품 업데이트
+          - 가격 변경
+          - 고객 획득/손실
+          - 펀딩/M&A 활동
+          - 시장 메시징
+      - id: intelligence-sources
+        title: 인텔리전스 소스
+        instruction: |
+          지속적인 인텔리전스를 수집할 곳:
+          - 회사 웹사이트/블로그
+          - 고객 리뷰
+          - 업계 보고서
+          - 소셜 미디어
+          - 특허 출원
+      - id: update-cadence
+        title: 업데이트 주기
+        instruction: |
+          권장 검토 일정:
+          - 주간: {{weekly_items}}
+          - 월간: {{monthly_items}}
+          - 분기별: {{quarterly_analysis}}

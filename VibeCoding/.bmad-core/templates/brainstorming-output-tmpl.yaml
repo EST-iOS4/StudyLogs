@@ -1,0 +1,156 @@
+template:
+  id: brainstorming-output-template-v2
+  name: 브레인스토밍 세션 결과
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/brainstorming-session-results.md
+    title: "브레인스토밍 세션 결과"
+
+workflow:
+  mode: non-interactive
+
+sections:
+  - id: header
+    content: |
+      **세션 날짜:** {{date}}
+      **진행자:** {{agent_role}} {{agent_name}}
+      **참가자:** {{user_name}}
+
+  - id: executive-summary
+    title: 요약
+    sections:
+      - id: summary-details
+        template: |
+          **주제:** {{session_topic}}
+
+          **세션 목표:** {{stated_goals}}
+
+          **사용된 기법:** {{techniques_list}}
+
+          **생성된 총 아이디어 수:** {{total_ideas}}
+      - id: key-themes
+        title: "식별된 주요 테마:"
+        type: bullet-list
+        template: "- {{theme}}"
+
+  - id: technique-sessions
+    title: 기법 세션
+    repeatable: true
+    sections:
+      - id: technique
+        title: "{{technique_name}} - {{duration}}"
+        sections:
+          - id: description
+            template: "**설명:** {{technique_description}}"
+          - id: ideas-generated
+            title: "생성된 아이디어:"
+            type: numbered-list
+            template: "{{idea}}"
+          - id: insights
+            title: "발견된 통찰:"
+            type: bullet-list
+            template: "- {{insight}}"
+          - id: connections
+            title: "주목할 만한 연결점:"
+            type: bullet-list
+            template: "- {{connection}}"
+
+  - id: idea-categorization
+    title: 아이디어 분류
+    sections:
+      - id: immediate-opportunities
+        title: 즉시 활용 가능한 기회
+        content: "*지금 바로 구현할 수 있는 아이디어*"
+        repeatable: true
+        type: numbered-list
+        template: |
+          **{{idea_name}}**
+          - 설명: {{description}}
+          - 즉시 가능한 이유: {{rationale}}
+          - 필요한 자원: {{requirements}}
+      - id: future-innovations
+        title: 미래 혁신
+        content: "*개발/연구가 필요한 아이디어*"
+        repeatable: true
+        type: numbered-list
+        template: |
+          **{{idea_name}}**
+          - 설명: {{description}}
+          - 필요한 개발: {{development_needed}}
+          - 예상 일정: {{timeline}}
+      - id: moonshots
+        title: 도전적 목표
+        content: "*야심차고 혁신적인 개념*"
+        repeatable: true
+        type: numbered-list
+        template: |
+          **{{idea_name}}**
+          - 설명: {{description}}
+          - 혁신적 잠재력: {{potential}}
+          - 극복할 과제: {{challenges}}
+      - id: insights-learnings
+        title: 통찰 및 학습
+        content: "*세션에서 얻은 주요 깨달음*"
+        type: bullet-list
+        template: "- {{insight}}: {{description_and_implications}}"
+
+  - id: action-planning
+    title: 행동 계획
+    sections:
+      - id: top-priorities
+        title: 상위 3개 우선순위 아이디어
+        sections:
+          - id: priority-1
+            title: "1순위: {{idea_name}}"
+            template: |
+              - 근거: {{rationale}}
+              - 다음 단계: {{next_steps}}
+              - 필요한 자원: {{resources}}
+              - 일정: {{timeline}}
+          - id: priority-2
+            title: "2순위: {{idea_name}}"
+            template: |
+              - 근거: {{rationale}}
+              - 다음 단계: {{next_steps}}
+              - 필요한 자원: {{resources}}
+              - 일정: {{timeline}}
+          - id: priority-3
+            title: "3순위: {{idea_name}}"
+            template: |
+              - 근거: {{rationale}}
+              - 다음 단계: {{next_steps}}
+              - 필요한 자원: {{resources}}
+              - 일정: {{timeline}}
+
+  - id: reflection-followup
+    title: 성찰 및 후속 조치
+    sections:
+      - id: what-worked
+        title: 잘 작동한 것
+        type: bullet-list
+        template: "- {{aspect}}"
+      - id: areas-exploration
+        title: 추가 탐구 영역
+        type: bullet-list
+        template: "- {{area}}: {{reason}}"
+      - id: recommended-techniques
+        title: 권장 후속 기법
+        type: bullet-list
+        template: "- {{technique}}: {{reason}}"
+      - id: questions-emerged
+        title: 제기된 질문
+        type: bullet-list
+        template: "- {{question}}"
+      - id: next-session
+        title: 다음 세션 계획
+        template: |
+          - **제안 주제:** {{followup_topics}}
+          - **권장 시간대:** {{timeframe}}
+          - **필요한 준비:** {{preparation}}
+
+  - id: footer
+    content: |
+      ---
+
+      *BMAD-METHOD™ 브레인스토밍 프레임워크를 사용하여 진행된 세션*

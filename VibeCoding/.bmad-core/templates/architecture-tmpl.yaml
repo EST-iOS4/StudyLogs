@@ -1,0 +1,651 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: architecture-template-v2
+  name: 아키텍처 문서
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/architecture.md
+    title: "{{project_name}} 아키텍처 문서"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: introduction
+    title: 소개
+    instruction: |
+      가능하다면 시작하기 전에 관련 문서들을 검토하여 모든 관련 맥락을 수집하세요. 최소한 docs/prd.md를 찾을 수 없다면 아키텍처의 기초가 될 문서가 무엇인지 사용자에게 문의하세요.
+    sections:
+      - id: intro-content
+        content: |
+          이 문서는 백엔드 시스템, 공유 서비스, 그리고 UI가 아닌 특정 관심사들을 포함하여 {{project_name}}의 전체 프로젝트 아키텍처를 개략적으로 설명합니다. 주요 목표는 AI 주도 개발을 위한 안내 아키텍처 청사진 역할을 하여 선택된 패턴과 기술에 대한 일관성과 준수를 보장하는 것입니다.
+
+          **프론트엔드 아키텍처와의 관계:**
+          프로젝트에 중요한 사용자 인터페이스가 포함되어 있다면, 별도의 프론트엔드 아키텍처 문서가 프론트엔드 특정 설계를 자세히 설명하며 이 문서와 함께 사용되어야 합니다. 여기에 문서화된 핵심 기술 스택 선택 ("기술 스택" 참조)은 모든 프론트엔드 구성 요소를 포함하여 전체 프로젝트에 대해 결정적입니다.
+      - id: starter-template
+        title: 스타터 템플릿 또는 기존 프로젝트
+        instruction: |
+          아키텍처 설계를 더 진행하기 전에 프로젝트가 스타터 템플릿이나 기존 코드베이스를 기반으로 하는지 확인하세요:
+
+          1. PRD와 브레인스토밍 브리프에서 다음을 언급하는지 검토하세요:
+          - 스타터 템플릿 (예: Create React App, Next.js, Vue CLI, Angular CLI 등)
+          - 기반으로 사용되는 기존 프로젝트나 코드베이스
+          - 보일러플레이트 프로젝트나 스캐폴딩 도구
+          - 복제하거나 적응할 이전 프로젝트
+
+          2. 스타터 템플릿이나 기존 프로젝트가 언급된 경우:
+          - 다음 방법 중 하나로 접근 권한을 사용자에게 요청하세요:
+            - 스타터 템플릿 문서 링크
+            - 프로젝트 파일 업로드/첨부 (소규모 프로젝트의 경우)
+            - 프로젝트 저장소 링크 공유 (GitHub, GitLab 등)
+          - 스타터/기존 프로젝트를 분석하여 다음을 이해하세요:
+            - 미리 구성된 기술 스택과 버전
+            - 프로젝트 구조와 조직 패턴
+            - 내장된 스크립트와 도구
+            - 기존 아키텍처 패턴과 관례
+            - 스타터에 의해 부과되는 제한사항이나 제약사항
+          - 이 분석을 사용하여 아키텍처 결정을 정보화하고 정렬하세요
+
+          3. 스타터 템플릿이 언급되지 않았지만 이것이 그린필드 프로젝트인 경우:
+          - 기술 스택 선호도에 따라 적절한 스타터 템플릿을 제안하세요
+          - 이점을 설명하세요 (빠른 설정, 모범 사례, 커뮤니티 지원)
+          - 사용자가 하나를 사용할지 결정하게 하세요
+
+          4. 사용자가 스타터 템플릿을 사용하지 않을 것을 확인한 경우:
+          - 처음부터 아키텍처 설계를 진행하세요
+          - 모든 도구와 구성에 대해 수동 설정이 필요할 것임을 참고하세요
+
+          아키텍처 설계를 진행하기 전에 여기서 결정을 문서화하세요. 없다면 N/A라고 하세요
+        elicit: true
+      - id: changelog
+        title: 변경 로그
+        type: table
+        columns: [날짜, 버전, 설명, 작성자]
+        instruction: 문서 버전과 변경 사항 추적
+
+  - id: high-level-architecture
+    title: 고수준 아키텍처
+    instruction: |
+      이 섹션은 아키텍처의 기초를 설정하는 여러 하위 섹션을 포함합니다. 모든 하위 섹션을 한 번에 함께 제시하세요.
+    elicit: true
+    sections:
+      - id: technical-summary
+        title: 기술 요약
+        instruction: |
+          다음에 대한 간략한 단락 (3-5문장) 개요를 제공하세요:
+          - 시스템의 전체 아키텍처 스타일
+          - 주요 구성 요소와 그들의 관계
+          - 주요 기술 선택
+          - 사용되는 핵심 아키텍처 패턴
+          - PRD 목표를 다시 참조하고 이 아키텍처가 어떻게 이를 지원하는지
+      - id: high-level-overview
+        title: 고수준 개요
+        instruction: |
+          PRD의 기술 가정 섹션을 기반으로 다음을 설명하세요:
+
+          1. 주요 아키텍처 스타일 (예: 모놀리스, 마이크로서비스, 서버리스, 이벤트 기반)
+          2. PRD의 저장소 구조 결정 (모노레포/폴리레포)
+          3. PRD의 서비스 아키텍처 결정
+          4. 개념적 수준에서의 주요 사용자 상호작용 흐름 또는 데이터 흐름
+          5. 주요 아키텍처 결정과 그 근거
+      - id: project-diagram
+        title: 고수준 프로젝트 다이어그램
+        type: mermaid
+        mermaid_type: graph
+        instruction: |
+          고수준 아키텍처를 시각화하는 Mermaid 다이어그램을 생성하세요. 다음을 고려하세요:
+          - 시스템 경계
+          - 주요 구성 요소/서비스
+          - 데이터 흐름 방향
+          - 외부 통합
+          - 사용자 진입점
+
+      - id: architectural-patterns
+        title: 아키텍처 및 설계 패턴
+        instruction: |
+          아키텍처를 안내할 주요 고수준 패턴을 나열하세요. 각 패턴에 대해:
+
+          1. 여러 개가 존재한다면 2-3개의 실행 가능한 옵션을 제시하세요
+          2. 명확한 근거와 함께 권장사항을 제공하세요
+          3. 확정하기 전에 사용자 확인을 받으세요
+          4. 이러한 패턴은 PRD의 기술 가정 및 프로젝트 목표와 일치해야 합니다
+
+          고려할 일반적인 패턴:
+          - 아키텍처 스타일 패턴 (서버리스, 이벤트 기반, 마이크로서비스, CQRS, 헥사고날)
+          - 코드 조직 패턴 (의존성 주입, 저장소, 모듈, 팩토리)
+          - 데이터 패턴 (이벤트 소싱, 사가, 서비스당 데이터베이스)
+          - 통신 패턴 (REST, GraphQL, 메시지 큐, Pub/Sub)
+        template: "- **{{pattern_name}}:** {{pattern_description}} - _근거:_ {{rationale}}"
+        examples:
+          - "**서버리스 아키텍처:** 컴퓨팅을 위해 AWS Lambda 사용 - _근거:_ 비용 최적화 및 자동 확장에 대한 PRD 요구사항과 일치"
+          - "**저장소 패턴:** 데이터 접근 로직 추상화 - _근거:_ 테스트 및 향후 데이터베이스 마이그레이션 유연성 제공"
+          - "**이벤트 기반 통신:** 서비스 분리를 위해 SNS/SQS 사용 - _근거:_ 비동기 처리 및 시스템 복원력 지원"
+
+  - id: tech-stack
+    title: 기술 스택
+    instruction: |
+      이것은 확정적인 기술 선택 섹션입니다. 사용자와 함께 구체적인 선택을 하세요:
+
+      1. PRD 기술 가정과 .bmad-core/data/technical-preferences.yaml 또는 첨부된 technical-preferences의 선호도를 검토하세요
+      2. 각 범주에 대해 장단점과 함께 2-3개의 실행 가능한 옵션을 제시하세요
+      3. 프로젝트 요구사항을 기반으로 명확한 권장사항을 제시하세요
+      4. 각 선택에 대해 명시적 사용자 승인을 받으세요
+      5. 정확한 버전을 문서화하세요 ("latest" 피하기 - 특정 버전 고정)
+      6. 이 테이블은 단일 정보 소스입니다 - 다른 모든 문서는 이러한 선택을 참조해야 합니다
+
+      확정할 주요 결정 사항 - 테이블을 표시하기 전에 다음에 대해 알고 있거나 사용자에게 문의하세요 - 확실하지 않은 것이 있다면 근거와 함께 제안할 수 있다고 사용자에게 알려주세요:
+
+      - 스타터 템플릿 (있는 경우)
+      - 정확한 버전을 가진 언어와 런타임
+      - 프레임워크와 라이브러리/패키지
+      - 클라우드 제공자 및 주요 서비스 선택
+      - 데이터베이스 및 스토리지 솔루션 - 불분명한 경우 프로젝트에 따라 sql 또는 nosql 또는 기타 유형을 제안하고 클라우드 제공자에 따라 제안을 제공
+      - 개발 도구
+
+      테이블 렌더링 시, 사용자가 이 섹션 선택의 중요성을 인식하도록 하고, 격차나 불일치를 찾아보고, 목록에 있는 이유가 불분명한 것이 있다면 명확화를 요청하고, 즉시 피드백을 요청하세요 - 이 명령문과 옵션은 렌더링되어야 하고 사용자 입력을 허용하기 전에 즉시 프롬프트해야 합니다.
+    elicit: true
+    sections:
+      - id: cloud-infrastructure
+        title: 클라우드 인프라
+        template: |
+          - **제공자:** {{cloud_provider}}
+          - **주요 서비스:** {{core_services_list}}
+          - **배포 지역:** {{regions}}
+      - id: technology-stack-table
+        title: 기술 스택 테이블
+        type: table
+        columns: [범주, 기술, 버전, 목적, 근거]
+        instruction: 모든 관련 기술로 기술 스택 테이블을 채우세요
+        examples:
+          - "| **언어** | TypeScript | 5.3.3 | 주요 개발 언어 | 강한 타이핑, 우수한 도구, 팀 전문성 |"
+          - "| **런타임** | Node.js | 20.11.0 | JavaScript 런타임 | LTS 버전, 안정적 성능, 광범위한 생태계 |"
+          - "| **프레임워크** | NestJS | 10.3.2 | 백엔드 프레임워크 | 엔터프라이즈 준비, 좋은 DI, 팀 패턴과 일치 |"
+
+  - id: data-models
+    title: 데이터 모델
+    instruction: |
+      핵심 데이터 모델/엔티티를 정의하세요:
+
+      1. PRD 요구사항을 검토하고 주요 비즈니스 엔티티를 식별하세요
+      2. 각 모델에 대해 목적과 관계를 설명하세요
+      3. 주요 속성과 데이터 타입을 포함하세요
+      4. 모델 간 관계를 보여주세요
+      5. 사용자와 설계 결정을 논의하세요
+
+      데이터베이스 스키마로 넘어가기 전에 명확한 개념적 모델을 생성하세요.
+    elicit: true
+    repeatable: true
+    sections:
+      - id: model
+        title: "{{model_name}}"
+        template: |
+          **목적:** {{model_purpose}}
+
+          **주요 속성:**
+          - {{attribute_1}}: {{type_1}} - {{description_1}}
+          - {{attribute_2}}: {{type_2}} - {{description_2}}
+
+          **관계:**
+          - {{relationship_1}}
+          - {{relationship_2}}
+
+  - id: components
+    title: 구성 요소
+    instruction: |
+      위의 아키텍처 패턴, 기술 스택, 데이터 모델을 기반으로:
+
+      1. 주요 논리적 구성 요소/서비스와 그들의 책임을 식별하세요
+      2. PRD의 저장소 구조 (모노레포/폴리레포)를 고려하세요
+      3. 구성 요소 간 명확한 경계와 인터페이스를 정의하세요
+      4. 각 구성 요소에 대해 다음을 명시하세요:
+      - 주요 책임
+      - 노출되는 주요 인터페이스/API
+      - 다른 구성 요소에 대한 의존성
+      - 기술 스택 선택을 기반으로 한 기술 세부사항
+
+      5. 도움이 되는 곳에서 구성 요소 다이어그램을 생성하세요
+    elicit: true
+    sections:
+      - id: component-list
+        repeatable: true
+        title: "{{component_name}}"
+        template: |
+          **책임:** {{component_description}}
+
+          **주요 인터페이스:**
+          - {{interface_1}}
+          - {{interface_2}}
+
+          **의존성:** {{dependencies}}
+
+          **기술 스택:** {{component_tech_details}}
+      - id: component-diagrams
+        title: 구성 요소 다이어그램
+        type: mermaid
+        instruction: |
+          구성 요소 관계를 시각화하는 Mermaid 다이어그램을 생성하세요. 옵션:
+          - 고수준 뷰를 위한 C4 컨테이너 다이어그램
+          - 상세한 내부 구조를 위한 구성 요소 다이어그램
+          - 복잡한 상호작용을 위한 시퀀스 다이어그램
+          명확성을 위해 가장 적절한 것을 선택하세요
+
+  - id: external-apis
+    title: 외부 API
+    condition: 프로젝트에 외부 API 통합이 필요한 경우
+    instruction: |
+      각 외부 서비스 통합에 대해:
+
+      1. PRD 요구사항과 구성 요소 설계를 기반으로 필요한 API를 식별하세요
+      2. 문서 URL을 모르는 경우 사용자에게 세부사항을 문의하세요
+      3. 인증 방법과 보안 고려사항을 문서화하세요
+      4. 사용될 특정 엔드포인트를 나열하세요
+      5. 속도 제한이나 사용 제약사항을 기록하세요
+
+      외부 API가 필요하지 않다면 이를 명시적으로 기술하고 다음 섹션으로 건너뛰세요.
+    elicit: true
+    repeatable: true
+    sections:
+      - id: api
+        title: "{{api_name}} API"
+        template: |
+          - **목적:** {{api_purpose}}
+          - **문서:** {{api_docs_url}}
+          - **기본 URL:** {{api_base_url}}
+          - **인증:** {{auth_method}}
+          - **속도 제한:** {{rate_limits}}
+
+          **사용되는 주요 엔드포인트:**
+          - `{{method}} {{endpoint_path}}` - {{endpoint_purpose}}
+
+          **통합 참고사항:** {{integration_considerations}}
+
+  - id: core-workflows
+    title: 핵심 워크플로우
+    type: mermaid
+    mermaid_type: sequence
+    instruction: |
+      시퀀스 다이어그램을 사용하여 주요 시스템 워크플로우를 설명하세요:
+
+      1. PRD에서 중요한 사용자 여정을 식별하세요
+      2. 외부 API를 포함한 구성 요소 상호작용을 보여주세요
+      3. 오류 처리 경로를 포함하세요
+      4. 비동기 작업을 문서화하세요
+      5. 필요에 따라 고수준 및 상세한 다이어그램을 모두 생성하세요
+
+      아키텍처 결정이나 복잡한 상호작용을 명확히 하는 워크플로우에 집중하세요.
+    elicit: true
+
+  - id: rest-api-spec
+    title: REST API 사양
+    condition: 프로젝트에 REST API가 포함된 경우
+    type: code
+    language: yaml
+    instruction: |
+      프로젝트에 REST API가 포함된 경우:
+
+      1. OpenAPI 3.0 사양을 생성하세요
+      2. 에픽/스토리의 모든 엔드포인트를 포함하세요
+      3. 데이터 모델을 기반으로 요청/응답 스키마를 정의하세요
+      4. 인증 요구사항을 문서화하세요
+      5. 예제 요청/응답을 포함하세요
+
+      더 나은 가독성을 위해 YAML 형식을 사용하세요. REST API가 없다면 이 섹션을 건너뛰세요.
+    elicit: true
+    template: |
+      openapi: 3.0.0
+      info:
+        title: {{api_title}}
+        version: {{api_version}}
+        description: {{api_description}}
+      servers:
+        - url: {{server_url}}
+          description: {{server_description}}
+
+  - id: database-schema
+    title: 데이터베이스 스키마
+    instruction: |
+      개념적 데이터 모델을 구체적인 데이터베이스 스키마로 변환하세요:
+
+      1. 기술 스택에서 선택된 데이터베이스 유형을 사용하세요
+      2. 적절한 표기법을 사용하여 스키마 정의를 생성하세요
+      3. 인덱스, 제약조건, 관계를 포함하세요
+      4. 성능과 확장성을 고려하세요
+      5. NoSQL의 경우 문서 구조를 보여주세요
+
+      데이터베이스 유형에 적합한 형식으로 스키마를 제시하세요 (SQL DDL, JSON 스키마 등)
+    elicit: true
+
+  - id: source-tree
+    title: 소스 트리
+    type: code
+    language: plaintext
+    instruction: |
+      다음을 반영하는 프로젝트 폴더 구조를 생성하세요:
+
+      1. 선택된 저장소 구조 (모노레포/폴리레포)
+      2. 서비스 아키텍처 (모놀리스/마이크로서비스/서버리스)
+      3. 선택된 기술 스택과 언어
+      4. 위의 구성 요소 조직
+      5. 선택된 프레임워크의 모범 사례
+      6. 관심사의 명확한 분리
+
+      프로젝트 요구사항에 따라 구조를 조정하세요. 모노레포의 경우 서비스 분리를 보여주세요. 서버리스의 경우 함수 조직을 보여주세요. 언어별 관례를 포함하세요.
+    elicit: true
+    examples:
+      - |
+        project-root/
+        ├── packages/
+        │   ├── api/                    # 백엔드 API 서비스
+        │   ├── web/                    # 프론트엔드 애플리케이션
+        │   ├── shared/                 # 공유 유틸리티/타입
+        │   └── infrastructure/         # IaC 정의
+        ├── scripts/                    # 모노레포 관리 스크립트
+        └── package.json                # 워크스페이스를 가진 루트 package.json
+
+  - id: infrastructure-deployment
+    title: 인프라 및 배포
+    instruction: |
+      배포 아키텍처와 관행을 정의하세요:
+
+      1. 기술 스택에서 선택된 IaC 도구를 사용하세요
+      2. 아키텍처에 적합한 배포 전략을 선택하세요
+      3. 환경과 승격 플로우를 정의하세요
+      4. 롤백 절차를 수립하세요
+      5. 보안, 모니터링, 비용 최적화를 고려하세요
+
+      배포 선호도와 CI/CD 도구 선택에 대한 사용자 입력을 받으세요.
+    elicit: true
+    sections:
+      - id: infrastructure-as-code
+        title: 코드형 인프라
+        template: |
+          - **도구:** {{iac_tool}} {{version}}
+          - **위치:** `{{iac_directory}}`
+          - **접근 방식:** {{iac_approach}}
+      - id: deployment-strategy
+        title: 배포 전략
+        template: |
+          - **전략:** {{deployment_strategy}}
+          - **CI/CD 플랫폼:** {{cicd_platform}}
+          - **파이프라인 구성:** `{{pipeline_config_location}}`
+      - id: environments
+        title: 환경
+        repeatable: true
+        template: "- **{{env_name}}:** {{env_purpose}} - {{env_details}}"
+      - id: promotion-flow
+        title: 환경 승격 플로우
+        type: code
+        language: text
+        template: "{{promotion_flow_diagram}}"
+      - id: rollback-strategy
+        title: 롤백 전략
+        template: |
+          - **주요 방법:** {{rollback_method}}
+          - **트리거 조건:** {{rollback_triggers}}
+          - **복구 시간 목표:** {{rto}}
+
+  - id: error-handling-strategy
+    title: 오류 처리 전략
+    instruction: |
+      포괄적인 오류 처리 접근 방식을 정의하세요:
+
+      1. 기술 스택의 언어/프레임워크에 적합한 패턴을 선택하세요
+      2. 로깅 표준과 도구를 정의하세요
+      3. 오류 범주와 처리 규칙을 수립하세요
+      4. 관찰 가능성과 디버깅 요구사항을 고려하세요
+      5. 보안을 보장하세요 (로그에 민감한 데이터 없음)
+
+      이 섹션은 AI와 인간 개발자 모두에게 일관된 오류 처리를 안내합니다.
+    elicit: true
+    sections:
+      - id: general-approach
+        title: 일반적 접근 방식
+        template: |
+          - **오류 모델:** {{error_model}}
+          - **예외 계층구조:** {{exception_structure}}
+          - **오류 전파:** {{propagation_rules}}
+      - id: logging-standards
+        title: 로깅 표준
+        template: |
+          - **라이브러리:** {{logging_library}} {{version}}
+          - **형식:** {{log_format}}
+          - **레벨:** {{log_levels_definition}}
+          - **필수 컨텍스트:**
+            - 상관관계 ID: {{correlation_id_format}}
+            - 서비스 컨텍스트: {{service_context}}
+            - 사용자 컨텍스트: {{user_context_rules}}
+      - id: error-patterns
+        title: 오류 처리 패턴
+        sections:
+          - id: external-api-errors
+            title: 외부 API 오류
+            template: |
+              - **재시도 정책:** {{retry_strategy}}
+              - **회로 차단기:** {{circuit_breaker_config}}
+              - **타임아웃 구성:** {{timeout_settings}}
+              - **오류 변환:** {{error_mapping_rules}}
+          - id: business-logic-errors
+            title: 비즈니스 로직 오류
+            template: |
+              - **사용자 정의 예외:** {{business_exception_types}}
+              - **사용자 대면 오류:** {{user_error_format}}
+              - **오류 코드:** {{error_code_system}}
+          - id: data-consistency
+            title: 데이터 일관성
+            template: |
+              - **트랜잭션 전략:** {{transaction_approach}}
+              - **보상 로직:** {{compensation_patterns}}
+              - **멱등성:** {{idempotency_approach}}
+
+  - id: coding-standards
+    title: 코딩 표준
+    instruction: |
+      이러한 표준은 AI 에이전트에게 필수입니다. 사용자와 함께 나쁜 코드를 방지하는 데 필요한 중요한 규칙만 정의하세요. 다음을 설명하세요:
+
+      1. 이 섹션은 AI 개발자 행동을 직접 제어합니다
+      2. 최소한으로 유지하세요 - AI가 일반적인 모범 사례를 안다고 가정합니다
+      3. 프로젝트별 관례와 주의점에 집중하세요
+      4. 지나치게 상세한 표준은 컨텍스트를 부풀리고 개발을 늦춥니다
+      5. 표준은 개발 에이전트 사용을 위해 별도 파일로 추출됩니다
+
+      각 표준에 대해 필요하다는 명시적 사용자 확인을 받으세요.
+    elicit: true
+    sections:
+      - id: core-standards
+        title: 핵심 표준
+        template: |
+          - **언어 및 런타임:** {{languages_and_versions}}
+          - **스타일 및 린팅:** {{linter_config}}
+          - **테스트 조직:** {{test_file_convention}}
+      - id: naming-conventions
+        title: 명명 규칙
+        type: table
+        columns: [요소, 규칙, 예시]
+        instruction: 언어 기본값에서 벗어나는 경우에만 포함
+      - id: critical-rules
+        title: 중요한 규칙
+        instruction: |
+          AI가 위반할 수 있는 규칙이나 프로젝트별 요구사항만 나열하세요. 예시:
+          - "프로덕션 코드에서 console.log 절대 사용 금지 - logger 사용"
+          - "모든 API 응답은 ApiResponse 래퍼 타입을 사용해야 함"
+          - "데이터베이스 쿼리는 저장소 패턴을 사용해야 하며, 직접 ORM 사용 금지"
+
+          "SOLID 원칙 사용"이나 "깨끗한 코드 작성"과 같은 당연한 규칙은 피하세요
+        repeatable: true
+        template: "- **{{rule_name}}:** {{rule_description}}"
+      - id: language-specifics
+        title: 언어별 가이드라인
+        condition: 중요한 언어별 규칙이 필요한 경우
+        instruction: AI 실수를 방지하는 데 중요한 경우에만 추가하세요. 대부분의 팀은 이 섹션이 필요하지 않습니다.
+        sections:
+          - id: language-rules
+            title: "{{language_name}} 세부사항"
+            repeatable: true
+            template: "- **{{rule_topic}}:** {{rule_detail}}"
+
+  - id: test-strategy
+    title: 테스트 전략 및 표준
+    instruction: |
+      사용자와 함께 포괄적인 테스트 전략을 정의하세요:
+
+      1. 기술 스택의 테스트 프레임워크를 사용하세요
+      2. TDD vs 테스트 후 접근 방식을 결정하세요
+      3. 테스트 조직과 명명을 정의하세요
+      4. 커버리지 목표를 수립하세요
+      5. 통합 테스트 인프라를 결정하세요
+      6. 테스트 데이터와 외부 의존성을 계획하세요
+
+      참고: 기본 정보는 개발 에이전트를 위해 코딩 표준에 포함됩니다. 이 상세한 섹션은 QA 에이전트와 팀 참조용입니다.
+    elicit: true
+    sections:
+      - id: testing-philosophy
+        title: 테스트 철학
+        template: |
+          - **접근 방식:** {{test_approach}}
+          - **커버리지 목표:** {{coverage_targets}}
+          - **테스트 피라미드:** {{test_distribution}}
+      - id: test-types
+        title: 테스트 유형 및 조직
+        sections:
+          - id: unit-tests
+            title: 단위 테스트
+            template: |
+              - **프레임워크:** {{unit_test_framework}} {{version}}
+              - **파일 규칙:** {{unit_test_naming}}
+              - **위치:** {{unit_test_location}}
+              - **모킹 라이브러리:** {{mocking_library}}
+              - **커버리지 요구사항:** {{unit_coverage}}
+
+              **AI 에이전트 요구사항:**
+              - 모든 공개 메서드에 대한 테스트 생성
+              - 엣지 케이스와 오류 조건 커버
+              - AAA 패턴 준수 (Arrange, Act, Assert)
+              - 모든 외부 의존성 모킹
+          - id: integration-tests
+            title: 통합 테스트
+            template: |
+              - **범위:** {{integration_scope}}
+              - **위치:** {{integration_test_location}}
+              - **테스트 인프라:**
+                - **{{dependency_name}}:** {{test_approach}} ({{test_tool}})
+            examples:
+              - "**데이터베이스:** 단위 테스트용 인메모리 H2, 통합용 Testcontainers PostgreSQL"
+              - "**메시지 큐:** 테스트용 임베디드 Kafka"
+              - "**외부 API:** 스텁을 위한 WireMock"
+          - id: e2e-tests
+            title: 종단간 테스트
+            template: |
+              - **프레임워크:** {{e2e_framework}} {{version}}
+              - **범위:** {{e2e_scope}}
+              - **환경:** {{e2e_environment}}
+              - **테스트 데이터:** {{e2e_data_strategy}}
+      - id: test-data-management
+        title: 테스트 데이터 관리
+        template: |
+          - **전략:** {{test_data_approach}}
+          - **픽스처:** {{fixture_location}}
+          - **팩토리:** {{factory_pattern}}
+          - **정리:** {{cleanup_strategy}}
+      - id: continuous-testing
+        title: 지속적 테스트
+        template: |
+          - **CI 통합:** {{ci_test_stages}}
+          - **성능 테스트:** {{perf_test_approach}}
+          - **보안 테스트:** {{security_test_approach}}
+
+  - id: security
+    title: 보안
+    instruction: |
+      AI와 인간 개발자를 위한 필수 보안 요구사항을 정의하세요:
+
+      1. 구현별 규칙에 집중하세요
+      2. 기술 스택의 보안 도구를 참조하세요
+      3. 일반적인 시나리오를 위한 명확한 패턴을 정의하세요
+      4. 이러한 규칙은 코드 생성에 직접 영향을 미칩니다
+      5. 사용자와 함께 중복 없이 완전성을 보장하세요
+    elicit: true
+    sections:
+      - id: input-validation
+        title: 입력 유효성 검사
+        template: |
+          - **유효성 검사 라이브러리:** {{validation_library}}
+          - **유효성 검사 위치:** {{where_to_validate}}
+          - **필수 규칙:**
+            - 모든 외부 입력은 반드시 유효성 검사를 거쳐야 함
+            - 처리 전 API 경계에서 유효성 검사
+            - 블랙리스트보다 화이트리스트 접근 방식 선호
+      - id: auth-authorization
+        title: 인증 및 권한 부여
+        template: |
+          - **인증 방법:** {{auth_implementation}}
+          - **세션 관리:** {{session_approach}}
+          - **필수 패턴:**
+            - {{auth_pattern_1}}
+            - {{auth_pattern_2}}
+      - id: secrets-management
+        title: 비밀 관리
+        template: |
+          - **개발:** {{dev_secrets_approach}}
+          - **프로덕션:** {{prod_secrets_service}}
+          - **코드 요구사항:**
+            - 비밀을 절대 하드코딩하지 말 것
+            - 구성 서비스를 통해서만 접근
+            - 로그나 오류 메시지에 비밀 노출 금지
+      - id: api-security
+        title: API 보안
+        template: |
+          - **속도 제한:** {{rate_limit_implementation}}
+          - **CORS 정책:** {{cors_configuration}}
+          - **보안 헤더:** {{required_headers}}
+          - **HTTPS 강제:** {{https_approach}}
+      - id: data-protection
+        title: 데이터 보호
+        template: |
+          - **저장 시 암호화:** {{encryption_at_rest}}
+          - **전송 중 암호화:** {{encryption_in_transit}}
+          - **PII 처리:** {{pii_rules}}
+          - **로깅 제한:** {{what_not_to_log}}
+      - id: dependency-security
+        title: 의존성 보안
+        template: |
+          - **스캔 도구:** {{dependency_scanner}}
+          - **업데이트 정책:** {{update_frequency}}
+          - **승인 프로세스:** {{new_dep_process}}
+      - id: security-testing
+        title: 보안 테스트
+        template: |
+          - **SAST 도구:** {{static_analysis}}
+          - **DAST 도구:** {{dynamic_analysis}}
+          - **침투 테스트:** {{pentest_schedule}}
+
+  - id: checklist-results
+    title: 체크리스트 결과 보고서
+    instruction: 체크리스트를 실행하기 전에 전체 아키텍처 문서를 출력할 것을 제안하세요. 사용자가 확인하면 architect-checklist를 실행하고 여기에 결과를 채우세요.
+
+  - id: next-steps
+    title: 다음 단계
+    instruction: |
+      아키텍처 완료 후:
+
+      1. 프로젝트에 UI 구성 요소가 있는 경우:
+      - "프론트엔드 아키텍처 모드" 사용
+      - 이 문서를 입력으로 제공
+
+      2. 모든 프로젝트의 경우:
+      - 제품 소유자와 검토
+      - 개발 에이전트와 함께 스토리 구현 시작
+      - DevOps 에이전트와 함께 인프라 설정
+
+      3. 필요한 경우 다음 에이전트를 위한 구체적인 프롬프트 포함
+    sections:
+      - id: architect-prompt
+        title: 아키텍트 프롬프트
+        condition: 프로젝트에 UI 구성 요소가 있는 경우
+        instruction: |
+          프론트엔드 아키텍처 생성을 위해 아키텍트에게 전달할 간단한 프롬프트를 만드세요. 포함 사항:
+          - 이 아키텍처 문서에 대한 참조
+          - PRD의 주요 UI 요구사항
+          - 여기서 내린 프론트엔드별 결정
+          - 상세한 프론트엔드 아키텍처 요청

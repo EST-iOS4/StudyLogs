@@ -1,0 +1,188 @@
+# <!-- Powered by BMAD™ Core -->
+workflow:
+  id: brownfield-service
+  name: 브라운필드 서비스/API 개선
+  description: >-
+    기존 백엔드 서비스와 API에 새로운 기능, 현대화 또는 성능 개선을 적용하는 
+    에이전트 워크플로우입니다. 기존 시스템 분석과 안전한 통합을 처리합니다.
+  type: brownfield
+  project_types:
+    - service-modernization # 서비스 현대화
+    - api-enhancement # API 개선
+    - microservice-extraction # 마이크로서비스 추출
+    - performance-optimization # 성능 최적화
+    - integration-enhancement # 통합 개선
+
+  sequence:
+    - step: service_analysis
+      agent: architect
+      action: 기존 프로젝트 분석 및 document-project 태스크 사용
+      creates: document-project 템플릿에 따른 여러 문서
+      notes: "기존 서비스 문서, 코드베이스, 성능 지표를 검토하고 통합 종속성을 식별합니다."
+
+    - agent: pm
+      creates: prd.md
+      uses: brownfield-prd-tmpl
+      requires: existing_service_analysis
+      notes: "기존 시스템 분석을 바탕으로 서비스 개선에 중점을 둔 포괄적인 PRD를 생성합니다. 출력 저장: 최종 prd.md를 프로젝트의 docs/ 폴더에 복사."
+
+    - agent: architect
+      creates: architecture.md
+      uses: brownfield-architecture-tmpl
+      requires: prd.md
+      notes: "서비스 통합 전략과 API 진화 계획을 포함한 아키텍처를 생성합니다. 출력 저장: 최종 architecture.md를 프로젝트의 docs/ 폴더에 복사."
+
+    - agent: po
+      validates: all_artifacts
+      uses: po-master-checklist
+      notes: "서비스 통합 안전성과 API 호환성을 위해 모든 문서를 검증합니다. 모든 문서의 업데이트가 필요할 수 있습니다."
+
+    - agent: various
+      updates: any_flagged_documents
+      condition: po_checklist_issues
+      notes: "PO가 문제를 발견한 경우, 관련 에이전트로 돌아가서 수정하고 업데이트된 문서를 docs/ 폴더로 다시 내보내기."
+
+    - agent: po
+      action: shard_documents
+      creates: sharded_docs
+      requires: all_artifacts_in_project
+      notes: |
+        IDE 개발을 위한 문서 샤딩:
+        - 옵션 A: PO 에이전트를 사용한 샤딩: @po 다음 docs/prd.md 샤딩 요청
+        - 옵션 B: 수동: shard-doc 태스크 + docs/prd.md를 채팅으로 드래그
+        - 샤딩된 콘텐츠로 docs/prd/ 및 docs/architecture/ 폴더 생성
+
+    - agent: sm
+      action: create_story
+      creates: story.md
+      requires: sharded_docs
+      repeats: for_each_epic
+      notes: |
+        스토리 생성 사이클:
+        - SM 에이전트 (새 채팅): @sm → *create
+        - 샤딩된 문서에서 다음 스토리 생성
+        - 스토리는 "Draft" 상태로 시작
+
+    - agent: analyst/pm
+      action: review_draft_story
+      updates: story.md
+      requires: story.md
+      optional: true
+      condition: user_wants_story_review
+      notes: |
+        선택사항: 초안 스토리 검토 및 승인
+        - 참고: story-review 태스크 곧 출시 예정
+        - 스토리 완성도 및 정렬 검토
+        - 스토리 상태 업데이트: Draft → Approved
+
+    - agent: dev
+      action: implement_story
+      creates: implementation_files
+      requires: story.md
+      notes: |
+        개발 에이전트 (새 채팅): @dev
+        - 승인된 스토리 구현
+        - 모든 변경사항으로 파일 목록 업데이트
+        - 완료 시 스토리를 "Review"로 표시
+
+    - agent: qa
+      action: review_implementation
+      updates: implementation_files
+      requires: implementation_files
+      optional: true
+      notes: |
+        선택사항: QA 에이전트 (새 채팅): @qa → review-story
+        - 리팩토링 능력을 가진 시니어 개발자 검토
+        - 작은 문제는 직접 수정
+        - 남은 항목에 대한 체크리스트 남김
+        - 스토리 상태 업데이트 (Review → Done 또는 Review 유지)
+
+    - agent: dev
+      action: address_qa_feedback
+      updates: implementation_files
+      condition: qa_left_unchecked_items
+      notes: |
+        QA가 미체크 항목을 남긴 경우:
+        - 개발 에이전트 (새 채팅): 남은 항목 처리
+        - 최종 승인을 위해 QA로 돌아가기
+
+    - repeat_development_cycle:
+      action: continue_for_all_stories
+      notes: |
+        모든 에픽 스토리에 대해 스토리 사이클 반복 (SM → Dev → QA)
+        PRD의 모든 스토리가 완료될 때까지 계속
+
+    - agent: po
+      action: epic_retrospective
+      creates: epic-retrospective.md
+      condition: epic_complete
+      optional: true
+      notes: |
+        선택사항: 에픽 완료 후
+        - 참고: epic-retrospective 태스크 곧 출시 예정
+        - 에픽이 올바르게 완료되었는지 검증
+        - 학습 사항 및 개선점 문서화
+
+    - workflow_end:
+      action: project_complete
+      notes: |
+        모든 스토리가 구현되고 검토되었습니다!
+        프로젝트 개발 단계 완료.
+
+        참조: .bmad-core/data/bmad-kb.md#IDE Development Workflow
+
+  flow_diagram: |
+    ```mermaid
+    graph TD
+        A[시작: 서비스 개선] --> B[analyst: 기존 서비스 분석]
+        B --> C[pm: prd.md]
+        C --> D[architect: architecture.md]
+        D --> E[po: po-master-checklist로 검증]
+        E --> F{PO가 문제를 발견했나?}
+        F -->|예| G[수정을 위해 관련 에이전트로 돌아가기]
+        F -->|아니오| H[po: 문서 샤딩]
+        G --> E
+        
+        H --> I[sm: 스토리 생성]
+        I --> J{초안 스토리 검토?}
+        J -->|예| K[analyst/pm: 스토리 검토 및 승인]
+        J -->|아니오| L[dev: 스토리 구현]
+        K --> L
+        L --> M{QA 검토?}
+        M -->|예| N[qa: 구현 검토]
+        M -->|아니오| O{더 많은 스토리?}
+        N --> P{QA가 문제를 발견했나?}
+        P -->|예| Q[dev: QA 피드백 처리]
+        P -->|아니오| O
+        Q --> N
+        O -->|예| I
+        O -->|아니오| R{에픽 회고?}
+        R -->|예| S[po: 에픽 회고]
+        R -->|아니오| T[프로젝트 완료]
+        S --> T
+
+        style T fill:#90EE90
+        style H fill:#ADD8E6
+        style I fill:#ADD8E6
+        style L fill:#ADD8E6
+        style C fill:#FFE4B5
+        style D fill:#FFE4B5
+        style K fill:#F0E68C
+        style N fill:#F0E68C
+        style S fill:#F0E68C
+    ```
+
+  decision_guidance:
+    when_to_use:
+      - 서비스 개선에 조정된 스토리들이 필요한 경우
+      - API 버전 관리 또는 호환성을 깨뜨리는 변경이 필요한 경우
+      - 데이터베이스 스키마 변경이 필요한 경우
+      - 성능 또는 확장성 개선이 필요한 경우
+      - 여러 통합 지점이 영향을 받는 경우
+
+  handoff_prompts:
+    analyst_to_pm: "서비스 분석이 완료되었습니다. 서비스 통합 전략을 포함한 포괄적인 PRD를 생성하세요."
+    pm_to_architect: "PRD가 준비되었습니다. docs/prd.md로 저장한 다음 서비스 아키텍처를 생성하세요."
+    architect_to_po: "아키텍처가 완료되었습니다. docs/architecture.md로 저장하세요. 서비스 통합 안전성을 위해 모든 아티팩트를 검증해 주세요."
+    po_issues: "PO가 [document]에서 문제를 발견했습니다. [agent]로 돌아가서 수정하고 업데이트된 문서를 다시 저장해 주세요."
+    complete: "모든 계획 아티팩트가 검증되어 docs/ 폴더에 저장되었습니다. 개발을 시작하기 위해 IDE 환경으로 이동하세요."

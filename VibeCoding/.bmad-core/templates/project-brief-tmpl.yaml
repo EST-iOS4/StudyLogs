@@ -1,0 +1,222 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: project-brief-template-v2
+  name: 프로젝트 브리프
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/brief.md
+    title: "프로젝트 브리프: {{project_name}}"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+  custom_elicitation:
+    title: "프로젝트 브리프 유도 액션"
+    options:
+      - "더 구체적인 세부사항으로 섹션 확장"
+      - "유사한 성공적인 제품과 대조하여 검증"
+      - "극단적인 상황으로 가정에 대한 스트레스 테스트"
+      - "대안적 솔루션 접근 방식 탐색"
+      - "자원/제약 상충관계 분석"
+      - "위험 완화 전략 생성"
+      - "MVP 미니멀리스트 관점에서 범위에 도전"
+      - "창의적인 기능 가능성 브레인스토밍"
+      - "우리에게 [자원/능력/시간]이 있었다면..."
+      - "다음 섹션으로 진행"
+
+sections:
+  - id: introduction
+    instruction: |
+      이 템플릿은 제품 개발의 기초 입력 역할을 하는 포괄적인 프로젝트 브리프 생성을 안내합니다.
+
+      사용자가 선호하는 모드를 문의하는 것부터 시작하세요:
+
+      1. **대화형 모드** - 각 섹션을 협력적으로 작업
+      2. **YOLO 모드** - 검토 및 개선을 위한 완전한 초안 생성
+
+      시작하기 전에 사용 가능한 입력 (브레인스토밍 결과, 시장 조사, 경쟁 분석, 초기 아이디어)이 무엇인지 이해하고 프로젝트 맥락을 수집하세요.
+
+  - id: executive-summary
+    title: 요약
+    instruction: |
+      프로젝트의 본질을 포착하는 간결한 개요를 생성하세요. 포함 사항:
+      - 1-2문장으로 제품 개념
+      - 해결되는 주요 문제
+      - 목표 시장 식별
+      - 주요 가치 제안
+    template: "{{executive_summary_content}}"
+
+  - id: problem-statement
+    title: 문제 설명
+    instruction: |
+      명확성과 증거로 문제를 표현하세요. 다루어야 할 사항:
+      - 현재 상태와 문제점
+      - 문제의 영향 (가능하면 정량화)
+      - 기존 솔루션이 부족한 이유
+      - 지금 해결의 긴급성과 중요성
+    template: "{{detailed_problem_description}}"
+
+  - id: proposed-solution
+    title: 제안된 솔루션
+    instruction: |
+      높은 수준에서 솔루션 접근 방식을 설명하세요. 포함 사항:
+      - 핵심 개념과 접근 방식
+      - 기존 솔루션과의 주요 차별화 요소
+      - 다른 솔루션이 실패한 곳에서 이 솔루션이 성공할 이유
+      - 제품에 대한 높은 수준의 비전
+    template: "{{solution_description}}"
+
+  - id: target-users
+    title: 목표 사용자
+    instruction: |
+      구체성을 가지고 의도된 사용자를 정의하고 특성화하세요. 각 사용자 세그먼트에 대해 포함할 사항:
+      - 인구통계학적/기업통계학적 프로필
+      - 현재 행동과 워크플로우
+      - 구체적인 요구사항과 문제점
+      - 달성하려는 목표
+    sections:
+      - id: primary-segment
+        title: "주요 사용자 세그먼트: {{segment_name}}"
+        template: "{{primary_user_description}}"
+      - id: secondary-segment
+        title: "보조 사용자 세그먼트: {{segment_name}}"
+        condition: 보조 사용자 세그먼트가 있는 경우
+        template: "{{secondary_user_description}}"
+
+  - id: goals-metrics
+    title: 목표 및 성공 지표
+    instruction: 명확한 목표와 성공 측정 방법을 수립하세요. 목표를 SMART (구체적, 측정 가능, 달성 가능, 관련성, 시간 제한)로 만드세요
+    sections:
+      - id: business-objectives
+        title: 비즈니스 목표
+        type: bullet-list
+        template: "- {{objective_with_metric}}"
+      - id: user-success-metrics
+        title: 사용자 성공 지표
+        type: bullet-list
+        template: "- {{user_metric}}"
+      - id: kpis
+        title: 핵심 성과 지표 (KPI)
+        type: bullet-list
+        template: "- {{kpi}}: {{definition_and_target}}"
+
+  - id: mvp-scope
+    title: MVP 범위
+    instruction: 최소 실행 가능 제품을 명확하게 정의하세요. 포함되는 것과 제외되는 것에 대해 구체적이어야 합니다. 사용자가 필수 요소와 있으면 좋은 요소를 구별할 수 있도록 도와주세요.
+    sections:
+      - id: core-features
+        title: 핵심 기능 (필수)
+        type: bullet-list
+        template: "- **{{feature}}:** {{description_and_rationale}}"
+      - id: out-of-scope
+        title: MVP 범위 외
+        type: bullet-list
+        template: "- {{feature_or_capability}}"
+      - id: mvp-success-criteria
+        title: MVP 성공 기준
+        template: "{{mvp_success_definition}}"
+
+  - id: post-mvp-vision
+    title: MVP 이후 비전
+    instruction: 구체적인 사항에 과도하게 커밋하지 않고 장기적인 제품 방향을 개략적으로 설명하세요
+    sections:
+      - id: phase-2-features
+        title: 2단계 기능
+        template: "{{next_priority_features}}"
+      - id: long-term-vision
+        title: 장기 비전
+        template: "{{one_two_year_vision}}"
+      - id: expansion-opportunities
+        title: 확장 기회
+        template: "{{potential_expansions}}"
+
+  - id: technical-considerations
+    title: 기술적 고려사항
+    instruction: 알려진 기술적 제약과 선호사항을 문서화하세요. 이것들은 최종 결정이 아닌 초기 생각임을 주의하세요.
+    sections:
+      - id: platform-requirements
+        title: 플랫폼 요구사항
+        template: |
+          - **목표 플랫폼:** {{platforms}}
+          - **브라우저/OS 지원:** {{specific_requirements}}
+          - **성능 요구사항:** {{performance_specs}}
+      - id: technology-preferences
+        title: 기술 선호사항
+        template: |
+          - **프론트엔드:** {{frontend_preferences}}
+          - **백엔드:** {{backend_preferences}}
+          - **데이터베이스:** {{database_preferences}}
+          - **호스팅/인프라:** {{infrastructure_preferences}}
+      - id: architecture-considerations
+        title: 아키텍처 고려사항
+        template: |
+          - **저장소 구조:** {{repo_thoughts}}
+          - **서비스 아키텍처:** {{service_thoughts}}
+          - **통합 요구사항:** {{integration_needs}}
+          - **보안/컴플라이언스:** {{security_requirements}}
+
+  - id: constraints-assumptions
+    title: 제약사항 및 가정
+    instruction: 현실적인 기대치를 설정하기 위해 제한사항과 가정을 명확하게 기술하세요
+    sections:
+      - id: constraints
+        title: 제약사항
+        template: |
+          - **예산:** {{budget_info}}
+          - **일정:** {{timeline_info}}
+          - **자원:** {{resource_info}}
+          - **기술적:** {{technical_constraints}}
+      - id: key-assumptions
+        title: 주요 가정
+        type: bullet-list
+        template: "- {{assumption}}"
+
+  - id: risks-questions
+    title: 위험 및 미해결 질문
+    instruction: 미지의 요소와 잠재적 도전과제를 사전에 식별하세요
+    sections:
+      - id: key-risks
+        title: 주요 위험
+        type: bullet-list
+        template: "- **{{risk}}:** {{description_and_impact}}"
+      - id: open-questions
+        title: 미해결 질문
+        type: bullet-list
+        template: "- {{question}}"
+      - id: research-areas
+        title: 추가 연구가 필요한 영역
+        type: bullet-list
+        template: "- {{research_topic}}"
+
+  - id: appendices
+    title: 부록
+    sections:
+      - id: research-summary
+        title: A. 연구 요약
+        condition: 연구 결과가 있는 경우
+        instruction: |
+          해당되는 경우 다음의 주요 발견사항을 요약하세요:
+          - 시장 조사
+          - 경쟁 분석
+          - 사용자 인터뷰
+          - 기술 실현 가능성 연구
+      - id: stakeholder-input
+        title: B. 이해관계자 의견
+        condition: 이해관계자 피드백이 있는 경우
+        template: "{{stakeholder_feedback}}"
+      - id: references
+        title: C. 참고 자료
+        template: "{{relevant_links_and_docs}}"
+
+  - id: next-steps
+    title: 다음 단계
+    sections:
+      - id: immediate-actions
+        title: 즉시 취해야 할 행동
+        type: numbered-list
+        template: "{{action_item}}"
+      - id: pm-handoff
+        title: PM 인수인계
+        content: |
+          이 프로젝트 브리프는 {{project_name}}의 전체 맥락을 제공합니다. 'PRD 생성 모드'로 시작하여 브리프를 철저히 검토하고 사용자와 협력하여 템플릿이 지시하는 대로 섹션별로 PRD를 생성하며, 필요한 명확화를 요청하거나 개선사항을 제안하세요.

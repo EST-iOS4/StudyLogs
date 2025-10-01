@@ -1,0 +1,477 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: brownfield-architecture-template-v2
+  name: 브라운필드 개선 아키텍처
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/architecture.md
+    title: "{{project_name}} 브라운필드 개선 아키텍처"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: introduction
+    title: 소개
+    instruction: |
+      중요 - 범위 및 평가 필요:
+
+      이 아키텍처 문서는 포괄적인 아키텍처 계획이 필요한 기존 프로젝트의 중요한 개선을 위한 것입니다. 진행하기 전에:
+
+      1. **복잡성 검증**: 이 개선이 아키텍처 계획이 필요한지 확인하세요. 단순한 추가의 경우 다음을 권장하세요: "아키텍처 계획이 필요하지 않은 단순한 변경의 경우, 제품 소유자와 함께 brownfield-create-epic 또는 brownfield-create-story 작업을 사용하는 것을 고려하세요."
+
+      2. **필수 입력**:
+         - 완료된 brownfield-prd.md
+         - 기존 프로젝트 기술 문서 (docs 폴더 또는 사용자 제공)
+         - 기존 프로젝트 구조에 대한 접근 권한 (IDE 또는 업로드된 파일)
+
+      3. **심층 분석 의무**: 아키텍처 권장사항을 만들기 전에 기존 코드베이스, 아키텍처 패턴, 기술적 제약사항에 대한 철저한 분석을 수행해야 합니다. 모든 제안은 가정이 아닌 실제 프로젝트 분석을 기반으로 해야 합니다.
+
+      4. **지속적 검증**: 이 과정 전반에 걸쳐 사용자와 이해를 명시적으로 검증하세요. 모든 아키텍처 결정에 대해 다음을 확인하세요: "기존 시스템 분석을 바탕으로 [실제 프로젝트의 증거] 때문에 [결정]을 권장합니다. 이것이 시스템의 현실과 일치합니까?"
+
+      필수 입력이 누락된 경우 진행하기 전에 요청하세요.
+    elicit: true
+    sections:
+      - id: intro-content
+        content: |
+          이 문서는 {{enhancement_description}}로 {{project_name}}을 개선하기 위한 아키텍처 접근 방식을 개략적으로 설명합니다. 주요 목표는 기존 시스템과의 원활한 통합을 보장하면서 새로운 기능의 AI 주도 개발을 위한 안내 아키텍처 청사진 역할을 하는 것입니다.
+
+          **기존 아키텍처와의 관계:**
+          이 문서는 새로운 구성 요소가 현재 시스템과 어떻게 통합될지 정의함으로써 기존 프로젝트 아키텍처를 보완합니다. 새로운 패턴과 기존 패턴 간에 충돌이 발생하는 경우, 이 문서는 개선 사항을 구현하면서 일관성을 유지하는 지침을 제공합니다.
+      - id: existing-project-analysis
+        title: 기존 프로젝트 분석
+        instruction: |
+          기존 프로젝트 구조와 아키텍처를 분석하세요:
+
+          1. docs 폴더의 기존 문서를 검토하세요
+          2. 현재 기술 스택과 버전을 조사하세요
+          3. 기존 아키텍처 패턴과 관례를 식별하세요
+          4. 현재 배포 및 인프라 설정을 기록하세요
+          5. 제약사항이나 한계를 문서화하세요
+
+          중요: 분석 후 발견사항을 명시적으로 검증하세요: "프로젝트 분석을 바탕으로 기존 시스템에 대해 다음을 식별했습니다: [주요 발견사항]. 아키텍처 권장사항을 진행하기 전에 이러한 관찰이 정확한지 확인해 주세요."
+        elicit: true
+        sections:
+          - id: current-state
+            title: 현재 프로젝트 상태
+            template: |
+              - **주요 목적:** {{existing_project_purpose}}
+              - **현재 기술 스택:** {{existing_tech_summary}}
+              - **아키텍처 스타일:** {{existing_architecture_style}}
+              - **배포 방법:** {{existing_deployment_approach}}
+          - id: available-docs
+            title: 사용 가능한 문서
+            type: bullet-list
+            template: "- {{existing_docs_summary}}"
+          - id: constraints
+            title: 식별된 제약사항
+            type: bullet-list
+            template: "- {{constraint}}"
+      - id: changelog
+        title: 변경 로그
+        type: table
+        columns: [변경, 날짜, 버전, 설명, 작성자]
+        instruction: 문서 버전과 변경 사항 추적
+
+  - id: enhancement-scope
+    title: 개선 범위 및 통합 전략
+    instruction: |
+      개선이 기존 시스템과 어떻게 통합될지 정의하세요:
+
+      1. 브라운필드 PRD 개선 범위를 검토하세요
+      2. 기존 코드와의 통합 지점을 식별하세요
+      3. 새로운 기능과 기존 기능 간의 경계를 정의하세요
+      4. 호환성 요구사항을 수립하세요
+
+      검증 체크포인트: 통합 전략을 제시하기 전에 다음을 확인하세요: "분석을 바탕으로 제안하는 통합 접근 방식은 [특정 기존 시스템 특성]을 고려합니다. 이러한 통합 지점과 경계는 현재의 아키텍처 패턴을 존중합니다. 이 평가가 정확합니까?"
+    elicit: true
+    sections:
+      - id: enhancement-overview
+        title: 개선 개요
+        template: |
+          **개선 유형:** {{enhancement_type}}
+          **범위:** {{enhancement_scope}}
+          **통합 영향:** {{integration_impact_level}}
+      - id: integration-approach
+        title: 통합 접근 방식
+        template: |
+          **코드 통합 전략:** {{code_integration_approach}}
+          **Database Integration:** {{database_integration_approach}}
+          **API Integration:** {{api_integration_approach}}
+          **UI Integration:** {{ui_integration_approach}}
+      - id: compatibility-requirements
+        title: Compatibility Requirements
+        template: |
+          - **Existing API Compatibility:** {{api_compatibility}}
+          - **Database Schema Compatibility:** {{db_compatibility}}
+          - **UI/UX Consistency:** {{ui_compatibility}}
+          - **Performance Impact:** {{performance_constraints}}
+
+  - id: tech-stack-alignment
+    title: Tech Stack Alignment
+    instruction: |
+      Ensure new components align with existing technology choices:
+
+      1. Use existing technology stack as the foundation
+      2. Only introduce new technologies if absolutely necessary
+      3. Justify any new additions with clear rationale
+      4. Ensure version compatibility with existing dependencies
+    elicit: true
+    sections:
+      - id: existing-stack
+        title: Existing Technology Stack
+        type: table
+        columns: [Category, Current Technology, Version, Usage in Enhancement, Notes]
+        instruction: Document the current stack that must be maintained or integrated with
+      - id: new-tech-additions
+        title: New Technology Additions
+        condition: Enhancement requires new technologies
+        type: table
+        columns: [Technology, Version, Purpose, Rationale, Integration Method]
+        instruction: Only include if new technologies are required for the enhancement
+
+  - id: data-models
+    title: Data Models and Schema Changes
+    instruction: |
+      Define new data models and how they integrate with existing schema:
+
+      1. Identify new entities required for the enhancement
+      2. Define relationships with existing data models
+      3. Plan database schema changes (additions, modifications)
+      4. Ensure backward compatibility
+    elicit: true
+    sections:
+      - id: new-models
+        title: New Data Models
+        repeatable: true
+        sections:
+          - id: model
+            title: "{{model_name}}"
+            template: |
+              **Purpose:** {{model_purpose}}
+              **Integration:** {{integration_with_existing}}
+
+              **Key Attributes:**
+              - {{attribute_1}}: {{type_1}} - {{description_1}}
+              - {{attribute_2}}: {{type_2}} - {{description_2}}
+
+              **Relationships:**
+              - **With Existing:** {{existing_relationships}}
+              - **With New:** {{new_relationships}}
+      - id: schema-integration
+        title: 스키마 통합 전략
+        template: |
+          **필요한 데이터베이스 변경사항:**
+          - **새로운 테이블:** {{new_tables_list}}
+          - **수정된 테이블:** {{modified_tables_list}}
+          - **새로운 인덱스:** {{new_indexes_list}}
+          - **마이그레이션 전략:** {{migration_approach}}
+
+          **하위 호환성:**
+          - {{compatibility_measure_1}}
+          - {{compatibility_measure_2}}
+
+  - id: component-architecture
+    title: 컴포넌트 아키텍처
+    instruction: |
+      새로운 컴포넌트와 기존 아키텍처와의 통합을 정의하세요:
+
+      1. 개선에 필요한 새로운 컴포넌트를 식별하세요
+      2. 기존 컴포넌트와의 인터페이스를 정의하세요
+      3. 명확한 경계와 책임을 설정하세요
+      4. 통합 지점과 데이터 흐름을 계획하세요
+
+      필수 검증: 컴포넌트 아키텍처를 제시하기 전에 다음을 확인하세요: "제안하는 새 컴포넌트들이 코드베이스에서 식별한 기존 아키텍처 패턴을 따릅니다: [특정 패턴]. 통합 인터페이스가 현재의 컴포넌트 구조와 통신 패턴을 존중합니다. 이것이 프로젝트의 현실과 일치합니까?"
+    elicit: true
+    sections:
+      - id: new-components
+        title: 새로운 컴포넌트
+        repeatable: true
+        sections:
+          - id: component
+            title: "{{component_name}}"
+            template: |
+              **책임:** {{component_description}}
+              **통합 지점:** {{integration_points}}
+
+              **주요 인터페이스:**
+              - {{interface_1}}
+              - {{interface_2}}
+
+              **의존성:**
+              - **기존 컴포넌트:** {{existing_dependencies}}
+              - **새로운 컴포넌트:** {{new_dependencies}}
+
+              **기술 스택:** {{component_tech_details}}
+      - id: interaction-diagram
+        title: 컴포넌트 상호작용 다이어그램
+        type: mermaid
+        mermaid_type: graph
+        instruction: 새로운 컴포넌트가 기존 컴포넌트와 어떻게 상호작용하는지 보여주는 Mermaid 다이어그램을 생성
+
+  - id: api-design
+    title: API 설계 및 통합
+    condition: Enhancement requires API changes
+    instruction: |
+      새로운 API 엔드포인트와 기존 API와의 통합을 정의하세요:
+
+      1. 개선에 필요한 새로운 API 엔드포인트를 계획하세요
+      2. 기존 API 패턴과의 일관성을 보장하세요
+      3. 인증 및 권한 부여 통합을 정의하세요
+      4. 필요한 경우 버전 관리 전략을 계획하세요
+    elicit: true
+    sections:
+      - id: api-strategy
+        title: API 통합 전략
+        template: |
+          **API 통합 전략:** {{api_integration_strategy}}
+          **인증:** {{auth_integration}}
+          **버전 관리:** {{versioning_approach}}
+      - id: new-endpoints
+        title: 새로운 API 엔드포인트
+        repeatable: true
+        sections:
+          - id: endpoint
+            title: "{{endpoint_name}}"
+            template: |
+              - **메서드:** {{http_method}}
+              - **엔드포인트:** {{endpoint_path}}
+              - **목적:** {{endpoint_purpose}}
+              - **통합:** {{integration_with_existing}}
+            sections:
+              - id: request
+                title: 요청
+                type: code
+                language: json
+                template: "{{request_schema}}"
+              - id: response
+                title: 응답
+                type: code
+                language: json
+                template: "{{response_schema}}"
+
+  - id: external-api-integration
+    title: 외부 API 통합
+    condition: Enhancement requires new external APIs
+    instruction: 개선에 필요한 새로운 외부 API 통합을 문서화하세요
+    repeatable: true
+    sections:
+      - id: external-api
+        title: "{{api_name}} API"
+        template: |
+          - **목적:** {{api_purpose}}
+          - **문서:** {{api_docs_url}}
+          - **베이스 URL:** {{api_base_url}}
+          - **인증:** {{auth_method}}
+          - **통합 방법:** {{integration_approach}}
+
+          **사용되는 주요 엔드포인트:**
+          - `{{method}} {{endpoint_path}}` - {{endpoint_purpose}}
+
+          **오류 처리:** {{error_handling_strategy}}
+
+  - id: source-tree-integration
+    title: 소스 트리 통합
+    instruction: |
+      새로운 코드가 기존 프로젝트 구조와 어떻게 통합될지 정의하세요:
+
+      1. 기존 프로젝트 조직 패턴을 따르세요
+      2. 새로운 파일/폴더가 배치될 위치를 식별하세요
+      3. 기존 명명 규칙과의 일관성을 보장하세요
+      4. 기존 구조에 대한 최소한의 방해를 계획하세요
+    elicit: true
+    sections:
+      - id: existing-structure
+        title: 기존 프로젝트 구조
+        type: code
+        language: plaintext
+        instruction: 현재 구조의 관련 부분을 문서화
+        template: "{{existing_structure_relevant_parts}}"
+      - id: new-file-organization
+        title: 새로운 파일 조직
+        type: code
+        language: plaintext
+        instruction: 기존 구조에 대한 새로운 추가사항만 표시
+        template: |
+          {{project-root}}/
+          ├── {{existing_structure_context}}
+          │   ├── {{new_folder_1}}/           # {{purpose_1}}
+          │   │   ├── {{new_file_1}}
+          │   │   └── {{new_file_2}}
+          │   ├── {{existing_folder}}/        # 추가사항이 있는 기존 폴더
+          │   │   ├── {{existing_file}}       # 기존 파일
+          │   │   └── {{new_file_3}}          # 새로운 추가사항
+          │   └── {{new_folder_2}}/           # {{purpose_2}}
+      - id: integration-guidelines
+        title: 통합 가이드라인
+        template: |
+          - **파일 명명:** {{file_naming_consistency}}
+          - **폴더 조직:** {{folder_organization_approach}}
+          - **Import/Export 패턴:** {{import_export_consistency}}
+
+  - id: infrastructure-deployment
+    title: 인프라 및 배포 통합
+    instruction: |
+      개선사항이 기존 인프라와 함께 어떻게 배포될지 정의하세요:
+
+      1. 기존 배포 파이프라인과 인프라를 사용하세요
+      2. 필요한 인프라 변경사항을 식별하세요
+      3. 위험을 최소화하는 배포 전략을 계획하세요
+      4. 롤백 절차를 정의하세요
+    elicit: true
+    sections:
+      - id: existing-infrastructure
+        title: 기존 인프라
+        template: |
+          **현재 배포:** {{existing_deployment_summary}}
+          **인프라 도구:** {{existing_infrastructure_tools}}
+          **환경:** {{existing_environments}}
+      - id: enhancement-deployment
+        title: 개선사항 배포 전략
+        template: |
+          **배포 접근 방식:** {{deployment_approach}}
+          **인프라 변경사항:** {{infrastructure_changes}}
+          **파이프라인 통합:** {{pipeline_integration}}
+      - id: rollback-strategy
+        title: 롤백 전략
+        template: |
+          **롤백 방법:** {{rollback_method}}
+          **위험 완화:** {{risk_mitigation}}
+          **모니터링:** {{monitoring_approach}}
+
+  - id: coding-standards
+    title: 코딩 표준 및 규칙
+    instruction: |
+      새로운 코드가 기존 프로젝트 규칙을 따르는지 확인하세요:
+
+      1. 프로젝트 분석에서 기존 코딩 표준을 문서화하세요
+      2. 개선사항별 요구사항을 식별하세요
+      3. 기존 코드베이스 패턴과의 일관성을 보장하세요
+      4. 새로운 코드 조직에 대한 표준을 정의하세요
+    elicit: true
+    sections:
+      - id: existing-standards
+        title: 기존 표준 준수
+        template: |
+          **코드 스타일:** {{existing_code_style}}
+          **린팅 규칙:** {{existing_linting}}
+          **테스팅 패턴:** {{existing_test_patterns}}
+          **문서화 스타일:** {{existing_doc_style}}
+      - id: enhancement-standards
+        title: 개선사항별 표준
+        condition: New patterns needed for enhancement
+        repeatable: true
+        template: "- **{{standard_name}}:** {{standard_description}}"
+      - id: integration-rules
+        title: 중요한 통합 규칙
+        template: |
+          - **기존 API 호환성:** {{api_compatibility_rule}}
+          - **데이터베이스 통합:** {{db_integration_rule}}
+          - **오류 처리:** {{error_handling_integration}}
+          - **로깅 일관성:** {{logging_consistency}}
+
+  - id: testing-strategy
+    title: 테스팅 전략
+    instruction: |
+      개선사항에 대한 테스팅 접근 방식을 정의하세요:
+
+      1. 기존 테스트 스위트와 통합하세요
+      2. 기존 기능이 온전히 유지되는지 확인하세요
+      3. 새로운 기능 테스팅을 계획하세요
+      4. 통합 테스팅 접근 방식을 정의하세요
+    elicit: true
+    sections:
+      - id: existing-test-integration
+        title: 기존 테스트와의 통합
+        template: |
+          **기존 테스트 프레임워크:** {{existing_test_framework}}
+          **테스트 조직:** {{existing_test_organization}}
+          **커버리지 요구사항:** {{existing_coverage_requirements}}
+      - id: new-testing
+        title: 새로운 테스팅 요구사항
+        sections:
+          - id: unit-tests
+            title: 새로운 컴포넌트에 대한 단위 테스트
+            template: |
+              - **프레임워크:** {{test_framework}}
+              - **위치:** {{test_location}}
+              - **커버리지 목표:** {{coverage_target}}
+              - **기존과의 통합:** {{test_integration}}
+          - id: integration-tests
+            title: 통합 테스트
+            template: |
+              - **범위:** {{integration_test_scope}}
+              - **기존 시스템 검증:** {{existing_system_verification}}
+              - **새로운 기능 테스팅:** {{new_feature_testing}}
+          - id: regression-tests
+            title: 회귀 테스팅
+            template: |
+              - **기존 기능 검증:** {{regression_test_approach}}
+              - **자동화된 회귀 스위트:** {{automated_regression}}
+              - **수동 테스팅 요구사항:** {{manual_testing_requirements}}
+
+  - id: security-integration
+    title: 보안 통합
+    instruction: |
+      기존 시스템과의 보안 일관성을 보장하세요:
+
+      1. 기존 보안 패턴과 도구를 따르세요
+      2. 새로운 기능이 취약점을 도입하지 않도록 하세요
+      3. 기존 보안 자세를 유지하세요
+      4. 새로운 컴포넌트에 대한 보안 테스팅을 정의하세요
+    elicit: true
+    sections:
+      - id: existing-security
+        title: 기존 보안 조치
+        template: |
+          **인증:** {{existing_auth}}
+          **권한 부여:** {{existing_authz}}
+          **데이터 보호:** {{existing_data_protection}}
+          **보안 도구:** {{existing_security_tools}}
+      - id: enhancement-security
+        title: 개선사항 보안 요구사항
+        template: |
+          **새로운 보안 조치:** {{new_security_measures}}
+          **통합 지점:** {{security_integration_points}}
+          **컴플라이언스 요구사항:** {{compliance_requirements}}
+      - id: security-testing
+        title: 보안 테스팅
+        template: |
+          **기존 보안 테스트:** {{existing_security_tests}}
+          **새로운 보안 테스트 요구사항:** {{new_security_tests}}
+          **침투 테스팅:** {{pentest_requirements}}
+
+  - id: checklist-results
+    title: 체크리스트 결과 보고서
+    instruction: architect-checklist를 실행하고 브라운필드별 검증에 초점을 맞춰 결과를 여기에 채우세요
+
+  - id: next-steps
+    title: 다음 단계
+    instruction: |
+      브라운필드 아키텍처 완료 후:
+
+      1. 기존 시스템과의 통합 지점을 검토하세요
+      2. Dev 에이전트와 함께 스토리 구현을 시작하세요
+      3. 배포 파이프라인 통합을 설정하세요
+      4. 롤백 및 모니터링 절차를 계획하세요
+    sections:
+      - id: story-manager-handoff
+        title: 스토리 매니저 인수인계
+        instruction: |
+          이 브라운필드 개선사항과 함께 작업할 스토리 매니저를 위한 간단한 프롬프트를 작성하세요. 포함사항:
+          - 이 아키텍처 문서에 대한 참조
+          - 사용자와 검증된 주요 통합 요구사항
+          - 실제 프로젝트 분석을 기반으로 한 기존 시스템 제약사항
+          - 명확한 통합 체크포인트가 있는 구현할 첫 번째 스토리
+          - 구현 전반에 걸쳐 기존 시스템 무결성 유지에 대한 강조
+      - id: developer-handoff
+        title: 개발자 인수인계
+        instruction: |
+          구현을 시작하는 개발자를 위한 간단한 프롬프트를 작성하세요. 포함사항:
+          - 실제 프로젝트에서 분석된 이 아키텍처와 기존 코딩 표준에 대한 참조
+          - 사용자와 검증된 기존 코드베이스와의 통합 요구사항
+          - 실제 프로젝트 제약사항을 기반으로 한 주요 기술적 결정
+          - 특정 검증 단계가 있는 기존 시스템 호환성 요구사항
+          - 기존 기능에 대한 위험을 최소화하기 위한 구현의 명확한 순서
