@@ -1,19 +1,27 @@
 #!/usr/bin/env swift
 import Foundation
-import XCTest
+import Testing
 
-class FizzBuzzTests: XCTestCase {
-  func testFizzBuzzWithThree() {
-    XCAssertEqual(fizzBuzz(3), "fizz")
+@Suite("FizzBuzz Tests")
+struct FizzBuzzTests {
+  @Test("FizzBuzz with 3 returns fizz")
+  func fizzBuzzWithThree() async throws {
+    #expect(fizzBuzz(3) == "fizz")
   }
-  func testFizzBuzzWithFive() {
-    XCAssertEqual(fizzBuzz(5), "buzz")
+  
+  @Test("FizzBuzz with 5 returns buzz")
+  func fizzBuzzWithFive() async throws {
+    #expect(fizzBuzz(5) == "buzz")
   }
-  func testFizzBuzzWithFifteen() {
-    XCAssertEqual(fizzBuzz(15), "fizz-buzz")
+  
+  @Test("FizzBuzz with 15 returns fizz-buzz")
+  func fizzBuzzWithFifteen() async throws {
+    #expect(fizzBuzz(15) == "fizz-buzz")
   }
-  func testFizzBuzzWithOne() {
-    XCAssertEqual(fizzBuzz(1), "1")
+  
+  @Test("FizzBuzz with 1 returns 1")
+  func fizzBuzzWithOne() async throws {
+    #expect(fizzBuzz(1) == "1")
   }
 }
 
