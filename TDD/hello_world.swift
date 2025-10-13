@@ -13,9 +13,40 @@ func fizzBuzz(_ number: Int) -> String {
   }
 }
 
+func testFizzBuzzOld() {
+  if fizzBuzz(3) == "fizz" {
+    print("PASSED")
+  } else {
+    print("FAILED")
+  }
+  if fizzBuzz(5) == "buzz" {
+    print("PASSED")
+  } else {
+    print("FAILED")
+  }
+  // ... 모든 케이스를 넣어줄 수 없다.
+}
+
+// 개선된 버전
+func test(value: String, matches expected: String) {
+  if value == expected {
+    print("PASSED")
+  } else {
+    print("FAILED")
+  }
+}
+
+func testFizzBuzz() {
+  test(value: fizzBuzz(1), matches: "1")
+  test(value: fizzBuzz(3), matches: "fizz")
+  test(value: fizzBuzz(5), matches: "buzz")
+  test(value: fizzBuzz(15), matches: "fizz-buzz")
+}
+
 func main() {
   guard CommandLine.argc > 1 else {
     print("Hello, world!")
+    testFizzBuzz()
     return
   }
 
