@@ -1,5 +1,21 @@
 #!/usr/bin/env swift
 import Foundation
+import XCTest
+
+class FizzBuzzTests: XCTestCase {
+  func testFizzBuzzWithThree() {
+    XCAssertEqual(fizzBuzz(3), "fizz")
+  }
+  func testFizzBuzzWithFive() {
+    XCAssertEqual(fizzBuzz(5), "buzz")
+  }
+  func testFizzBuzzWithFifteen() {
+    XCAssertEqual(fizzBuzz(15), "fizz-buzz")
+  }
+  func testFizzBuzzWithOne() {
+    XCAssertEqual(fizzBuzz(1), "1")
+  }
+}
 
 func fizzBuzz(_ number: Int) -> String {
   let divisibleBy3 = number % 3 == 0
