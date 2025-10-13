@@ -8,5 +8,5 @@
 import Foundation
 
 func isLeap(_ year: Int) -> Bool {
-  return true
+  return (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)
 }
