@@ -9,8 +9,9 @@ import Testing
 
 struct TestBasicsSwiftTestings {
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
-    }
+  @Test("4로 나누어 떨어지면 윤년")
+  func evenlyDivisibleBy4IsLeap() {
+    #expect(isLeap(2020))
+  }
 
 }

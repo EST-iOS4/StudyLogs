@@ -9,5 +9,8 @@ import XCTest
 
 final class TestBasicsTests: XCTestCase {
 
+  func testEvenlyDivisibleBy4IsLeap() {
+    XCTAssertTrue(isLeap(2020))
+  }
 
 }

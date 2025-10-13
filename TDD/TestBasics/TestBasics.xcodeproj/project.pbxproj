@@ -29,9 +29,30 @@
 		CCC6ED142E9CC8B100933718 /* TestBasicsSwiftTestings.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestBasicsSwiftTestings.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CCC6ED5C2E9CCF6200933718 /* Exceptions for "TestBasics" folder in "TestBasicsTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Main.swift,
+			);
+			target = CCC6ECF22E9CC84E00933718 /* TestBasicsTests */;
+		};
+		CCC6ED5D2E9CCF6200933718 /* Exceptions for "TestBasics" folder in "TestBasicsSwiftTestings" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Main.swift,
+			);
+			target = CCC6ED132E9CC8B100933718 /* TestBasicsSwiftTestings */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CCC6ECE82E9CC84D00933718 /* TestBasics */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CCC6ED5C2E9CCF6200933718 /* Exceptions for "TestBasics" folder in "TestBasicsTests" target */,
+				CCC6ED5D2E9CCF6200933718 /* Exceptions for "TestBasics" folder in "TestBasicsSwiftTestings" target */,
+			);
 			path = TestBasics;
 			sourceTree = "<group>";
 		};
