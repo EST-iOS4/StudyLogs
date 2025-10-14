@@ -43,6 +43,7 @@ let menu = [
   MenuItem(category: "drinks", name: "Red Wine", spicy: false),
   MenuItem(category: "desserts", name: "Tiramisù", spicy: false),
   MenuItem(category: "desserts", name: "Crema Catalana", spicy: false),
+  MenuItem(category: "pastas", name: "Arrabiata", spicy: true)
 ]
 
 @main

@@ -30,12 +30,36 @@ struct MenuPresentation {
 
 struct MenuList: View {
   let sections: [MenuSection]
+  @State private var items: [MenuItem] = []
+  @State private var showSpicy = false
+
+  var presentation: MenuPresentation {
+    MenuPresentation(
+      allItems: sections.flatMap { $0.items },
+      showOnlySpicy: showSpicy
+    )
+  }
+
   var body: some View {
     List {
-      ForEach(sections) { section in
-        Section(header: Text(section.category)) {
-          ForEach(section.items) { item in
-            Text(item.name)
+      Toggle("Spicy Only", isOn: $showSpicy)
+
+      if showSpicy {
+        Section(header: Text("Spicy 🌶️")) {
+          if let emptyStateMessage = presentation.emptyStateMessage {
+            Text(emptyStateMessage)
+          } else {
+            ForEach(presentation.displayedItems, id: \.name) { item in
+              Text(item.name)
+            }
+          }
+        }
+      } else {
+        ForEach(sections) { section in
+          Section(header: Text(section.category)) {
+            ForEach(section.items) { item in
+              Text(item.name)
+            }
           }
         }
       }
