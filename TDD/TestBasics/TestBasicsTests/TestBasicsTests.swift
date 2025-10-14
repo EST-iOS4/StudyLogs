@@ -16,4 +16,12 @@ final class TestBasicsTests: XCTestCase {
   func testNotEvenlyDivisibleBy4IsNotLeap() {
     XCTAssertFalse(isLeap(2021))
   }
+
+  func testEvenlyDivisibleBy100IsNotLeap() {
+    XCTAssertFalse(isLeap(2100))
+  }
+
+  func testEvenlyDivisibleBy400IsLeap() {
+    XCTAssertTrue(isLeap(2000))
+  }
 }
