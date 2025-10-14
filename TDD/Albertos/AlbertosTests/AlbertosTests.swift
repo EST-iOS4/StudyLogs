@@ -27,8 +27,8 @@ struct AlbertosTests {
   @Test("단일 카테고리는 하나의 섹션만 반환")
   func test2() throws {
     let menu =  [
-      MenuItem(name: "name", category: "pastas"),
-      MenuItem(name: "other name", category: "pastas"),
+      MenuItem(category: "pastas", name: "name"),
+      MenuItem(category: "pastas", name: "other name"),
     ]
     let sections = groupMenuByCategory(menu)
 
@@ -42,10 +42,10 @@ struct AlbertosTests {
   @Test("여러 카테고리는 카테고리당 하나의 섹션을 반환")
   func test3() {
     let menu =  [
-      MenuItem(name: "a pasta", category: "pastas"),
-      MenuItem(name: "a drink", category: "drinks"),
-      MenuItem(name: "another pasta", category: "pastas"),
-      MenuItem(name: "a dessert", category: "desserts")
+      MenuItem(category: "pastas", name: "a pasta"),
+      MenuItem(category: "drinks", name: "a drink"),
+      MenuItem(category: "pastas", name: "another pasta"),
+      MenuItem(category: "desserts", name: "a dessert")
     ]
     let sections = groupMenuByCategory(menu)
 

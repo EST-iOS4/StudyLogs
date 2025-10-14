@@ -8,13 +8,21 @@
 import SwiftUI
 
 struct MenuItem {
-  let name: String
   let category: String
+  let name: String
 }
 
 struct MenuSection {
   let category: String
   let items: [MenuItem]
+}
+
+extension MenuItem: Identifiable {
+  var id: String { name }
+}
+
+extension MenuSection: Identifiable {
+  var id: String { category }
 }
 
 func groupMenuByCategory(_ menu: [MenuItem]) -> [MenuSection] {
@@ -25,12 +33,25 @@ func groupMenuByCategory(_ menu: [MenuItem]) -> [MenuSection] {
     .sorted { $0.category > $1.category }
 }
 
+let menu = [
+  MenuItem(category: "starters", name: "Caprese Salad"),
+  MenuItem(category: "starters", name: "Arancini Balls"),
+  MenuItem(category: "pastas", name: "Penne all'Arrabbiata"),
+  MenuItem(category: "pastas", name: "Spaghetti Carbonara"),
+  MenuItem(category: "drinks", name: "Water"),
+  MenuItem(category: "drinks", name: "Red Wine"),
+  MenuItem(category: "desserts", name: "Tiramisù"),
+  MenuItem(category: "desserts", name: "Crema Catalana"),
+]
 
 @main
 struct AlbertosApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+          NavigationStack {
+            MenuList(sections: groupMenuByCategory(menu))
+              .navigationTitle("Alberto's 🍕")
+          }
         }
     }
 }
