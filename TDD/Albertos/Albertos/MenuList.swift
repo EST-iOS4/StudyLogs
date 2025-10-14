@@ -7,6 +7,27 @@
 
 import SwiftUI
 
+
+struct MenuPresentation {
+  let allItems: [MenuItem]
+  let showOnlySpicy: Bool
+
+  var displayedItems: [MenuItem] {
+    if showOnlySpicy {
+      return allItems.filter { $0.spicy }
+    } else {
+      return allItems
+    }
+  }
+
+  var emptyStateMessage: String? {
+    if showOnlySpicy && displayedItems.isEmpty {
+      return "매운 메뉴가 없습니다."
+    }
+    return nil
+  }
+}
+
 struct MenuList: View {
   let sections: [MenuSection]
   var body: some View {
