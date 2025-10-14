@@ -10,7 +10,6 @@ import SwiftUI
 struct MenuItem {
   let name: String
   let category: String
-  let price: Decimal
 }
 
 struct MenuSection {
@@ -19,7 +18,8 @@ struct MenuSection {
 }
 
 func groupMenuByCategory(_ menu: [MenuItem]) -> [MenuSection] {
-  return []
+  guard menu.isEmpty == false else { return [] }
+  return [MenuSection(category: "category", items: menu)]
 }
 
 
