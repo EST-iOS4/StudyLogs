@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		CC09B7FC2E9DDE4E00E63CE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CC09B7DE2E9DDDF600E63CE7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CC09B7E52E9DDDF600E63CE7;
+			remoteInfo = Albertos;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		CC09B7E62E9DDDF600E63CE7 /* Albertos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Albertos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC09B7F82E9DDE4E00E63CE7 /* AlbertosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlbertosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,22 @@
 			path = Albertos;
 			sourceTree = "<group>";
 		};
+		CC09B7F92E9DDE4E00E63CE7 /* AlbertosTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AlbertosTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		CC09B7E32E9DDDF600E63CE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC09B7F52E9DDE4E00E63CE7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				CC09B7E82E9DDDF600E63CE7 /* Albertos */,
+				CC09B7F92E9DDE4E00E63CE7 /* AlbertosTests */,
 				CC09B7E72E9DDDF600E63CE7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				CC09B7E62E9DDDF600E63CE7 /* Albertos.app */,
+				CC09B7F82E9DDE4E00E63CE7 /* AlbertosTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 			productReference = CC09B7E62E9DDDF600E63CE7 /* Albertos.app */;
 			productType = "com.apple.product-type.application";
 		};
+		CC09B7F72E9DDE4E00E63CE7 /* AlbertosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC09B7FE2E9DDE4E00E63CE7 /* Build configuration list for PBXNativeTarget "AlbertosTests" */;
+			buildPhases = (
+				CC09B7F42E9DDE4E00E63CE7 /* Sources */,
+				CC09B7F52E9DDE4E00E63CE7 /* Frameworks */,
+				CC09B7F62E9DDE4E00E63CE7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CC09B7FD2E9DDE4E00E63CE7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CC09B7F92E9DDE4E00E63CE7 /* AlbertosTests */,
+			);
+			name = AlbertosTests;
+			packageProductDependencies = (
+			);
+			productName = AlbertosTests;
+			productReference = CC09B7F82E9DDE4E00E63CE7 /* AlbertosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +130,10 @@
 				TargetAttributes = {
 					CC09B7E52E9DDDF600E63CE7 = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					CC09B7F72E9DDE4E00E63CE7 = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = CC09B7E52E9DDDF600E63CE7;
 					};
 				};
 			};
@@ -100,12 +152,20 @@
 			projectRoot = "";
 			targets = (
 				CC09B7E52E9DDDF600E63CE7 /* Albertos */,
+				CC09B7F72E9DDE4E00E63CE7 /* AlbertosTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CC09B7E42E9DDDF600E63CE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC09B7F62E9DDE4E00E63CE7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +182,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CC09B7F42E9DDE4E00E63CE7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CC09B7FD2E9DDE4E00E63CE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CC09B7E52E9DDDF600E63CE7 /* Albertos */;
+			targetProxy = CC09B7FC2E9DDE4E00E63CE7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		CC09B7EF2E9DDDF700E63CE7 /* Debug */ = {
@@ -310,6 +385,48 @@
 			};
 			name = Release;
 		};
+		CC09B7FF2E9DDE4E00E63CE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 59FP2PXRXK;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.codegrove.AlbertosTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Albertos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Albertos";
+			};
+			name = Debug;
+		};
+		CC09B8002E9DDE4E00E63CE7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 59FP2PXRXK;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.codegrove.AlbertosTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Albertos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Albertos";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -327,6 +444,15 @@
 			buildConfigurations = (
 				CC09B7F22E9DDDF700E63CE7 /* Debug */,
 				CC09B7F32E9DDDF700E63CE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CC09B7FE2E9DDE4E00E63CE7 /* Build configuration list for PBXNativeTarget "AlbertosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC09B7FF2E9DDE4E00E63CE7 /* Debug */,
+				CC09B8002E9DDE4E00E63CE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
