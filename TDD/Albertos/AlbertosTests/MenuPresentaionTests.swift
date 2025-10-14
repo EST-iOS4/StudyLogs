@@ -66,4 +66,19 @@ struct MenuPresentaionTests {
     #expect(presentation.emptyStateMessage == nil)
   }
 
+  @Test("맵지 않은 메뉴명은 이름만 출력")
+  func test5() {
+    let item = MenuItem.fixture(name: "name", spicy: false)
+    let viewModel = MenuRow.ViewModel(item: item)
+
+    #expect(viewModel.text == "name")
+  }
+
+  @Test("매운 메뉴는 이름과 고추 이모지를 출력")
+  func test6() {
+    let item = MenuItem.fixture(name: "name", spicy: true)
+    let viewModel = MenuRow.ViewModel(item: item)
+
+    #expect(viewModel.text == "name 🌶️")
+  }
 }
