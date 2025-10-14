@@ -17,5 +17,8 @@ struct Product {
 }
 
 func sumOf(_ products: [Product], withCategory category: String) -> Double {
-  return products.reduce(0.0) { $0 + $1.price }
+  return products.reduce(0.0) {
+    guard $1.category == category else { return $0 }
+    return $0 + $1.price
+  }
 }

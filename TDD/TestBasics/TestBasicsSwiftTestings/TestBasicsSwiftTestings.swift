@@ -34,7 +34,26 @@ struct TestBasicsSwiftTestings {
 
     // Assert
     #expect(sum == product.price)
+  }
 
+  @Test("필터링된 카테고리의 합을 반환")
+  func sumIsSumOfItemsPricesForGivenCategory() {
+    // Arrange
+    let category = "books"
+    let products = [
+      Product(category: category, price: 3),
+      Product(category: "movies", price: 2),
+      Product(category: category, price: 1),
+    ]
+    let expectValue = products
+      .filter{ $0.category == category }
+      .reduce(0.0) { $0 + $1.price }
+
+    // Act
+    let sum = sumOf(products, withCategory: category)
+
+    // Assert
+    #expect(sum == expectValue)
   }
 
   @Test("4로 나누어 떨어지면 윤년")
