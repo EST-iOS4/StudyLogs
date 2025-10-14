@@ -24,6 +24,15 @@ extension MenuItem {
   }
 }
 
+extension MenuSection {
+  static func fixture(
+    category: String = "category",
+    items: [MenuItem] = [.fixture()]
+  ) -> MenuSection {
+    MenuSection(category: category, items: items)
+  }
+}
+
 struct AlbertosTests {
 
   @Test("빈 메뉴는 빈 섹션 배열 반환")
