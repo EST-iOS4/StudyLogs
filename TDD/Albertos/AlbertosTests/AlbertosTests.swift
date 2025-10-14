@@ -8,6 +8,12 @@
 import Testing
 @testable import Albertos
 
+extension Collection {
+  subscript(safe index: Index) -> Element? {
+    return indices.contains(index) ? self[index] : nil
+  }
+}
+
 struct AlbertosTests {
 
   @Test("빈 메뉴는 빈 섹션 배열 반환")
@@ -34,6 +40,19 @@ struct AlbertosTests {
   }
 
   @Test("여러 카테고리는 카테고리당 하나의 섹션을 반환")
-  func test3() {}
+  func test3() {
+    let menu =  [
+      MenuItem(name: "a pasta", category: "pastas"),
+      MenuItem(name: "a drink", category: "drinks"),
+      MenuItem(name: "another pasta", category: "pastas"),
+      MenuItem(name: "a dessert", category: "desserts")
+    ]
+    let sections = groupMenuByCategory(menu)
+
+    #expect(sections.count == 3)
+    #expect(sections[safe: 0]?.category == "pastas")
+    #expect(sections[safe: 1]?.category == "drinks")
+    #expect(sections[safe: 2]?.category == "desserts")
+  }
 
 }
