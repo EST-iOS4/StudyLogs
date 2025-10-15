@@ -35,7 +35,7 @@ extension MenuSection {
 
 struct AlbertosTests {
 
-  @Test("빈 메뉴는 빈 섹션 배열 반환")
+  @Test("빈 메뉴는 빈 섹션 배열 반환", .disabled("더 이상 사용하지 않음"))
   func test1() {
     let menu = [MenuItem]()
     let sections = groupMenuByCategory(menu)
@@ -43,7 +43,7 @@ struct AlbertosTests {
     #expect(sections.isEmpty)
   }
 
-  @Test("단일 카테고리는 하나의 섹션만 반환")
+  @Test("단일 카테고리는 하나의 섹션만 반환", .disabled("더 이상 사용하지 않음"))
   func test2() throws {
     let menu: [MenuItem] = [
       .fixture(name: "name"),
@@ -58,7 +58,7 @@ struct AlbertosTests {
     #expect(section.items.last?.name == "other name")
   }
 
-  @Test("여러 카테고리는 카테고리당 하나의 섹션을 반환")
+  @Test("여러 카테고리는 카테고리당 하나의 섹션을 반환", .disabled("더 이상 사용하지 않음"))
   func test3() {
     let menu: [MenuItem] = [
       .fixture(category: "pastas"),

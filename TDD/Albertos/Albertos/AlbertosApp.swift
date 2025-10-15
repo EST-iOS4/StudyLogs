@@ -13,7 +13,7 @@ struct MenuItem: Equatable {
   let spicy: Bool
 }
 
-struct MenuSection: Equatable {
+nonisolated struct MenuSection: Equatable {
   let category: String
   let items: [MenuItem]
 }
@@ -51,11 +51,7 @@ struct AlbertosApp: App {
     var body: some Scene {
         WindowGroup {
           NavigationStack {
-            MenuList(
-              viewModel: .init(
-                menu: menu,
-                menuGrouping: groupMenuByCategory)
-            )
+            MenuList(viewModel: .init(menu: menu))
               .navigationTitle("Alberto's 🍕")
           }
         }

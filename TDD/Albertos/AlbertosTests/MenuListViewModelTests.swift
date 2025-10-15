@@ -34,4 +34,21 @@ struct MenuListViewModelTests {
     #expect(called == true)
     #expect(sections == inputSections)
   }
+
+  @Test("메뉴를 불러오기 시작할 때, 빈 메뉴를 발행")
+  func test2() {
+    let viewModel = MenuList.ViewModel(menu: [.fixture()])
+
+    #expect(viewModel.sections.isEmpty)
+  }
+
+  @Test("메뉴 불러오기 성공 후, 받은 메뉴로 구성된 메뉴 섹션을 발행")
+  func test3() {
+
+  }
+
+  @Test("메뉴 불러오기 실패 후, 에러를 발행")
+  func test4() {
+
+  }
 }
