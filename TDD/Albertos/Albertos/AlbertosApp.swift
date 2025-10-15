@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct MenuItem {
+struct MenuItem: Equatable {
   let category: String
   let name: String
   let spicy: Bool
 }
 
-struct MenuSection {
+struct MenuSection: Equatable {
   let category: String
   let items: [MenuItem]
 }
