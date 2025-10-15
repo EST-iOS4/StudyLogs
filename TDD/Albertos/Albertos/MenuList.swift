@@ -29,13 +29,14 @@ struct MenuPresentation {
 }
 
 struct MenuList: View {
-  let sections: [MenuSection]
   @State private var items: [MenuItem] = []
   @State private var showSpicy = false
 
+  let viewModel: ViewModel
+
   var presentation: MenuPresentation {
     MenuPresentation(
-      allItems: sections.flatMap { $0.items },
+      allItems: viewModel.sections.flatMap { $0.items },
       showOnlySpicy: showSpicy
     )
   }
@@ -55,7 +56,7 @@ struct MenuList: View {
           }
         }
       } else {
-        ForEach(sections) { section in
+        ForEach(viewModel.sections) { section in
           Section(header: Text(section.category)) {
             ForEach(section.items) { item in
               MenuRow(viewModel: .init(item: item))
@@ -77,8 +78,4 @@ extension MenuList {
         self.sections = menuGrouping(menu)
       }
   }
-}
-
-#Preview {
-  MenuList(sections: [])
 }
