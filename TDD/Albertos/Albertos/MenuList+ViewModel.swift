@@ -11,7 +11,7 @@ extension MenuList {
     @Published private(set) var sections: [MenuSection]
 
     init(
-      menu: [MenuItem],
+      menuFetching: MenuFetching = MenuFetchingPlaceholder(),
       menuGrouping: @escaping ([MenuItem]) -> [MenuSection] = groupMenuByCategory) {
         self.sections = menuGrouping([])
       }

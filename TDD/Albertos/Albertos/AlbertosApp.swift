@@ -51,7 +51,7 @@ struct AlbertosApp: App {
     var body: some Scene {
         WindowGroup {
           NavigationStack {
-            MenuList(viewModel: .init(menu: menu))
+            MenuList(viewModel: .init())
               .navigationTitle("Alberto's 🍕")
           }
         }
