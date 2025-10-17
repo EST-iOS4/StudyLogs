@@ -35,8 +35,17 @@ struct MenuList: View {
   @ObservedObject var viewModel: ViewModel
 
   var presentation: MenuPresentation {
-    MenuPresentation(
-      allItems: viewModel.sections.flatMap { $0.items },
+    let allItems: [MenuItem]
+
+    switch viewModel.sections {
+    case .success(let sections):
+      allItems = sections.flatMap { $0.items }
+    case .failure:
+      allItems = []
+    }
+    
+    return MenuPresentation(
+      allItems: allItems,
       showOnlySpicy: showSpicy
     )
   }
@@ -56,12 +65,18 @@ struct MenuList: View {
           }
         }
       } else {
-        ForEach(viewModel.sections) { section in
-          Section(header: Text(section.category)) {
-            ForEach(section.items) { item in
-              MenuRow(viewModel: .init(item: item))
+        switch viewModel.sections {
+        case .success(let sections):
+          ForEach(sections) { section in
+            Section(header: Text(section.category)) {
+              ForEach(section.items) { item in
+                MenuRow(viewModel: .init(item: item))
+              }
             }
           }
+        case .failure(let error):
+          Text("Error loading menu: \(error.localizedDescription)")
+            .foregroundColor(.red)
         }
       }
     }

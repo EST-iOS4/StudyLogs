@@ -60,7 +60,7 @@ struct MenuListViewModelTests {
     #expect(called == true)
   }
 
-  @Test("메뉴를 불러오기 시작할 때, 빈 메뉴를 발행", .disabled())
+  @Test("메뉴를 불러오기 시작할 때, 빈 메뉴를 발행")
   func test2() {
     let viewModel = MenuList.ViewModel(
       menuFetching: MenuFetchingSub(returning: .success([]))

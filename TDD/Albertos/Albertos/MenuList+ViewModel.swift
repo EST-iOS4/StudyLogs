@@ -9,7 +9,7 @@ import Combine
 extension MenuList {
 
   class ViewModel: ObservableObject {
-    @Published private(set) var sections: [MenuSection]
+    @Published private(set) var sections: Result<[MenuSection], Error> = .success([])
 
     let menuFetching: MenuFetching
     let menuGrouping: ([MenuItem]) -> [MenuSection]
@@ -21,7 +21,6 @@ extension MenuList {
       menuGrouping: @escaping ([MenuItem]) -> [MenuSection] = groupMenuByCategory) {
         self.menuFetching = menuFetching
         self.menuGrouping = menuGrouping
-        self.sections = []
         fetchMenu()
       }
 
@@ -30,7 +29,8 @@ extension MenuList {
         .fetchMenu()
         .sink(receiveCompletion: { _ in },
               receiveValue: { [weak self] value in
-          self?.sections = self?.menuGrouping(value) ?? []
+          guard let self = self else { return }
+          self.sections = .success(self.menuGrouping(value))
         })
         .store(in: &cancellables)
 
