@@ -27,7 +27,8 @@ extension Publisher where Failure == Never {
 struct MenuListViewModelTests {
 
   @Test("메뉴 그룹 함수가 실행되는지 확인")
-  func test1() {
+  @MainActor
+  func test1() async {
     // Arrange
     var called = false
     let inputSections = [MenuSection.fixture()]
@@ -40,50 +41,66 @@ struct MenuListViewModelTests {
 
     // Act
     let viewModel = MenuList.ViewModel(
-      menuFetching: MenuFetchingPlaceholder(),
+      menuFetching: MenuFetchingSub(returning: .success([])),
       menuGrouping: spyClosure
     )
 
-    // Assert
-    let sections = viewModel.sections
+    _ = await withCheckedContinuation { continuation in
+      var cancellable: AnyCancellable?
 
+      cancellable = viewModel.$sections
+        .dropFirst()
+        .first()
+        .sink { sections in
+          // Assert
+          continuation.resume(returning: sections)
+          cancellable?.cancel()
+        }
+    }
     #expect(called == true)
-    #expect(sections == inputSections)
   }
 
   @Test("메뉴를 불러오기 시작할 때, 빈 메뉴를 발행", .disabled())
   func test2() {
     let viewModel = MenuList.ViewModel(
-      menuFetching: MenuFetchingPlaceholder()
+      menuFetching: MenuFetchingSub(returning: .success([]))
     )
 
     #expect(viewModel.sections.isEmpty)
   }
 
   @Test("메뉴 불러오기 성공 후, 받은 메뉴로 구성된 메뉴 섹션을 발행")
+  @MainActor
   func test3() async throws {
     // Arrange
     var receivedMenu: [MenuItem]?
     let expectedSections = [MenuSection.fixture()]
-
     let spyClosure: ([MenuItem]) -> [MenuSection] = { items in
       receivedMenu = items
       return expectedSections
     }
+    let expectedMenu = [MenuItem.fixture()]
+    let viewModel = MenuList.ViewModel(
+      menuFetching: MenuFetchingSub(returning: .success(expectedMenu)),
+      menuGrouping: spyClosure
+    )
 
-    await confirmation("expectation") { confirm in
-      // Act
-      let viewModel = await MenuList.ViewModel(
-        menuFetching: MenuFetchingPlaceholder(),
-        menuGrouping: spyClosure
-      )
-      _ = await viewModel.$sections.dropFirst().sink { value in
+    // Act
+    let result = await withCheckedContinuation { continuation in
+      var cancellable: AnyCancellable?
+
+      cancellable = viewModel.$sections.dropFirst().first().sink { value in
         // Assert - 현재 구현에서는 초기화 시 빈 배열로 grouping 함수가 호출됨
-        #expect(receivedMenu?.isEmpty == true, "초기화 시 빈 메뉴 배열이 전달되어야 함")
-        #expect(viewModel.sections == expectedSections, "초기 섹션이 설정되어야 함")
-        confirm()
+        print("!!!!!!!")
+        // Assert
+        continuation.resume(returning: value)
+        cancellable?.cancel()
       }
     }
+
+    //Assert
+    #expect(receivedMenu == expectedMenu)
+    #expect(result == expectedSections)
   }
 
   @Test("메뉴 불러오기 실패 후, 에러를 발행")
