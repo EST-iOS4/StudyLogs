@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 class MenuFetchingPlaceholder: MenuFetching {
-  func fetchMenu() -> AnyPublisher<[MenuItem], any Error> {
+  func fetchMenu() -> AnyPublisher<[MenuItem], Error> {
     return Future { $0(.success(menu))}
       .delay(for: 0.5, scheduler: RunLoop.main)
       .eraseToAnyPublisher()

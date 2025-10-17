@@ -26,7 +26,7 @@ extension MenuSection: Identifiable {
   var id: String { category }
 }
 
-func groupMenuByCategory(_ menu: [MenuItem]) -> [MenuSection] {
+nonisolated func groupMenuByCategory(_ menu: [MenuItem]) -> [MenuSection] {
   return Dictionary(grouping: menu, by: { $0.category })
     .map { key, value in
       MenuSection(category: key, items: value)
@@ -51,7 +51,7 @@ struct AlbertosApp: App {
     var body: some Scene {
         WindowGroup {
           NavigationStack {
-            MenuList(viewModel: .init())
+            MenuList(viewModel: .init(menuFetching: MenuFetchingPlaceholder()))
               .navigationTitle("Alberto's 🍕")
           }
         }
