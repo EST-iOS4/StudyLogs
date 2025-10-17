@@ -24,6 +24,10 @@ extension Publisher where Failure == Never {
 }
 
 
+struct TestError: Equatable, Error {
+  let id: Int
+}
+
 struct MenuListViewModelTests {
 
   @Test("메뉴 그룹 함수가 실행되는지 확인")
@@ -61,12 +65,13 @@ struct MenuListViewModelTests {
   }
 
   @Test("메뉴를 불러오기 시작할 때, 빈 메뉴를 발행")
-  func test2() {
+  func test2() throws {
     let viewModel = MenuList.ViewModel(
       menuFetching: MenuFetchingSub(returning: .success([]))
     )
 
-    #expect(viewModel.sections.isEmpty)
+    let sections = try viewModel.sections.get()
+    #expect(sections.isEmpty)
   }
 
   @Test("메뉴 불러오기 성공 후, 받은 메뉴로 구성된 메뉴 섹션을 발행")
@@ -90,10 +95,13 @@ struct MenuListViewModelTests {
       var cancellable: AnyCancellable?
 
       cancellable = viewModel.$sections.dropFirst().first().sink { value in
-        // Assert - 현재 구현에서는 초기화 시 빈 배열로 grouping 함수가 호출됨
-        print("!!!!!!!")
+        guard case .success(let sections) = value else {
+          Issue.record("Expected successful Result, got: \(value), ")
+          return
+        }
+
         // Assert
-        continuation.resume(returning: value)
+        continuation.resume(returning: sections)
         cancellable?.cancel()
       }
     }
@@ -104,15 +112,28 @@ struct MenuListViewModelTests {
   }
 
   @Test("메뉴 불러오기 실패 후, 에러를 발행")
-  func test4() {
+  @MainActor
+  func test4() async {
+    let expectedError = TestError(id: 123)
     // Arrange
     let viewModel = MenuList.ViewModel(
-      menuFetching: MenuFetchingPlaceholder()
+      menuFetching: MenuFetchingSub(returning: .failure(expectedError)),
     )
-    
+
+    let result = await withCheckedContinuation { continuation in
+      var cancellable: AnyCancellable?
+
+      cancellable = viewModel.$sections.dropFirst().sink { value in
+        guard case .failure(let error) = value else {
+          Issue.record("Expected failing Result, got: \(value)")
+          return
+        }
+        continuation.resume(returning: error as! TestError)
+        cancellable?.cancel()
+      }
+    }
+
     // Assert - 현재 구현에서는 에러 상태가 없으므로, 기본 동작만 확인
-    #expect(viewModel.sections.isEmpty, "초기 상태에서는 빈 섹션이어야 함")
-    
-    // Note: 실제 에러 처리 기능이 구현되면 이 테스트를 업데이트해야 함
+    #expect(result == expectedError)
   }
 }
