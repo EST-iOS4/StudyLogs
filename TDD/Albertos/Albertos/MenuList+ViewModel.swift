@@ -27,6 +27,7 @@ extension MenuList {
     func fetchMenu() {
       menuFetching
         .fetchMenu()
+        .map(menuGrouping)
         .sink(receiveCompletion: { [weak self] completion in
           guard case .failure(let error) = completion else {
             return
@@ -34,8 +35,7 @@ extension MenuList {
           self?.sections = .failure(error)
         },
               receiveValue: { [weak self] value in
-          guard let self = self else { return }
-          self.sections = .success(self.menuGrouping(value))
+          self?.sections = .success(value)
         })
         .store(in: &cancellables)
 
