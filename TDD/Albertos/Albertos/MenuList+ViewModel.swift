@@ -8,23 +8,32 @@ import Combine
 
 extension MenuList {
 
-  @MainActor
   class ViewModel: ObservableObject {
     @Published private(set) var sections: [MenuSection]
+
+    let menuFetching: MenuFetching
+    let menuGrouping: ([MenuItem]) -> [MenuSection]
 
     private var cancellables = Set<AnyCancellable>()
 
     init(
       menuFetching: MenuFetching,
       menuGrouping: @escaping ([MenuItem]) -> [MenuSection] = groupMenuByCategory) {
-        sections = []
-        menuFetching
-          .fetchMenu()
-          .sink(receiveCompletion: { _ in },
-                receiveValue: { [weak self] value in
-            self?.sections = menuGrouping(value)
-          })
-          .store(in: &cancellables)
+        self.menuFetching = menuFetching
+        self.menuGrouping = menuGrouping
+        self.sections = []
+        fetchMenu()
       }
+
+    func fetchMenu() {
+      menuFetching
+        .fetchMenu()
+        .sink(receiveCompletion: { _ in },
+              receiveValue: { [weak self] value in
+          self?.sections = self?.menuGrouping(value) ?? []
+        })
+        .store(in: &cancellables)
+
+    }
   }
 }

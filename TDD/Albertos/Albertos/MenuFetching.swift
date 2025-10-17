@@ -8,5 +8,5 @@
 import Combine
 
 protocol MenuFetching {
-  nonisolated func fetchMenu() -> AnyPublisher<[MenuItem], any Error>
+  func fetchMenu() -> AnyPublisher<[MenuItem], Error>
 }

@@ -32,7 +32,7 @@ struct MenuList: View {
   @State private var items: [MenuItem] = []
   @State private var showSpicy = false
 
-  let viewModel: ViewModel
+  @ObservedObject var viewModel: ViewModel
 
   var presentation: MenuPresentation {
     MenuPresentation(

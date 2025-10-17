@@ -26,7 +26,7 @@ extension MenuSection: Identifiable {
   var id: String { category }
 }
 
-nonisolated func groupMenuByCategory(_ menu: [MenuItem]) -> [MenuSection] {
+func groupMenuByCategory(_ menu: [MenuItem]) -> [MenuSection] {
   return Dictionary(grouping: menu, by: { $0.category })
     .map { key, value in
       MenuSection(category: key, items: value)

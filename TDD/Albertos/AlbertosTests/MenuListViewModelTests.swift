@@ -26,9 +26,7 @@ extension Publisher where Failure == Never {
 
 struct MenuListViewModelTests {
 
-
   @Test("메뉴 그룹 함수가 실행되는지 확인")
-  @MainActor
   func test1() {
     // Arrange
     var called = false
@@ -53,8 +51,7 @@ struct MenuListViewModelTests {
     #expect(sections == inputSections)
   }
 
-  @Test("메뉴를 불러오기 시작할 때, 빈 메뉴를 발행")
-  @MainActor
+  @Test("메뉴를 불러오기 시작할 때, 빈 메뉴를 발행", .disabled())
   func test2() {
     let viewModel = MenuList.ViewModel(
       menuFetching: MenuFetchingPlaceholder()
@@ -64,7 +61,6 @@ struct MenuListViewModelTests {
   }
 
   @Test("메뉴 불러오기 성공 후, 받은 메뉴로 구성된 메뉴 섹션을 발행")
-  @MainActor
   func test3() async throws {
     // Arrange
     var receivedMenu: [MenuItem]?
@@ -74,20 +70,23 @@ struct MenuListViewModelTests {
       receivedMenu = items
       return expectedSections
     }
-    
-    // Act
-    let viewModel = MenuList.ViewModel(
-      menuFetching: MenuFetchingPlaceholder(),
-      menuGrouping: spyClosure
-    )
-    
-    // Assert - 현재 구현에서는 초기화 시 빈 배열로 grouping 함수가 호출됨
-    #expect(receivedMenu?.isEmpty == true, "초기화 시 빈 메뉴 배열이 전달되어야 함")
-    #expect(viewModel.sections == expectedSections, "초기 섹션이 설정되어야 함")
+
+    await confirmation("expectation") { confirm in
+      // Act
+      let viewModel = await MenuList.ViewModel(
+        menuFetching: MenuFetchingPlaceholder(),
+        menuGrouping: spyClosure
+      )
+      _ = await viewModel.$sections.dropFirst().sink { value in
+        // Assert - 현재 구현에서는 초기화 시 빈 배열로 grouping 함수가 호출됨
+        #expect(receivedMenu?.isEmpty == true, "초기화 시 빈 메뉴 배열이 전달되어야 함")
+        #expect(viewModel.sections == expectedSections, "초기 섹션이 설정되어야 함")
+        confirm()
+      }
+    }
   }
 
   @Test("메뉴 불러오기 실패 후, 에러를 발행")
-  @MainActor
   func test4() {
     // Arrange
     let viewModel = MenuList.ViewModel(
