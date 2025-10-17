@@ -7,25 +7,6 @@
 
 import SwiftUI
 
-struct MenuItem: Equatable {
-  let category: String
-  let name: String
-  let spicy: Bool
-}
-
-nonisolated struct MenuSection: Equatable {
-  let category: String
-  let items: [MenuItem]
-}
-
-extension MenuItem: Identifiable {
-  var id: String { name }
-}
-
-extension MenuSection: Identifiable {
-  var id: String { category }
-}
-
 func groupMenuByCategory(_ menu: [MenuItem]) -> [MenuSection] {
   return Dictionary(grouping: menu, by: { $0.category })
     .map { key, value in
