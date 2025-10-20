@@ -11,8 +11,8 @@ import Foundation
 
 struct MenuFetcherTests {
 
-  @Test("메뉴 요청 API가 성공 했을때, 디코드된 메뉴 아이템이 발행되어야 함")
   @MainActor
+  @Test("메뉴 요청 API가 성공 했을때, 디코드된 메뉴 아이템이 발행되어야 함")
   func test1() async throws {
     let json = """
 [
@@ -28,8 +28,10 @@ struct MenuFetcherTests {
       cancellable = menuFetcher.fetchMenu()
         .sink(receiveCompletion: { _ in }, receiveValue: {
           items in
+          defer {
+            cancellable?.cancel()
+          }
           continuation.resume(returning: items)
-          cancellable?.cancel()
         })
     }
 
@@ -38,4 +40,29 @@ struct MenuFetcherTests {
     #expect(items.last?.name == "another name")
   }
 
+  @MainActor
+  @Test("API 요청이 실패했을때, 받은 에러를 발행")
+  func test2() async throws {
+    let expectedError = URLError(.badServerResponse)
+    let menuFetcher = MenuFetcher(
+      networkFetching: NetworkFetchingStub(returning: .failure(expectedError))
+    )
+    let error = await withCheckedContinuation { continuation in
+      var cancellable: AnyCancellable?
+      cancellable = menuFetcher.fetchMenu()
+        .sink(receiveCompletion: { completion in
+          defer {
+            cancellable?.cancel()
+          }
+          guard case .failure(let error) = completion else {
+            Issue.record("Expected to fail")
+            return
+          }
+          continuation.resume(returning: error as? URLError)
+        }, receiveValue: { items in
+          Issue.record("Expected to fail, succeeded with \(items)")
+        })
+    }
+    #expect(error == expectedError)
+  }
 }
