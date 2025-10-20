@@ -35,7 +35,7 @@ extension MenuItemDetail {
 
     func addOrRemoveFromOrder() {
       if (orderController.order.items.contains { $0 == item } ) {
-        orderController.remoteFromOrder(item: item)
+        orderController.removeFromOrder(item: item)
       } else {
         orderController.addToOrder(item: item)
       }

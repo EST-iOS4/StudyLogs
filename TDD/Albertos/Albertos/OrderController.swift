@@ -23,7 +23,7 @@ class OrderController: ObservableObject {
     order.items.append(item)
   }
 
-  func remoteFromOrder(item: MenuItem) {
+  func removeFromOrder(item: MenuItem) {
     order.items.removeAll(where: { $0 == item })
   }
 }
