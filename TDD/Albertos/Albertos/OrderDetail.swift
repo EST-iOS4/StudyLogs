@@ -1,0 +1,64 @@
+//
+//  OrderDetail.swift
+//  Albertos
+//
+//  Created by Jungman Bae on 10/20/25.
+//
+
+import SwiftUI
+
+struct OrderDetail: View {
+  @Environment(\.dismiss) var dismiss
+  @ObservedObject private var viewModel: ViewModel
+  
+  init(viewModel: ViewModel) {
+    self.viewModel = viewModel
+  }
+  
+  var body: some View {
+    List {
+      ForEach(viewModel.orderItems) { item in
+        HStack {
+          VStack(alignment: .leading) {
+            Text(item.name)
+              .font(.headline)
+            Text(item.description ?? "")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+          Spacer()
+          Text("$\(item.price, specifier: "%.2f")")
+            .fontWeight(.medium)
+        }
+        .padding(.vertical, 4)
+      }
+      //      .onDelete(perform: viewModel.deleteItems)
+      
+      if !viewModel.orderItems.isEmpty {
+        HStack {
+          Text("Total")
+            .font(.title2)
+            .fontWeight(.bold)
+          Spacer()
+          Text("$\(viewModel.orderTotal, specifier: "%.2f")")
+            .font(.title2)
+            .fontWeight(.bold)
+            .foregroundColor(.blue)
+        }
+        .padding(.top, 10)
+      }
+    }
+    .navigationTitle("Your Order")
+    .navigationBarTitleDisplayMode(.inline)
+    .navigationBarItems(
+      leading: Button("Cancel") {
+        dismiss()
+      },
+      trailing: Button("Checkout") {
+        // TODO: 결제 로직 구현
+        dismiss()
+      }
+        .disabled(viewModel.orderItems.isEmpty)
+    )
+  }
+}

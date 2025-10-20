@@ -10,6 +10,7 @@ import Combine
 
 struct OrderButton: View {
   @ObservedObject private var viewModel: ViewModel
+  @State var showOrder = false
 
   init(viewModel: ViewModel) {
     self.viewModel = viewModel
@@ -17,9 +18,14 @@ struct OrderButton: View {
 
   var body: some View {
     Button(action: {
-      // TODO: 구현 필요
+      showOrder.toggle()
     }) {
       Text(viewModel.buttonText)
+    }
+    .sheet(isPresented: $showOrder) {
+      NavigationView {
+        OrderDetail(viewModel: .init(orderController: viewModel.orderController))
+      }
     }
   }
 }
@@ -27,7 +33,7 @@ struct OrderButton: View {
 extension OrderButton {
   class ViewModel: ObservableObject {
     @Published private(set) var buttonText = "Your Order"
-    private let orderController: OrderController
+    let orderController: OrderController
     private var cancellables = Set<AnyCancellable>()
 
     init(orderController: OrderController) {
