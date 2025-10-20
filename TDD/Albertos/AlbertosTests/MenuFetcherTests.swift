@@ -92,4 +92,48 @@ struct MenuFetcherTests {
     #expect(error == expectedError)
   }
 
+  @MainActor
+  @Test("API 요청 1번 실패시 재시도 후 성공")
+  func test4() async throws {
+    let json = """
+[
+    { "name": "retry success", "category": "test", "spicy": false }
+]
+"""
+    let data = try #require(json.data(using: .utf8))
+    let firstCallError = URLError(.networkConnectionLost)
+    
+    // 첫 번째 호출은 실패, 두 번째 호출(재시도)는 성공
+    let menuFetcher = MenuFetcher(
+      networkFetching: NetworkFetchingStub(returning: [
+        .failure(firstCallError),  // 첫 번째 요청 실패
+        .success(data)             // 재시도 성공
+      ])
+    )
+    
+    let items = await withCheckedContinuation { continuation in
+      var cancellable: AnyCancellable?
+      cancellable = menuFetcher.fetchMenu()
+        .sink(
+          receiveCompletion: { completion in
+            defer {
+              cancellable?.cancel()
+            }
+            guard case .failure(let error) = completion else {
+              return
+            }
+            Issue.record("Expected success after retry, but failed with \(error)")
+          },
+          receiveValue: { items in
+            defer {
+              cancellable?.cancel()
+            }
+            continuation.resume(returning: items)
+          }
+        )
+    }
+    
+    #expect(items.count == 1)
+    #expect(items.first?.name == "retry success")
+  }
 }
