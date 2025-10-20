@@ -8,11 +8,27 @@
 import SwiftUI
 
 struct MenuItemDetail: View {
-  var body: some View {
-    Text("")
-  }
-}
+  @ObservedObject private(set) var viewModel: ViewModel
 
-#Preview {
-  MenuItemDetail()
+  var body: some View {
+    VStack {
+      Text(viewModel.item.name)
+        .font(.title)
+
+      Text(viewModel.item.description ?? "")
+        .padding()
+
+      Text("Price: $\(viewModel.item.price, specifier: "%.2f")")
+        .font(.headline)
+
+      Button(viewModel.addOrRemoveFromOrderButtonText) {
+        viewModel.addOrRemoveFromOrder()
+      }
+      .padding()
+      .background(Color.blue)
+      .foregroundColor(.white)
+      .cornerRadius(10)
+    }
+    .padding()
+  }
 }

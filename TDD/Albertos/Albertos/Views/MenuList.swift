@@ -29,6 +29,8 @@ struct MenuPresentation {
 }
 
 struct MenuList: View {
+  @EnvironmentObject var orderController: OrderController
+
   @State private var items: [MenuItem] = []
   @State private var showSpicy = false
 
@@ -60,7 +62,9 @@ struct MenuList: View {
             Text(emptyStateMessage)
           } else {
             ForEach(presentation.displayedItems, id: \.name) { item in
-              MenuRow(viewModel: .init(item: item))
+              NavigationLink(destination: destination(for: item)) {
+                MenuRow(viewModel: .init(item: item))
+              }
             }
           }
         }
@@ -70,7 +74,9 @@ struct MenuList: View {
           ForEach(sections) { section in
             Section(header: Text(section.category)) {
               ForEach(section.items) { item in
-                MenuRow(viewModel: .init(item: item))
+                NavigationLink(destination: destination(for: item)) {
+                  MenuRow(viewModel: .init(item: item))
+                }
               }
             }
           }
@@ -80,5 +86,11 @@ struct MenuList: View {
         }
       }
     }
+  }
+
+  private func destination(for item: MenuItem) -> some View {
+    MenuItemDetail(
+      viewModel: .init(item: item, orderController: orderController)
+    )
   }
 }

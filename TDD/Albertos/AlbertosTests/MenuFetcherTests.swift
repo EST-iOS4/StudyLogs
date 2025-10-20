@@ -16,8 +16,8 @@ struct MenuFetcherTests {
   func test1() async throws {
     let json = """
 [
-    { "name": "a name", "category": "a category", "spicy": true },
-    { "name": "another name", "category": "a category", "spicy": true }
+    { "name": "a name", "description": "description", "category": "a category", "price": 10.0,  "spicy": true },
+    { "name": "another name", "description": "description", "category": "a category", "price": 10.0, "spicy": true }
 ]
 """
     let data = try #require(json.data(using: .utf8))
@@ -97,7 +97,7 @@ struct MenuFetcherTests {
   func test4() async throws {
     let json = """
 [
-    { "name": "retry success", "category": "test", "spicy": false }
+    { "name": "a name", "description": "description", "category": "a category", "price": 10.0,  "spicy": true }
 ]
 """
     let data = try #require(json.data(using: .utf8))

@@ -17,10 +17,18 @@ extension Collection {
 extension MenuItem {
   static func fixture(
     category: String = "category",
-  name: String = "name",
+    name: String = "name",
+    description: String = "description",
+    price: Double = 10.0,
     spicy: Bool = false
   ) -> MenuItem {
-    MenuItem(category: category, name: name, spicy: spicy)
+    MenuItem(
+      category: category,
+      name: name,
+      spicy: spicy,
+      description: description,
+      price: price
+    )
   }
 }
 
@@ -34,15 +42,15 @@ extension MenuSection {
 }
 
 struct AlbertosTests {
-
+  
   @Test("빈 메뉴는 빈 섹션 배열 반환", .disabled("더 이상 사용하지 않음"))
   func test1() {
     let menu = [MenuItem]()
     let sections = groupMenuByCategory(menu)
-
+    
     #expect(sections.isEmpty)
   }
-
+  
   @Test("단일 카테고리는 하나의 섹션만 반환", .disabled("더 이상 사용하지 않음"))
   func test2() throws {
     let menu: [MenuItem] = [
@@ -50,14 +58,14 @@ struct AlbertosTests {
       .fixture(name: "other name"),
     ]
     let sections = groupMenuByCategory(menu)
-
+    
     #expect(sections.count == 1)
     let section = try #require(sections.first)
     #expect(section.items.count == 2)
     #expect(section.items.first?.name == "name")
     #expect(section.items.last?.name == "other name")
   }
-
+  
   @Test("여러 카테고리는 카테고리당 하나의 섹션을 반환", .disabled("더 이상 사용하지 않음"))
   func test3() {
     let menu: [MenuItem] = [
@@ -67,11 +75,11 @@ struct AlbertosTests {
       .fixture(category: "desserts")
     ]
     let sections = groupMenuByCategory(menu)
-
+    
     #expect(sections.count == 3)
     #expect(sections[safe: 0]?.category == "pastas")
     #expect(sections[safe: 1]?.category == "drinks")
     #expect(sections[safe: 2]?.category == "desserts")
   }
-
+  
 }
