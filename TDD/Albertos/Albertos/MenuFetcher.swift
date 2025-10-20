@@ -8,9 +8,9 @@ import Combine
 import Foundation
 
 class MenuFetcher: MenuFetching {
-  let networkFetching: NetworkFetcing
+  let networkFetching: NetworkFetching
   
-  init(networkFetching: NetworkFetcing = URLSession.shared) {
+  init(networkFetching: NetworkFetching = URLSession.shared) {
     self.networkFetching = networkFetching
   }
 
