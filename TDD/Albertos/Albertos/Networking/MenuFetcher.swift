@@ -18,7 +18,7 @@ class MenuFetcher: MenuFetching {
     let url = URL(string: "https://raw.githubusercontent.com/mokagio/tddinswift_fake_api/trunk/menu_response.json")!
     return networkFetching.load(URLRequest(url: url))
       .decode(type: [MenuItem].self, decoder: JSONDecoder())
-      .retry(3)
+      .retry(1)
       .eraseToAnyPublisher()
   }
 }

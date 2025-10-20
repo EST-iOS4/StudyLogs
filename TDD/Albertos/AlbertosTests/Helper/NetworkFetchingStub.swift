@@ -25,14 +25,15 @@ class NetworkFetchingStub: NetworkFetching {
 
   func load(_ request: URLRequest) -> AnyPublisher<Data, URLError> {
     let resultToReturn: Result<Data, URLError>
-    
+    defer {
+      callCount += 1
+    }
+
     if !results.isEmpty {
-      if callCount < results.count {
-        resultToReturn = results[callCount]
-        callCount += 1
-      } else {
-        resultToReturn = results.last!
+      guard callCount < results.count else {
+        return Fail(error: URLError(.unknown)).eraseToAnyPublisher()
       }
+      resultToReturn = results[callCount]
     } else {
       resultToReturn = result
     }
