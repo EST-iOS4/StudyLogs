@@ -41,7 +41,27 @@ struct MenuItemDetail_ViewModelTests {
 
   @MainActor
   @Test("메뉴 아이템이 Order 에 들어있을때, 버튼 액션은 삭제")
-  func test3() {}
+  func test3() {
+    // Arrange
+    let item = MenuItem.fixture()
+    let controller = OrderController()
+    controller.addToOrder(item: item)
+
+    let viewModel = MenuItemDetail.ViewModel(
+      item: item,
+      orderController: controller
+    )
+
+    // 삭제 이전에 메뉴 아이템을 가지고 있는지 확인
+    #expect(controller.order.items.contains { $0 == item })
+
+    // Act
+    viewModel.addOrRemoveFromOrder()
+
+    // Assert
+    // 삭제 후 아이템이 삭제되었는지 확인
+    #expect(!controller.order.items.contains { $0 == item })
+  }
 
   @MainActor
   @Test("메뉴 아이템이 Order 에 들어있지 않을떄, 버튼 액션은 추가")

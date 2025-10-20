@@ -16,7 +16,6 @@ class OrderController: ObservableObject {
   }
 
   func isItemInOrder(_ item: MenuItem) -> Bool {
-    // TODO: 구현 필요
     return order.items.contains { $0 == item }
   }
 
@@ -25,6 +24,6 @@ class OrderController: ObservableObject {
   }
 
   func remoteFromOrder(item: MenuItem) {
-    // TODO: 구현 필요
+    order.items.removeAll(where: { $0 == item })
   }
 }

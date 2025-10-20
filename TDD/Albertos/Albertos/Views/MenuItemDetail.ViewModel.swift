@@ -32,5 +32,13 @@ extension MenuItemDetail {
           }
           .store(in: &cancellables)
     }
+
+    func addOrRemoveFromOrder() {
+      if (orderController.order.items.contains { $0 == item } ) {
+        orderController.remoteFromOrder(item: item)
+      } else {
+        orderController.addToOrder(item: item)
+      }
+    }
   }
 }
