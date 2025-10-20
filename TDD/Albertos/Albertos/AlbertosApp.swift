@@ -24,6 +24,7 @@ struct AlbertosApp: App {
       NavigationStack {
         MenuList(viewModel: .init(menuFetching: MenuFetcher()))
           .navigationTitle("Alberto's 🍕")
+        OrderButton(viewModel: .init(orderController: orderController))
       }
       .environmentObject(orderController)
     }
