@@ -8,10 +8,15 @@ import Combine
 import Foundation
 
 class MenuFetcher: MenuFetching {
+  let networkFetching: NetworkFetcing
+  
+  init(networkFetching: NetworkFetcing = URLSession.shared) {
+    self.networkFetching = networkFetching
+  }
+
   func fetchMenu() -> AnyPublisher<[MenuItem], Error> {
     let url = URL(string: "https://raw.githubusercontent.com/mokagio/tddinswift_fake_api/trunk/menu_response.json")!
-    return URLSession.shared.dataTaskPublisher(for: url)
-      .map { $0.data }
+    return networkFetching.load(URLRequest(url: url))
       .decode(type: [MenuItem].self, decoder: JSONDecoder())
       .eraseToAnyPublisher()
   }
