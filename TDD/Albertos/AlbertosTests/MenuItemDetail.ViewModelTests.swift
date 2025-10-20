@@ -21,12 +21,23 @@ struct MenuItemDetail_ViewModelTests {
     )
 
     let text = viewModel.addOrRemoveFromOrderButtonText
-    #expect(text == "Remove from Order")
+    #expect(text == "Remove from order")
   }
 
   @MainActor
   @Test("메뉴 아이템이 Order 에 들어있지 않을떄, 추가 버튼이 노출")
-  func test2() {}
+  func test2() {
+    let item = MenuItem.fixture()
+    let orderController = OrderController()
+    let viewModel = MenuItemDetail.ViewModel(
+      item: item,
+      orderController: orderController
+    )
+
+    let text = viewModel.addOrRemoveFromOrderButtonText
+    #expect(text == "Add to order")
+
+  }
 
   @MainActor
   @Test("메뉴 아이템이 Order 에 들어있을때, 버튼 액션은 삭제")

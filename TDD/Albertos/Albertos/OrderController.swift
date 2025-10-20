@@ -17,11 +17,11 @@ class OrderController: ObservableObject {
 
   func isItemInOrder(_ item: MenuItem) -> Bool {
     // TODO: 구현 필요
-    return false
+    return order.items.contains { $0 == item }
   }
 
   func addToOrder(item: MenuItem) {
-    // TODO: 구현 필요
+    order.items.append(item)
   }
 
   func remoteFromOrder(item: MenuItem) {

@@ -8,7 +8,7 @@
 import Foundation
 
 struct Order {
-  let items: [MenuItem]
+  var items: [MenuItem]
   var total: Double {
     0
 //    items.reduce(0) { $0 + $1.price }
