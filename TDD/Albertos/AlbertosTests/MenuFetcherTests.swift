@@ -65,4 +65,31 @@ struct MenuFetcherTests {
     }
     #expect(error == expectedError)
   }
+
+  @MainActor
+  @Test("API 요청이 실패 했을때, 타임아웃 에러")
+  func test3() async throws {
+    let expectedError = URLError(.timedOut)
+    let menuFetcher = MenuFetcher(
+      networkFetching: NetworkFetchingStub(returning: .failure(expectedError))
+    )
+    let error = await withCheckedContinuation { continuation in
+      var cancellable: AnyCancellable?
+      cancellable = menuFetcher.fetchMenu()
+        .sink(receiveCompletion: { completion in
+          defer {
+            cancellable?.cancel()
+          }
+          guard case .failure(let error) = completion else {
+            Issue.record("Expected to fail")
+            return
+          }
+          continuation.resume(returning: error as? URLError)
+        }, receiveValue: { items in
+          Issue.record("Expected to fail, succeeded with \(items)")
+        })
+    }
+    #expect(error == expectedError)
+  }
+
 }
