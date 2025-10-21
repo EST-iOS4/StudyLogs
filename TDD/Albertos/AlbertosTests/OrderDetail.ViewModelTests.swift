@@ -70,4 +70,21 @@ struct OrderDetail_ViewModelTests {
     #expect(sut.orderItems.count == 3)
     #expect(sut.orderTotal == (1.0 + 2.0 + 3.0))
   }
+
+  @Test("체크아웃 버튼을 누르면, 결제 프로세스에 진입하는 확인")
+  func test6() {
+    let orderController = OrderController()
+    orderController.addToOrder(item: .fixture(name:"name"))
+    orderController.addToOrder(item: .fixture(name:"other name"))
+
+    let paymentProcessingSpy = PaymentProcessingSpy()
+    let viewModel = OrderDetail.ViewModel(
+      orderController: orderController,
+      paymentProcessor: paymentProcessingSpy
+    )
+
+    viewModel.checkout()
+
+    #expect(paymentProcessingSpy.receivedOrder == orderController.order)
+  }
 }

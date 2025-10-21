@@ -11,15 +11,15 @@ import HippoPayments
 
 extension OrderDetail {
   class ViewModel: ObservableObject {
-    private let paymentProcessor: HippoPaymentsProcessor
-    
+    private let paymentProcessor: PaymentProcessing
+
     @Published private(set) var orderItems: [MenuItem] = []
     @Published private(set) var orderTotal: Double = 0.0
     private let orderController: OrderController
     private var cancellables = Set<AnyCancellable>()
 
     init(orderController: OrderController,
-         paymentProcessor: HippoPaymentsProcessor) {
+         paymentProcessor: PaymentProcessing = HippoPaymentsProcessor(apiKey: "A1B2C3")) {
       self.orderController = orderController
       self.paymentProcessor = paymentProcessor
       setupSubscriptions()
@@ -38,6 +38,9 @@ extension OrderDetail {
       orderTotal = order.total
     }
 
+    func checkout() {
+      paymentProcessor.process(order: orderController.order)
+    }
 
   }
 }

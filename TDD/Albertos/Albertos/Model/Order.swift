@@ -13,3 +13,5 @@ struct Order {
     items.reduce(0) { $0 + $1.price }
   }
 }
+
+extension Order: Equatable {}

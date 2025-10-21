@@ -24,7 +24,9 @@ struct OrderButton: View {
     }
     .sheet(isPresented: $showOrder) {
       NavigationView {
-        OrderDetail(viewModel: .init(orderController: viewModel.orderController))
+        OrderDetail(
+          viewModel: .init(orderController: viewModel.orderController)
+        )
       }
     }
   }
