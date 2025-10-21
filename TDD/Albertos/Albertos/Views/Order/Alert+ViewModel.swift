@@ -12,6 +12,8 @@ extension Alert {
     let title: String
     let message: String
     let buttonText: String
+    let buttonAction: (() -> Void)?
+    
     var id: String { title + message + buttonText }
   }
 }

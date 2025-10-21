@@ -13,6 +13,7 @@ import SwiftUI
 extension OrderDetail {
   class ViewModel: ObservableObject {
     private let paymentProcessor: PaymentProcessing
+    let onAlertDismiss: () -> Void
 
     @Published private(set) var orderItems: [MenuItem] = []
     @Published private(set) var orderTotal: Double = 0.0
@@ -21,8 +22,10 @@ extension OrderDetail {
     private var cancellables = Set<AnyCancellable>()
 
     init(orderController: OrderController,
+         onAlertDismiss: @escaping () -> Void,
          paymentProcessor: PaymentProcessing = HippoPaymentsProcessor(apiKey: "A1B2C3")) {
       self.orderController = orderController
+      self.onAlertDismiss = onAlertDismiss
       self.paymentProcessor = paymentProcessor
       setupSubscriptions()
     }
@@ -47,12 +50,16 @@ extension OrderDetail {
           self?.alertToShow = Alert.ViewModel(
             title: "실패",
             message: "There's been an error with your order. Please contact a waiter.",
-            buttonText: "OK")
+            buttonText: "OK",
+            buttonAction: self?.onAlertDismiss
+          )
         }, receiveValue: { [weak self] _ in
           self?.alertToShow = Alert.ViewModel(
             title: "성공",
             message: "The payment was successful. Your food will be with you shortly.",
-            buttonText: "OK")
+            buttonText: "OK",
+            buttonAction: self?.onAlertDismiss
+          )
         })
         .store(in: &cancellables)
     }
