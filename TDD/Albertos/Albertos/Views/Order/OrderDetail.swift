@@ -9,10 +9,12 @@ import SwiftUI
 
 struct OrderDetail: View {
   @Environment(\.dismiss) var dismiss
+  @Binding private(set) var isPresented: Bool
   @ObservedObject private var viewModel: ViewModel
   
-  init(viewModel: ViewModel) {
+  init(viewModel: ViewModel, isPresented: Binding<Bool>) {
     self.viewModel = viewModel
+    self._isPresented = isPresented
   }
   
   var body: some View {
@@ -52,7 +54,8 @@ struct OrderDetail: View {
     .navigationBarTitleDisplayMode(.inline)
     .navigationBarItems(
       leading: Button("Cancel") {
-        dismiss()
+//        dismiss()
+        isPresented.toggle()
       },
       trailing: Button("Checkout") {
         viewModel.checkout()
