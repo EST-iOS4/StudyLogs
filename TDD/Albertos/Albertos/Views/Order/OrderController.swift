@@ -26,4 +26,8 @@ class OrderController: ObservableObject {
   func removeFromOrder(item: MenuItem) {
     order.items.removeAll(where: { $0 == item })
   }
+
+  func resetOrder() {
+    order = Order(items: [])
+  }
 }

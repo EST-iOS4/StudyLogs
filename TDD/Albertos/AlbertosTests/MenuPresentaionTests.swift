@@ -74,11 +74,11 @@ struct MenuPresentaionTests {
     #expect(viewModel.text == "name")
   }
 
-  @Test("매운 메뉴는 이름과 고추 이모지를 출력")
+  @Test("매운 메뉴는 이름과 불 이모지를 출력")
   func test6() {
     let item = MenuItem.fixture(name: "name", spicy: true)
     let viewModel = MenuRow.ViewModel(item: item)
 
-    #expect(viewModel.text == "name 🌶️")
+    #expect(viewModel.text == "name 🔥")
   }
 }

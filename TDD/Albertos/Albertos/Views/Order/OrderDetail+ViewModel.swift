@@ -58,7 +58,10 @@ extension OrderDetail {
             title: "성공",
             message: "The payment was successful. Your food will be with you shortly.",
             buttonText: "OK",
-            buttonAction: self?.onAlertDismiss
+            buttonAction: {
+              self?.orderController.resetOrder()
+              self?.onAlertDismiss()
+            }
           )
         })
         .store(in: &cancellables)
