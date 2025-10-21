@@ -55,10 +55,16 @@ struct OrderDetail: View {
         dismiss()
       },
       trailing: Button("Checkout") {
-        // TODO: 결제 로직 구현
-        dismiss()
+        viewModel.checkout()
       }
         .disabled(viewModel.orderItems.isEmpty)
     )
+    .alert(item: $viewModel.alertToShow) { alertViewModel in
+      Alert(
+        title: Text(alertViewModel.title),
+        message: Text(alertViewModel.message),
+        dismissButton: .default(Text(alertViewModel.buttonText))
+      )
+    }
   }
 }

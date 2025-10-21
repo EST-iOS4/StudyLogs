@@ -9,6 +9,21 @@
 import Testing
 import Combine
 
+extension OrderDetail.ViewModel {
+  @MainActor
+  func waitForAlert(timeout: Duration = .seconds(2)) async throws {
+    let startTime = ContinuousClock.now
+
+    while alertToShow == nil {
+      if ContinuousClock.now - startTime > timeout {
+        Issue.record("Alert이 \(timeout) 안에 표시되지 않음")
+        throw TestError(id: -1)
+      }
+      try await Task.sleep(for: .milliseconds(10))
+    }
+  }
+}
+
 @Suite("OrderDetail ViewModel 테스트")
 @MainActor
 struct OrderDetail_ViewModelTests {
@@ -86,5 +101,38 @@ struct OrderDetail_ViewModelTests {
     viewModel.checkout()
 
     #expect(paymentProcessingSpy.receivedOrder == orderController.order)
+  }
+
+  @Test("결제 성공시 확인 알림창 표시")
+  func test7() async throws {
+    let viewModel = OrderDetail.ViewModel(
+      orderController: OrderController(),
+      paymentProcessor: PaymentProcessingStub(
+        returning: .success(())
+      )
+    )
+    viewModel.checkout()
+    try await viewModel.waitForAlert()
+
+    #expect(viewModel.alertToShow?.title == "성공")
+    #expect(viewModel.alertToShow?.message == "The payment was successful. Your food will be with you shortly.")
+    #expect(viewModel.alertToShow?.buttonText == "OK")
+
+  }
+
+  @Test("결제 실패시 오류 알림창 표시")
+  func test8() async throws {
+    let viewModel = OrderDetail.ViewModel(
+      orderController: OrderController(),
+      paymentProcessor: PaymentProcessingStub(
+        returning: .failure(TestError(id: 123))
+      )
+    )
+    viewModel.checkout()
+    try await viewModel.waitForAlert()
+
+    #expect(viewModel.alertToShow?.title == "실패")
+    #expect(viewModel.alertToShow?.message == "There's been an error with your order. Please contact a waiter.")
+    #expect(viewModel.alertToShow?.buttonText == "OK")
   }
 }

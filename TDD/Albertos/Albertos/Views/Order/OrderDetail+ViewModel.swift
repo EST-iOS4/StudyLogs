@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import HippoPayments
+import SwiftUI
 
 extension OrderDetail {
   class ViewModel: ObservableObject {
@@ -15,6 +16,7 @@ extension OrderDetail {
 
     @Published private(set) var orderItems: [MenuItem] = []
     @Published private(set) var orderTotal: Double = 0.0
+    @Published var alertToShow: Alert.ViewModel?
     private let orderController: OrderController
     private var cancellables = Set<AnyCancellable>()
 
@@ -40,6 +42,19 @@ extension OrderDetail {
 
     func checkout() {
       paymentProcessor.process(order: orderController.order)
+        .sink(receiveCompletion: { [weak self] completion in
+          guard case .failure = completion else { return }
+          self?.alertToShow = Alert.ViewModel(
+            title: "실패",
+            message: "There's been an error with your order. Please contact a waiter.",
+            buttonText: "OK")
+        }, receiveValue: { [weak self] _ in
+          self?.alertToShow = Alert.ViewModel(
+            title: "성공",
+            message: "The payment was successful. Your food will be with you shortly.",
+            buttonText: "OK")
+        })
+        .store(in: &cancellables)
     }
 
   }
