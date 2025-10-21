@@ -1,0 +1,380 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "HippoPayments",
+    "printedName": "HippoPayments",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "HippoPayments",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "HippoPayments",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HippoPaymentsError",
+        "printedName": "HippoPaymentsError",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "genericError",
+            "printedName": "genericError",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(HippoPayments.HippoPaymentsError.Type) -> HippoPayments.HippoPaymentsError",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "HippoPaymentsError",
+                    "printedName": "HippoPayments.HippoPaymentsError",
+                    "usr": "s:13HippoPayments0aB5ErrorO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "HippoPayments.HippoPaymentsError.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "HippoPaymentsError",
+                        "printedName": "HippoPayments.HippoPaymentsError",
+                        "usr": "s:13HippoPayments0aB5ErrorO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13HippoPayments0aB5ErrorO07genericC0yA2CmF",
+            "mangledName": "$s13HippoPayments0aB5ErrorO07genericC0yA2CmF",
+            "moduleName": "HippoPayments"
+          },
+          {
+            "kind": "Function",
+            "name": "==",
+            "printedName": "==(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "HippoPaymentsError",
+                "printedName": "HippoPayments.HippoPaymentsError",
+                "usr": "s:13HippoPayments0aB5ErrorO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "HippoPaymentsError",
+                "printedName": "HippoPayments.HippoPaymentsError",
+                "usr": "s:13HippoPayments0aB5ErrorO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HippoPayments0aB5ErrorO2eeoiySbAC_ACtFZ",
+            "mangledName": "$s13HippoPayments0aB5ErrorO2eeoiySbAC_ACtFZ",
+            "moduleName": "HippoPayments",
+            "static": true,
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "hashValue",
+            "printedName": "hashValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HippoPayments0aB5ErrorO9hashValueSivp",
+            "mangledName": "$s13HippoPayments0aB5ErrorO9hashValueSivp",
+            "moduleName": "HippoPayments",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HippoPayments0aB5ErrorO9hashValueSivg",
+                "mangledName": "$s13HippoPayments0aB5ErrorO9hashValueSivg",
+                "moduleName": "HippoPayments",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "hash",
+            "printedName": "hash(into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Hasher",
+                "printedName": "Swift.Hasher",
+                "paramValueOwnership": "InOut",
+                "usr": "s:s6HasherV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HippoPayments0aB5ErrorO4hash4intoys6HasherVz_tF",
+            "mangledName": "$s13HippoPayments0aB5ErrorO4hash4intoys6HasherVz_tF",
+            "moduleName": "HippoPayments",
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:13HippoPayments0aB5ErrorO",
+        "mangledName": "$s13HippoPayments0aB5ErrorO",
+        "moduleName": "HippoPayments",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Error",
+            "printedName": "Error",
+            "usr": "s:s5ErrorP",
+            "mangledName": "$ss5ErrorP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "HippoPayments",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HippoPaymentsProcessor",
+        "printedName": "HippoPaymentsProcessor",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(apiKey:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HippoPaymentsProcessor",
+                "printedName": "HippoPayments.HippoPaymentsProcessor",
+                "usr": "s:13HippoPayments0aB9ProcessorC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13HippoPayments0aB9ProcessorC6apiKeyACSS_tcfc",
+            "mangledName": "$s13HippoPayments0aB9ProcessorC6apiKeyACSS_tcfc",
+            "moduleName": "HippoPayments",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "processPayment",
+            "printedName": "processPayment(payload:onSuccess:onFailure:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "() -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ]
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(HippoPayments.HippoPaymentsError) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "HippoPaymentsError",
+                    "printedName": "HippoPayments.HippoPaymentsError",
+                    "usr": "s:13HippoPayments0aB5ErrorO"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HippoPayments0aB9ProcessorC14processPayment7payload9onSuccess0G7FailureySDySSypG_yycyAA0aB5ErrorOctF",
+            "mangledName": "$s13HippoPayments0aB9ProcessorC14processPayment7payload9onSuccess0G7FailureySDySSypG_yycyAA0aB5ErrorOctF",
+            "moduleName": "HippoPayments",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:13HippoPayments0aB9ProcessorC",
+        "mangledName": "$s13HippoPayments0aB9ProcessorC",
+        "moduleName": "HippoPayments",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "HippoPayments",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": []
+}
