@@ -1,13 +1,17 @@
+// 명령형에서 선언형으로 변환
 
-func sumOf(numbers: Int..., b: Int) -> (sum: Int, count: Int) {
-  var sum = 0
-  var count = 0
-  for number in numbers {
-    sum += number
-    count += 1
+let numbers = [1,2,3,4,5,6,7,8,9,10]
+
+// 명령형 방식
+var evenSquaredSum1 = 0
+for number in numbers {
+  if number % 2 == 0 {
+    evenSquaredSum1 += number * number
   }
-  return (sum, count)
 }
+print("명령형 결과: \(evenSquaredSum1)")
 
-let result = sumOf(numbers: 7,8,9,10,20, b: 10)
-print("합계: \(result.sum), 개수: \(result.count)")
+
+// 선언형 방식
+let evenSquaredSum2 = numbers.filter { $0 % 2 == 0 }.map { $0 * $0 }.reduce(0, +)
+print("선언형 결과: \(evenSquaredSum2)")
