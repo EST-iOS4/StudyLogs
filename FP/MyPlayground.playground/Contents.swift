@@ -1,3 +1,27 @@
+
+func makeIncrementer(increment: Int) -> () -> Int {
+  var total = 0
+
+  let incrementer = {
+    total += increment
+    return total
+  }
+
+  return incrementer
+}
+
+let incrementByFive = makeIncrementer(increment: 5)
+
+print(incrementByFive())
+print(incrementByFive())
+print(incrementByFive())
+
+let incrementByTen = makeIncrementer(increment: 10)
+
+print(incrementByTen())
+print(incrementByTen())
+print(incrementByTen())
+
 func applyOperation(_ numbers: [Int], operation: (Int) -> Int) -> [Int] {
   return numbers.map(operation)
 }
