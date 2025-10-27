@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:">
+   </FileRef>
+   <FileRef
+      location = "group:DeepCopy.playground">
+   </FileRef>
+   <FileRef
+      location = "group:DeepCopy 2.playground">
+   </FileRef>
+   <FileRef
+      location = "group:DeepCopy 3.playground">
+   </FileRef>
+   <FileRef
+      location = "group:DeepCopy 4.playground">
+   </FileRef>
+</Workspace>
