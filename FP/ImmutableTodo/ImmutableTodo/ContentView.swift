@@ -15,7 +15,16 @@ struct ContentView: View {
       VStack(spacing: 0) {
         List {
           ForEach(viewModel.todos) { todo in
-            Text(todo.title)
+            Button {
+              Task {
+                await viewModel.toggleTodoCompletion(todo)
+              }
+            } label: {
+              HStack {
+                Image(systemName: todo.isCompleted ? "checkmark.app" : "square")
+                Text(todo.title)
+              }
+            }
             // TodoRow
           }
         }
