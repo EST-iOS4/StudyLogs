@@ -8,14 +8,36 @@
 import SwiftUI
 
 struct ContentView: View {
+  @State private var viewModel = TodoViewModel()
+
   var body: some View {
-    VStack {
-      Image(systemName: "globe")
-        .imageScale(.large)
-        .foregroundStyle(.tint)
-      Text("Hello, world!")
+    NavigationStack {
+      VStack(spacing: 0) {
+        List {
+          ForEach(viewModel.todos) { todo in
+            Text(todo.title)
+            // TodoRow
+          }
+        }
+      }
+      .navigationTitle("Todos")
+      .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          Button {
+//            viewModel.showingAddSheet = true
+            Task {
+              viewModel.newTodoTitle = "Todo Item \(viewModel.todos.count + 1)"
+              await viewModel.addTodo()
+            }
+          } label: {
+            Image(systemName: "plus")
+          }
+        }
+      }
+      .sheet(isPresented: $viewModel.showingAddSheet) {
+        // AddTodoView
+      }
     }
-    .padding()
   }
 }
 
