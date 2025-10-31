@@ -11,7 +11,7 @@ import SwiftUI
 @Observable
 class CounterViewModel {
 
-//  @ObservedObject private var store = Store<CounterState,CounterAction,CounterEnvironment>
+  @ObservedObject private var store = Store<CounterState,CounterAction,CounterEnvironment>
 
 
   var count: Int = 0
