@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TodoState: Equatable {
+nonisolated struct TodoState: Equatable {
   var todos: [Todo] = []
   var filter: Filter = .all
 

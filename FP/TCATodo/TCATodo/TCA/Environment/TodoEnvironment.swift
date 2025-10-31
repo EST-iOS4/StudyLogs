@@ -14,11 +14,12 @@ struct TodoEnvironment {
 }
 
 extension TodoEnvironment {
-  static let live = TodoEnvironment(
+  nonisolated static let live = TodoEnvironment(
     mainQueue: .main,
     saveTodos: { todos in
-          let data = try? JSONEncoder().encode(todos)
-          UserDefaults.standard.set(data, forKey: "todos")
+      let data = try? JSONEncoder().encode(todos)
+      UserDefaults.standard.set(data, forKey: "todos")
+      return .none
     },
     loadTodos: {
       .task {
