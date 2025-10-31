@@ -6,10 +6,9 @@
 //
 
 extension Store where State == TodoState, Action == TodoAction, Environment == TodoEnvironment {
-  func todoStore(
+  static func todoStore(
     initState: TodoState = TodoState(),
-    environment: TodoEnvironment
-    = .live) -> TodoStore {
+    environment: TodoEnvironment = .live) -> TodoStore {
       return Store(initialState: initState, reducer: todoReducer, environment: environment)
     }
 }
