@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 typealias CounterStore = Store<CounterState, CounterAction, CounterEnvironment>
 
@@ -15,8 +16,25 @@ class CounterViewModel {
 
   private var store: CounterStore
 
+  private var cancellables = Set<AnyCancellable>();
+
   init(store: CounterStore) {
     self.store = store
+
+    store.$state
+      .map(\.count)
+      .assign(to: \.count, on: self)
+      .store(in: &cancellables)
+
+    store.$state
+      .map(\.isLoading)
+      .assign(to: \.isLoading, on: self)
+      .store(in: &cancellables)
+
+    store.$state
+      .map(\.errorMessage)
+      .assign(to: \.errorMessage, on: self)
+      .store(in: &cancellables)
   }
 
   var count: Int = 0
@@ -24,22 +42,22 @@ class CounterViewModel {
   var errorMessage: String?
 
   func clearError() {
-//    store.send(.clearError)
+    store.send(.clearError)
   }
 
   func decrement() {
-//    store.send(.decrement)
+    store.send(.decrement)
   }
 
   func increment() {
-//    store.send(.increment)
+    store.send(.increment)
   }
 
   func asyncIncrementTapped() {
-//    store.send(.asyncIncrementTapped)
+    store.send(.asyncIncrementTapped)
   }
 
   func reset() {
-//    store.send(.reset)
+    store.send(.reset)
   }
 }

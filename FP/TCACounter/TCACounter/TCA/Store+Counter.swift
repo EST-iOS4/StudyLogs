@@ -20,9 +20,7 @@ func counterReducer(
 ) -> Effect<CounterAction> {
 
   switch action {
-
-    // MARK: - 동기 액션
-
+  // MARK: - 동기 액션
   case .increment:
     // 카운트 증가
     state.count += 1
@@ -47,8 +45,7 @@ func counterReducer(
     // 부작용 없음
     return .none
 
-    // MARK: - 비동기 액션
-
+  // MARK: - 비동기 액션
   case .asyncIncrementTapped:
     // 로딩 상태 시작
     state.isLoading = true
@@ -89,7 +86,7 @@ func counterReducer(
 }
 
 extension Store where State == CounterState, Action == CounterAction, Environment == CounterEnvironment {
-  
+
   static func counter(
     initState: CounterState = CounterState(),
     environment: CounterEnvironment = .live
