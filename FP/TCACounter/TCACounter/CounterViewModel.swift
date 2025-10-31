@@ -7,12 +7,17 @@
 
 import SwiftUI
 
+typealias CounterStore = Store<CounterState, CounterAction, CounterEnvironment>
+
 @MainActor
 @Observable
 class CounterViewModel {
 
-  @ObservedObject private var store = Store<CounterState,CounterAction,CounterEnvironment>
+  private var store: CounterStore
 
+  init(store: CounterStore) {
+    self.store = store
+  }
 
   var count: Int = 0
   var isLoading = false

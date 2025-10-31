@@ -23,7 +23,7 @@ struct CounterEnvironment {
 // MARK: - Live Environment (실제 운영 환경)
 extension CounterEnvironment {
   /// 실제 운영 환경에서 사용할 Environment
-  static let live = CounterEnvironment(
+  nonisolated static let live = CounterEnvironment(
     delayedIncrement: { delay, value in
       // Task.sleep을 사용한 실제 지연
       try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))

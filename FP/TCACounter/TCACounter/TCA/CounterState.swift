@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CounterState: Equatable {
+nonisolated struct CounterState: Equatable {
   /// 현재 카운트 값
   var count: Int = 0
 

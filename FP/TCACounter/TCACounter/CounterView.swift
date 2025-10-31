@@ -9,7 +9,9 @@ import SwiftUI
 
 struct CounterView: View {
   // MARK: - Properties
-  @State private var viewModel = CounterViewModel()
+  @State private var viewModel = CounterViewModel(
+    store: Store.counter()
+  )
 //  @ObservedObject var store: Store<CounterState, CounterAction, CounterEnvironment>
 
   // MARK: - Body
